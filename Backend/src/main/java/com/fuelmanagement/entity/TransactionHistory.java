@@ -7,37 +7,37 @@ import java.time.LocalDateTime;
 public class TransactionHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long TransactionId;
     @ManyToOne
     @JoinColumn(name = "fuel_station_id")
-    private FuelStation fuelStation;
+    private Long fuelStation;
     @ManyToOne
     @JoinColumn(name = "vehicle_id")
-    private Vehicle vehicle;
+    private Long vehicle;
     private int fuelAmount; // Liters distributed
     private LocalDateTime distributionDate;
 
-    public Long getId() {
-        return id;
+    public Long getTransactionId() {
+        return TransactionId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long TransactionId) {
+        this.TransactionId = TransactionId;
     }
 
-    public FuelStation getFuelStation() {
+    public Long getFuelStation() {
         return fuelStation;
     }
 
-    public void setFuelStation(FuelStation fuelStation) {
+    public void setFuelStation(Long fuelStation) {
         this.fuelStation = fuelStation;
     }
 
-    public Vehicle getVehicle() {
+    public Long getVehicle() {
         return vehicle;
     }
 
-    public void setVehicle(Vehicle vehicle) {
+    public void setVehicle(Long vehicle) {
         this.vehicle = vehicle;
     }
 

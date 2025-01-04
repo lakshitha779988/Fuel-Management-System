@@ -8,33 +8,33 @@ import jakarta.persistence.Id;
 public class VehicleType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String typeName; // e.g., Car, Van, Bike
-    private String fuelType; // e.g., Petrol, Diesel
+    private Long VehicleTypeId;
+    private String VehicleTypeTypeName; // e.g., Car, Van, Bike
+    private String VehicleFuelType; // e.g., Petrol, Diesel
     private int weeklyQuota; // Weekly fuel quota for this type
 
-    public Long getId() {
-        return id;
+    public Long getVehicleTypeId() {
+        return VehicleTypeId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setVehicleTypeId(Long vehicleTypeId) {
+        VehicleTypeId = vehicleTypeId;
     }
 
-    public String getTypeName() {
-        return typeName;
+    public String getVehicleTypeTypeName() {
+        return VehicleTypeTypeName;
     }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
+    public void setVehicleTypeTypeName(String vehicleTypeTypeName) {
+        VehicleTypeTypeName = vehicleTypeTypeName;
     }
 
-    public String getFuelType() {
-        return fuelType;
+    public String getVehicleFuelType() {
+        return VehicleFuelType;
     }
 
-    public void setFuelType(String fuelType) {
-        this.fuelType = fuelType;
+    public void setVehicleFuelType(String vehicleFuelType) {
+        VehicleFuelType = vehicleFuelType;
     }
 
     public int getWeeklyQuota() {

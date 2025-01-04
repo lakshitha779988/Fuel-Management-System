@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String registrationNumber;
+    private Long VehicleId;
+    private String VehicleRegistrationNumber;
     @ManyToOne
     @JoinColumn(name = "vehicle_type_id")
     private VehicleType vehicleType;
@@ -16,23 +16,23 @@ public class Vehicle {
     @JoinColumn(name = "user_id")
     private User user;
     private String qrCode; // QR code generated for the vehicle
-    private int currentQuota; // Remaining fuel quota
+    private static int currentQuota; // Remaining fuel quota
     private LocalDateTime resetDate;
 
-    public Long getId() {
-        return id;
+    public Long getVehicleId() {
+        return VehicleId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setVehicleId(Long vehicleId) {
+        VehicleId = vehicleId;
     }
 
-    public String getRegistrationNumber() {
-        return registrationNumber;
+    public String getVehicleRegistrationNumber() {
+        return VehicleRegistrationNumber;
     }
 
-    public void setRegistrationNumber(String registrationNumber) {
-        this.registrationNumber = registrationNumber;
+    public void setVehicleRegistrationNumber(String vehicleRegistrationNumber) {
+        VehicleRegistrationNumber = vehicleRegistrationNumber;
     }
 
     public VehicleType getVehicleType() {
@@ -51,20 +51,20 @@ public class Vehicle {
         this.user = user;
     }
 
+    public static int getCurrentQuota() {
+        return currentQuota;
+    }
+
+    public void setCurrentQuota(int currentQuota) {
+        this.currentQuota = currentQuota;
+    }
+
     public String getQrCode() {
         return qrCode;
     }
 
     public void setQrCode(String qrCode) {
         this.qrCode = qrCode;
-    }
-
-    public int getCurrentQuota() {
-        return currentQuota;
-    }
-
-    public void setCurrentQuota(int currentQuota) {
-        this.currentQuota = currentQuota;
     }
 
     public LocalDateTime getResetDate() {

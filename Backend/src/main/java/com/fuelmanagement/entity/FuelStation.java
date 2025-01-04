@@ -7,43 +7,43 @@ import java.util.List;
 public class FuelStation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String location;
-    private int currentFuelStock; // Liters of fuel available
+    private Long FuelStationId;
+    private String FuelStationName;
+    private String FuelStationLocation;
+    private int FuelStationFuelStationCurrentFuelStock; // Liters of fuel available
     @OneToMany(mappedBy = "fuelStation")
     private List<TransactionHistory> distributions;
 
-    public Long getId() {
-        return id;
+    public Long getFuelStationId() {
+        return FuelStationId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setFuelStationId(Long fuelStationId) {
+        FuelStationId = fuelStationId;
     }
 
-    public String getName() {
-        return name;
+    public String getFuelStationName() {
+        return FuelStationName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFuelStationName(String fuelStationName) {
+        FuelStationName = fuelStationName;
     }
 
-    public String getLocation() {
-        return location;
+    public String getFuelStationLocation() {
+        return FuelStationLocation;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setFuelStationLocation(String fuelStationLocation) {
+        FuelStationLocation = fuelStationLocation;
     }
 
-    public int getCurrentFuelStock() {
-        return currentFuelStock;
+    public int getFuelStationFuelStationCurrentFuelStock() {
+        return FuelStationFuelStationCurrentFuelStock;
     }
 
-    public void setCurrentFuelStock(int currentFuelStock) {
-        this.currentFuelStock = currentFuelStock;
+    public void setFuelStationFuelStationCurrentFuelStock(int fuelStationFuelStationCurrentFuelStock) {
+        FuelStationFuelStationCurrentFuelStock = fuelStationFuelStationCurrentFuelStock;
     }
 
     public List<TransactionHistory> getDistributions() {

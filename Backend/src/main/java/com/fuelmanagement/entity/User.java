@@ -7,52 +7,52 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String email;
-    private String phoneNumber;
-    private String password; // For authentication
+    private Long UserId;
+    private String UserName;
+    private String UserEmail;
+    private String UserPhoneNumber;
+    private String UserPassword; // For authentication
     @OneToMany(mappedBy = "user")
     private List<Vehicle> vehicles;
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return UserId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        UserId = userId;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return UserName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        UserName = userName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUserEmail() {
+        return UserEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserEmail(String userEmail) {
+        UserEmail = userEmail;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getUserPhoneNumber() {
+        return UserPhoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setUserPhoneNumber(String userPhoneNumber) {
+        UserPhoneNumber = userPhoneNumber;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUserPassword() {
+        return UserPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserPassword(String userPassword) {
+        UserPassword = userPassword;
     }
 
     public List<Vehicle> getVehicles() {

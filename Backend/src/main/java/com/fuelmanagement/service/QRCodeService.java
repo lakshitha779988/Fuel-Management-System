@@ -16,8 +16,16 @@ public class QRCodeService {
     public QRCode generateQRCodeForVehicle(Vehicle vehicle) {
         QRCode qrCode = new QRCode();
         qrCode.setVehicle(vehicle);
-        qrCode.setQrData("ENCODED_DATA_FOR_" + vehicle.getRegistrationNumber());
-        qrCode.setCreatedDate(LocalDateTime.now());
+
+        // Encode QR data (use vehicle's registration number or unique string)
+        String encodedData = "VEHICLE:" + vehicle.getVehicleRegistrationNumber() + "|QUOTA:" + Vehicle.getCurrentQuota();
+        qrCode.setQrData(encodedData);
+        qrCode.setQrCreatedDate(LocalDateTime.now());
         return qrCodeRepository.save(qrCode);
+    }
+
+    public QRCode getQRCodeDetails(String qrData) {
+        return (QRCode) qrCodeRepository.findByQrData(qrData)
+                .orElseThrow(() -> new RuntimeException("QR Code not found"));
     }
 }

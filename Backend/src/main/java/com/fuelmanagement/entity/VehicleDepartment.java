@@ -8,26 +8,26 @@ import jakarta.persistence.Id;
 public class VehicleDepartment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String registrationNumber;
+    private Long VehicleDepartmentId;
+    private String VehicleDepartmentRegistrationNumber;
     private boolean isConfirmed; // Whether the vehicle is registered
     private String ownerDetails; // Name and contact of the owner
     private boolean taxPaid; // Current tax status
 
-    public Long getId() {
-        return id;
+    public Long getVehicleDepartmentId() {
+        return VehicleDepartmentId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setVehicleDepartmentId(Long vehicleDepartmentId) {
+        VehicleDepartmentId = vehicleDepartmentId;
     }
 
-    public String getRegistrationNumber() {
-        return registrationNumber;
+    public String getVehicleDepartmentRegistrationNumber() {
+        return VehicleDepartmentRegistrationNumber;
     }
 
-    public void setRegistrationNumber(String registrationNumber) {
-        this.registrationNumber = registrationNumber;
+    public void setVehicleDepartmentRegistrationNumber(String vehicleDepartmentRegistrationNumber) {
+        VehicleDepartmentRegistrationNumber = vehicleDepartmentRegistrationNumber;
     }
 
     public boolean isConfirmed() {

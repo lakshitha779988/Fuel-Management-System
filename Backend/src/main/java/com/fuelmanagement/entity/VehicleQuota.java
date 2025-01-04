@@ -8,24 +8,24 @@ import jakarta.persistence.Id;
 public class VehicleQuota {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String vehicleType;
+    private Long VehicleQuotaId;
+    private String VehicleQuotaVehicleType;
     private int weeklyQuota;
 
-    public Long getId() {
-        return id;
+    public Long getVehicleQuotaId() {
+        return VehicleQuotaId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setVehicleQuotaId(Long vehicleQuotaId) {
+        VehicleQuotaId = vehicleQuotaId;
     }
 
-    public String getVehicleType() {
-        return vehicleType;
+    public String getVehicleQuotaVehicleType() {
+        return VehicleQuotaVehicleType;
     }
 
-    public void setVehicleType(String vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setVehicleQuotaVehicleType(String vehicleQuotaVehicleType) {
+        VehicleQuotaVehicleType = vehicleQuotaVehicleType;
     }
 
     public int getWeeklyQuota() {
