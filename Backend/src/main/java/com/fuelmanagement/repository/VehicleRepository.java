@@ -1,14 +1,13 @@
 package com.fuelmanagement.repository;
 
-import com.fuelmanagement.entity.Vehicle;
+
+import com.fuelmanagement.model.entity.Vehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
 @Repository
-public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
-    List<Vehicle> findByUserId(Long userId);
-    Optional<Vehicle> findByRegistrationNumber(String registrationNumber);
+public interface VehicleRepository extends JpaRepository<Vehicle,Long> {
+
+    Vehicle findByRegistrationNumber(String registrationNumber);
 }
