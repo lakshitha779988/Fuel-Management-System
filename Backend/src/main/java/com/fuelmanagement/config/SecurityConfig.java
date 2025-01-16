@@ -33,7 +33,7 @@ public class SecurityConfig {
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.authorizeHttpRequests(request -> request
-                .requestMatchers("register","logging","users/{id}" ,"vehicles/types" ,"api/auth/register")
+                .requestMatchers("/api/auth/register","logging","users/{id}" ,"vehicles/types" ,"api/auth/register")
                 .permitAll()
                 .anyRequest().authenticated());
 

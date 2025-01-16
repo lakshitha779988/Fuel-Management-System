@@ -23,4 +23,9 @@ public class AuthController {
     public void logging(@RequestBody LoggingRequest loggingRequest){
         authService.logging(loggingRequest);
     }
+
+    @GetMapping("register")
+    public String  hi(){
+        return "hiii";
+    }
 }
