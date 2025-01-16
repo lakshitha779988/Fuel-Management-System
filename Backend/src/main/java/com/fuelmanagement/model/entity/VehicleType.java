@@ -18,7 +18,7 @@ public class VehicleType {
      private int fuelLimit;
 
     @Column(nullable = false)
-     private String VehicleTypeName;
+     private String vehicleTypeName;
 
     public Long getId() {
         return id;
@@ -45,10 +45,10 @@ public class VehicleType {
     }
 
     public String getVehicleTypeName() {
-        return VehicleTypeName;
+        return vehicleTypeName;
     }
 
     public void setVehicleTypeName(String vehicleTypeName) {
-        VehicleTypeName = vehicleTypeName;
+        this.vehicleTypeName = vehicleTypeName;
     }
 }

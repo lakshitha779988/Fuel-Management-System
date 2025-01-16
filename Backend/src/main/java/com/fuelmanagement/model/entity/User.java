@@ -1,7 +1,9 @@
 package com.fuelmanagement.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+
+import java.util.Date;
+
 
 @Entity
 public class User {
@@ -9,7 +11,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Data createAt;
+    private Date createAt;
     @Column(nullable = false)
     private String mobileNumber;
 
@@ -30,11 +32,11 @@ public class User {
         this.id = id;
     }
 
-    public Data getCreateAt() {
+    public Date getCreateAt() {
         return createAt;
     }
 
-    public void setCreateAt(Data createAt) {
+    public void setCreateAt(Date createAt) {
         this.createAt = createAt;
     }
 
