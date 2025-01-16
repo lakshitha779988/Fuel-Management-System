@@ -24,6 +24,10 @@ public class User {
     @Column(nullable = false, unique  = true)
     private String nationalId;
 
+    @OneToOne
+    @JoinColumn(name = "vehicle_id" , nullable = false)
+    private Vehicle vehicle;
+
     public Long getId() {
         return id;
     }
@@ -78,5 +82,13 @@ public class User {
 
     public void setNationalId(String nationalId) {
         this.nationalId = nationalId;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 }
