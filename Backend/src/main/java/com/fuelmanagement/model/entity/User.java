@@ -2,6 +2,7 @@ package com.fuelmanagement.model.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -27,6 +28,11 @@ public class User {
     @OneToOne
     @JoinColumn(name = "vehicle_id" , nullable = false)
     private Vehicle vehicle;
+
+
+    private String otp;
+
+    private LocalDateTime otpExpiry;
 
     public Long getId() {
         return id;
@@ -90,5 +96,21 @@ public class User {
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public LocalDateTime getOtpExpiry() {
+        return otpExpiry;
+    }
+
+    public void setOtpExpiry(LocalDateTime otpExpiry) {
+        this.otpExpiry = otpExpiry;
     }
 }
