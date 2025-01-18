@@ -10,7 +10,8 @@ function LoginForm() {
   return (
     <div>
       <form>
-            <Input label="Mobile Number" 
+            <label for="mobile">Mobile Number</label>
+            <input id="mobile" 
             type="text"
             value={mobileNumber}
             placeholder="Enter your mobile number"
@@ -18,7 +19,7 @@ function LoginForm() {
             <button>Sent OTP</button>
             {otpSent && (
                 <>
-                   <label htmlFor="otp">OTP</label>
+                   <label for="otp">OTP</label>
                     <input
                     id="otp"
                     type="text"
