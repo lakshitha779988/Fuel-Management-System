@@ -21,7 +21,7 @@ public class AuthController {
 
     @PostMapping("logging")
     public void logging(@RequestBody LoggingRequest loggingRequest){
-        authService.logging(loggingRequest);
+        authService.login(loggingRequest);
     }
 
     @GetMapping("register")
