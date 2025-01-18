@@ -25,18 +25,19 @@ public class AuthService {
     private final VehicleRepository vehicleRepository;
     private final VehicleTypeRepository vehicleTypeRepository;
     private final JwtService jwtService;
-
+    private final SmsService smsService;
 
     @Autowired
     public AuthService(UserRepository userRepository,
                        VehicleRepository vehicleRepository,
-                       VehicleTypeRepository vehicleTypeRepository, JwtService jwtService
+                       VehicleTypeRepository vehicleTypeRepository, JwtService jwtService, SmsService smsService
     ) {
         this.userRepository = userRepository;
         this.vehicleRepository = vehicleRepository;
         this.vehicleTypeRepository = vehicleTypeRepository;
 
         this.jwtService = jwtService;
+        this.smsService = smsService;
     }
 
     public void register(RegistrationRequest registrationRequest) {
@@ -111,7 +112,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        //implement sms service
+        smsService.sendOtp(user.getMobileNumber(),user.getOtp());
 
         return "OTP sent to registered mobile number.";
 
