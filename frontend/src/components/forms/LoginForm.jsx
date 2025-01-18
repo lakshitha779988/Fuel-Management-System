@@ -6,20 +6,34 @@ function LoginForm() {
     const [otp, setOtp] = useState('');
     const [mobileNumber,setMobileNumber] = useState('');
 
+    const handleSendOTP = () => {
+        if(!mobileNumber){
+            alert('Please enter a valid mobile number.');
+            return;
+        }
+        alert('OTP will be sent soon..');
+        setOtpSent(true);
+
+    };
+
+    const handleVerifyOTP = () => {
+        alert('Login successful!.');
+    };
+
 
   return (
     <div>
       <form>
-            <label for="mobile">Mobile Number</label>
+            <label htmlFor="mobile">Mobile Number</label>
             <input id="mobile" 
             type="text"
             value={mobileNumber}
             placeholder="Enter your mobile number"
             onChange={(e) => setMobileNumber(e.target.value)}/>
-            <button>Sent OTP</button>
+            <button onClick={handleSendOTP}>Sent OTP</button>
             {otpSent && (
                 <>
-                   <label for="otp">OTP</label>
+                   <label htmlFor="otp">OTP</label>
                     <input
                     id="otp"
                     type="text"
@@ -27,7 +41,7 @@ function LoginForm() {
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
                     />
-                    <button>Verify OTP</button>
+                    <button onClick={handleVerifyOTP}>Verify OTP</button>
 
                 </>
             )}
