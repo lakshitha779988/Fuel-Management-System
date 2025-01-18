@@ -12,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class AuthService {
@@ -21,17 +24,19 @@ public class AuthService {
     private final UserRepository userRepository;
     private final VehicleRepository vehicleRepository;
     private final VehicleTypeRepository vehicleTypeRepository;
+    private final JwtService jwtService;
 
 
     @Autowired
     public AuthService(UserRepository userRepository,
                        VehicleRepository vehicleRepository,
-                       VehicleTypeRepository vehicleTypeRepository
-                       ) {
+                       VehicleTypeRepository vehicleTypeRepository, JwtService jwtService
+    ) {
         this.userRepository = userRepository;
         this.vehicleRepository = vehicleRepository;
         this.vehicleTypeRepository = vehicleTypeRepository;
 
+        this.jwtService = jwtService;
     }
 
     public void register(RegistrationRequest registrationRequest) {
@@ -49,13 +54,7 @@ public class AuthService {
             throw new IllegalArgumentException("Vehicle with this registration number is already registered.");
         }
 
-        // Check if the vehicle number is valid (Placeholder logic for now)
-        // Uncomment and implement actual validation logic later if needed
-        /*
-        if (!isValidVehicleNumber(registrationRequest.getVehicleNumber())) {
-            throw new IllegalArgumentException("Invalid vehicle number.");
-        }
-        */
+
 
         // Find VehicleType by ID
         Optional<VehicleType> vehicleTypeOptional = vehicleTypeRepository.findById(registrationRequest.getVehicleTypeId());
@@ -82,19 +81,75 @@ public class AuthService {
         vehicle.setCreatedAt(new Date());
         vehicleRepository.save(vehicle);
 
-        // Log success or return a response DTO
+
         System.out.println("User and Vehicle registered successfully.");
     }
 
-    // Placeholder for vehicle number validation
+
     private boolean isValidVehicleNumber(String vehicleNumber) {
-        // Add validation logic here
+        //need conect with mock database and check
         return true; // Placeholder logic; replace with actual checks
     }
 
 
 
-public void logging(LoggingRequest loggingRequest) {
+    public String  login(LoggingRequest loggingRequest) {
+
+        //check mobile number is exit on database or not
+        User user = userRepository.findByMobileNumber(loggingRequest.getMobileNumber());
+        if (user == null) {
+            throw new RuntimeException("Mobile number not found.");
+        }
+
+        //generate otm
+        String otp = generateOtp();
+        LocalDateTime otpExpiry = LocalDateTime.now().plus(5, ChronoUnit.MINUTES);  // 5 minutes from now
+
+        //update otp in the user table for temporally
+        user.setOtp(otp);
+        user.setOtpExpiry(otpExpiry);
+
+        userRepository.save(user);
+
+        //implement sms service
+
+        return "OTP sent to registered mobile number.";
+
 
     }
+
+
+    public String verifyOtp(String mobileNumber, String inputOtp) {
+
+        //  Check if the user on that mobile number exists
+        User user = userRepository.findByMobileNumber(mobileNumber);
+
+        // Validate OTP is valid or not
+        if (!user.getOtp().equals(inputOtp)) {
+            throw new RuntimeException("Invalid OTP");
+        }
+        if (user.getOtpExpiry().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("OTP expired");
+        }
+
+        // Generate JWT Token
+        String token = jwtService.generateToken(mobileNumber);
+
+        // Clear OTP in user table
+        user.setOtp(null);
+        user.setOtpExpiry(null);
+        userRepository.save(user);
+
+        return token;
+    }
+
+
+
+
+    private String generateOtp() {
+        Random rand = new Random();
+        int otp = rand.nextInt(900000) + 100000; // Generates a 6-digit OTP
+        return String.valueOf(otp);
+    }
+
 }
