@@ -1,12 +1,16 @@
 import React from 'react'
 
-export default function LoginForm() {
+function LoginForm() {
   return (
     <div>
-        <form>
-            <Input></Input>
+      <form>
+            <Input label="Mobile Number"
+            type="text"
+            placeholder="Enter your mobile number"/>
+            <button>Sent OTP</button>
         </form>
-      
     </div>
   )
 }
+
+export default LoginForm
