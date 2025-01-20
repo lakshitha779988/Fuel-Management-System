@@ -6,6 +6,10 @@ function UserDetailsForm() {
   const [otpVerified, setOtpVerified] = useState(false);
   const [otp, setOtp] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
+  const[firstName, setFirstName] = useState('');
+  const[lastName, setLastName] = useState('');
+  const[address, setAddress] = useState('');
+  const[nic, setNic] = useState('');
 
   const handleSendOTP = (event) => {
     event.preventDefault();
@@ -23,25 +27,60 @@ function UserDetailsForm() {
    
       alert('OTP Verified!');
       setOtpVerified(true);
-      
-  };
 
+  };
+const handleSubmit = (e) => {
+  e.preventDefault();
+  if (!otpVerified) {
+    alert('Please verify the OTP first.');
+    return;
+  }
+
+  const userDetails = {
+    firstName,
+    lastName,
+    address,
+    nic,
+    mobileNumber,
+  };
+  console.log('Form Submitted:', userDetails);
+
+  
+  alert('User details submitted successfully!');
+};
   return (
     <div>
-      <form onSubmit={(e) => e.preventDefault()}>
-        <h3>User Details</h3>
+      <form onSubmit={handleSubmit}>
+      <h3 class="some-class">User Details</h3> 
+
 
         <label htmlFor="firstName">First Name</label>
-        <input id="firstName" type="text" placeholder="Ex: Saman" />
+        <input id="firstName"
+         type="text"
+          placeholder="Ex: Saman"
+          onChange={(e) => setFirstName(e.target.value)}
+          />
 
         <label htmlFor="lastName">Last Name</label>
-        <input id="lastName" type="text" placeholder="Ex: Perera" />
+        <input id="lastName"
+         type="text"
+          placeholder="Ex: Perera"
+          onChange={(e) => setLastName(e.target.value)}
+          />
 
         <label htmlFor="address">Address</label>
-        <input id="address" type="text" placeholder="Ex: 399/8, Station Road, Colombo" />
+        <input id="address"
+         type="text"
+          placeholder="Ex: 399/8, Station Road, Colombo" 
+          onChange={(e) => setAddress(e.target.value)}
+          />
 
         <label htmlFor="nic">NIC</label>
-        <input id="nic" type="text" placeholder="Ex: 200134587570" />
+        <input id="nic"
+         type="text"
+          placeholder="Ex: 200134587570" 
+          onChange={(e) => setNic(e.target.value)}
+          />
 
         <label htmlFor="mobileNumber">Mobile Number</label>
         <input
@@ -52,7 +91,7 @@ function UserDetailsForm() {
           onChange={(e) => setMobileNumber(e.target.value)}
         />
 
-        <button type="button" onClick={handleSendOTP}>
+        <button onClick={handleSendOTP}>
           Send OTP
         </button>
 
@@ -67,13 +106,14 @@ function UserDetailsForm() {
               onChange={(e) => setOtp(e.target.value)}
             />
 
-            <button type="button" onClick={handleVerifyOTP}>
+            <button onClick={handleVerifyOTP}>
               Verify OTP
             </button>
           </div>
         )}
 
         {otpVerified && <p>OTP verified successfully!</p>}
+        <button  disabled={!otpVerified} >Submit</button>
       </form>
     </div>
   );
