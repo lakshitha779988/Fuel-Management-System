@@ -87,5 +87,31 @@ public class QrCodeService {
         return generateQRCodeImage(qrCodeString, folderPath);
     }
 
+    public byte[] updateQRCode(Long vehicleId) throws Exception {
+        Optional<QrCode> qrCodeOptional = qrCodeRepository.findByVehicleId(vehicleId);
+
+        if (qrCodeOptional.isEmpty()) {
+            throw new IllegalArgumentException("QR Code not found for this vehicle.");
+        }
+
+        QrCode qrCode = qrCodeOptional.get();
+        String newQrCodeString = generateUniqueQRCodeString();
+        qrCode.setQrCode(newQrCodeString);
+        qrCodeRepository.save(qrCode);
+
+        // Specify the folder path to save the updated QR code
+        String folderPath = "C:/QRCodeFiles"; // Replace with your desired folder path
+        return generateQRCodeImage(newQrCodeString, folderPath);
+    }
+
+    // Delete a QR code record
+    public void deleteQRCode(Long vehicleId) {
+        if (!qrCodeRepository.findByVehicleId(vehicleId).isPresent()) {
+            throw new IllegalArgumentException("QR Code not found for this vehicle.");
+        }
+
+        qrCodeRepository.deleteByVehicleId(vehicleId);
+    }
+
 
 }
