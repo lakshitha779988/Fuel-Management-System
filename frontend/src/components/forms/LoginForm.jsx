@@ -109,13 +109,13 @@ function LoginForm() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-red-100">
       <form className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm">
         <h2 className="text-2xl font-bold text-red-500 text-center mb-4">
           LOGIN
           <p className="text-sm text-gray-600 mt-2">
             Don't have an account?{' '}
-            <a href="/register" className="text-red-500 underline hover:text-blue-600">
+            <a href="/UserDetails" className="text-red-500 underline hover:text-blue-600">
               Register here
             </a>
           </p>
