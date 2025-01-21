@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './components/forms/LoginForm';
+import UserDetailsForm from './components/forms/UserDetailsForm';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         </h1>
         <Routes>
           <Route path="/login" element={<LoginForm />} />
+          <Route path="/UserDetails" element={<UserDetailsForm />} />
         </Routes>
       </>
     </Router>
