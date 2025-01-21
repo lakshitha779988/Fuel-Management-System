@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface QrCodeRepository extends JpaRepository<QrCode,Long> {
+    QrCode findByQrCode(String qrString);
+
+    boolean existsByQrCode(String qrString);
 }
