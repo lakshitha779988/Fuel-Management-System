@@ -62,5 +62,30 @@ public class QrCodeService {
         }
     }
 
+    // Create a QR code for a vehicle
+    public byte[] createQRCode(Long vehicleId) throws Exception {
+        Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
+
+        if (vehicleOptional.isEmpty()) {
+            throw new IllegalArgumentException("Vehicle not found.");
+        }
+
+        Vehicle vehicle = vehicleOptional.get();
+
+        // Check if a QR code already exists
+        if (qrCodeRepository.findByVehicleId(vehicleId).isPresent()) {
+            throw new IllegalStateException("QR Code already exists for this vehicle.");
+        }
+
+        String qrCodeString = generateUniqueQRCodeString();
+        QrCode qrCode = new QrCode(qrCodeString, vehicle);
+        qrCodeRepository.save(qrCode);
+
+        // Specify the folder path to save the QR code
+        String folderPath = System.getProperty("user.home") + "\\Downloads\\qrcode";
+// Replace with your desired folder path
+        return generateQRCodeImage(qrCodeString, folderPath);
+    }
+
 
 }
