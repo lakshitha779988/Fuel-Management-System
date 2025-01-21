@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './components/forms/LoginForm';
 import UserDetailsForm from './components/forms/UserDetailsForm';
+import VehicleDetailsForm from './components/forms/VehicleDetailsForm';
+
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/UserDetails" element={<UserDetailsForm />} />
+          <Route path="/VehicleDetails" element={<VehicleDetailsForm />} />
+          
         </Routes>
       </>
     </Router>
