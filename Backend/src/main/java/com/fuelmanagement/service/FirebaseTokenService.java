@@ -12,6 +12,10 @@ public class FirebaseTokenService {
     @Autowired
     private FirebaseAuth firebaseAuth;
 
+    public FirebaseTokenService(FirebaseAuth firebaseAuth) {
+        this.firebaseAuth = firebaseAuth;
+    }
+
     public FirebaseToken verifyToken(String idToken) throws FirebaseAuthException {
         return firebaseAuth.verifyIdToken(idToken);
     }
