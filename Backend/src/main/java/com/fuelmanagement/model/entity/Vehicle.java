@@ -21,6 +21,9 @@ public class Vehicle  {
     @Column(nullable = false)
     private String registrationNumber;
 
+    @Column(nullable = false)
+    private String fuelType;
+
     @ManyToOne
     @JoinColumn(name = "type_id", nullable = false)
     private VehicleType vehicleType;
@@ -62,8 +65,17 @@ public class Vehicle  {
         return registrationNumber;
     }
 
+
     public void setRegistrationNumber(String registrationNumber) {
         this.registrationNumber = registrationNumber;
+    }
+
+    public String getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(String fuelType) {
+        this.fuelType = fuelType;
     }
 
     public VehicleType getVehicleType() {

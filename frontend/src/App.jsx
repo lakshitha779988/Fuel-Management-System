@@ -1,24 +1,19 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import UserDetailsForm from './components/forms/UserDetailsForm';
+import LoginForm from './components/forms/LoginForm';
 
 function App() {
   return (
     <Router>
-    <>
-
-    <h1 class="text-4xl font-bold text-center text-blue-500 mt-4">
-    Welcome to fuel Management System 
-  </h1>
-  <Routes>
-          <Route path="/UserDetails" element={<UserDetailsForm />} />
+      <>
+        <h1 className="text-4xl font-bold text-center text-blue-500 mt-4">
+          Welcome to Fuel Management System
+        </h1>
+        <Routes>
+          <Route path="/login" element={<LoginForm />} />
         </Routes>
       </>
     </Router>
   );
-
-  
 }
 
 export default App;
-
