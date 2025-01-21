@@ -1,12 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 function VehicleDetailsForm() {
- 
+ const [vehicleType,setVehicleType]=useState('');
+ const[fuelType,setFuelType]=useState('');
+ const[letter,setLetter]=useState('');
+ const[number,setNumber]=useState('');
+ const[submitted,setSubmitted]=useState('false');
+ const[chassisNumber,setChassisNumber]=useState('false');
 
+const  handleSubmit = (event) =>{
+    event.preventDefault();
+    if (vehicleType && fuelType && letter && number && chassisNumber) {
+        console.log("Vehicle Details Submitted: ", { vehicleType, fuelType, letter, number, chassisNumber });
+        setSubmitted(true); 
+        alert("Form submitted sucessfully!");
+      } else {
+        alert("Please fill in all the fields.");
+      }
+ };
+ const handleLetterChange = (e) =>
+    {
+        setLetter(e.target.value.toUpperCase());
+ };
+ const handleNumberChange = (e) =>
+ {
+    setNumber(e.target.value.replace(/\D/g,''));
+ };
 
   return (
-    <div>VehicleDetailsForm
-  <form>
+    <div>
+  <form onSubmit={handleSubmit}>
  <h2>Vehicle Details</h2>
  <div>
     <label htmlFor='letter'>Vehicle Number</label>
@@ -15,6 +38,7 @@ function VehicleDetailsForm() {
       id='letter'
       maxLength="3"
       value={letter}
+      onChange={handleLetterChange}
       placeholder='ABC'
       />
  </div>
@@ -24,7 +48,8 @@ function VehicleDetailsForm() {
 type='text'
 id='number'
 maxLength="4"
-value={Number}
+value={number}
+onChange={handleNumberChange}
 placeholder='1234'
 />
 <div>
@@ -38,7 +63,12 @@ placeholder='1236AC5685AF5'
 </div>
 <div>
 <label htmlFor='VehicleType'>VehicleType</label>
-<select>
+<select
+id='vehicleType'
+value={vehicleType}
+onChange={(e) =>setVehicleType(e.target.value)}
+
+>
 <option value="">Select Vechile Type</option>
 <option value="Car">Car</option>
 <option value="Bike">Bike</option>
@@ -46,7 +76,12 @@ placeholder='1236AC5685AF5'
 <option value="Truck">Van</option>
 </select>
 </div>
-<select>
+<select
+id='fuelType'
+value={fuelType}
+onChange={(e) =>setFuelType(e.target.value)}
+
+>
 <option value="">Select Fuel Type</option>
 <option value="Petrol">Petrol</option>
 <option  value="Diesel">Diesel</option>
@@ -64,7 +99,6 @@ placeholder='1236AC5685AF5'
  </div>
 
   </form>
-
 
 
 
