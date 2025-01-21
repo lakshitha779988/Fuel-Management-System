@@ -5,7 +5,7 @@ import com.fuelmanagement.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+    @Service
     public class VehicleService {
         @Autowired
         private VehicleRepository vehicleRepository;
@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
             // Add validation logic (e.g., mock Motor Traffic DB validation)
             return vehicleRepository.save(vehicle);
         }
-
-
+        public Vehicle getVehicleById(Long vehicleId) {
+            // Fetch the vehicle details using its ID
+            return vehicleRepository.findById(vehicleId)
+                    .orElseThrow(() -> new IllegalArgumentException("Vehicle not found with ID: " + vehicleId));
+        }
     }
 
