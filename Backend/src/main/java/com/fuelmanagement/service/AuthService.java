@@ -2,9 +2,11 @@ package com.fuelmanagement.service;
 
 import com.fuelmanagement.model.dto.request.LoggingRequest;
 import com.fuelmanagement.model.dto.request.RegistrationRequest;
+import com.fuelmanagement.model.entity.FuelQuotaTracker;
 import com.fuelmanagement.model.entity.User;
 import com.fuelmanagement.model.entity.Vehicle;
 import com.fuelmanagement.model.entity.VehicleType;
+import com.fuelmanagement.repository.FuelQuotaTrackerRepository;
 import com.fuelmanagement.repository.UserRepository;
 import com.fuelmanagement.repository.VehicleRepository;
 import com.fuelmanagement.repository.VehicleTypeRepository;
@@ -26,11 +28,13 @@ public class AuthService {
     private final VehicleTypeRepository vehicleTypeRepository;
     private final JwtService jwtService;
     private final SmsService smsService;
+    private final FuelQuotaTrackerRepository fuelQuotaTrackerRepository;
+
 
     @Autowired
     public AuthService(UserRepository userRepository,
                        VehicleRepository vehicleRepository,
-                       VehicleTypeRepository vehicleTypeRepository, JwtService jwtService, SmsService smsService
+                       VehicleTypeRepository vehicleTypeRepository, JwtService jwtService, SmsService smsService, FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelQuotaTracker fuelQuotaTracker
     ) {
         this.userRepository = userRepository;
         this.vehicleRepository = vehicleRepository;
@@ -38,6 +42,8 @@ public class AuthService {
 
         this.jwtService = jwtService;
         this.smsService = smsService;
+        this.fuelQuotaTrackerRepository = fuelQuotaTrackerRepository;
+
     }
 
     public void register(RegistrationRequest registrationRequest) {
@@ -64,6 +70,29 @@ public class AuthService {
         }
         VehicleType vehicleType = vehicleTypeOptional.get();
 
+        //create fuel-quota tracker
+
+        FuelQuotaTracker fuelQuotaTracker1 = new FuelQuotaTracker();
+        fuelQuotaTracker1.setExistingFuel((float) vehicleType.getFuelLimit());
+        fuelQuotaTracker1.setWeeklyConsumption((float) vehicleType.getFuelLimit());
+        fuelQuotaTracker1.setCreatedAt(new Date(System.currentTimeMillis()));
+        fuelQuotaTracker1.setResetDate(new Date(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000));
+        fuelQuotaTrackerRepository.save(fuelQuotaTracker1);
+
+
+
+
+
+        // Create and save Vehicle
+        Vehicle vehicle = new Vehicle();
+        vehicle.setChaseNumber(registrationRequest.getChaseNumber());
+        vehicle.setRegistrationNumber(registrationRequest.getVehicleNumber());
+        vehicle.setVehicleType(vehicleType);
+        vehicle.setCreatedAt(new Date());
+        vehicle.setFuelType(registrationRequest.getFuelType());
+        vehicle.setFuelQuotaTracker(fuelQuotaTracker1);
+        vehicleRepository.save(vehicle);
+
         // Create and save User
         User user = new User();
         user.setFirstName(registrationRequest.getFirstName());
@@ -72,15 +101,8 @@ public class AuthService {
         user.setNationalId(registrationRequest.getNationalId());
         user.setPassword(registrationRequest.getPassword());
         user.setCreateAt(new Date());
+        user.setVehicle(vehicle);
         userRepository.save(user);
-
-        // Create and save Vehicle
-        Vehicle vehicle = new Vehicle();
-        vehicle.setChaseNumber(registrationRequest.getChaseNumber());
-        vehicle.setRegistrationNumber(registrationRequest.getVehicleNumber());
-        vehicle.setVehicleType(vehicleType);
-        vehicle.setCreatedAt(new Date());
-        vehicleRepository.save(vehicle);
 
 
         System.out.println("User and Vehicle registered successfully.");
