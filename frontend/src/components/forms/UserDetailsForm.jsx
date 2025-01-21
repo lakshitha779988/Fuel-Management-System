@@ -49,72 +49,93 @@ const handleSubmit = (e) => {
   alert('User details submitted successfully!');
 };
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-      <h3 class="some-class">User Details</h3> 
-
-
-        <label htmlFor="firstName">First Name</label>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+       <div className="max-w-lg w-full bg-white rounded-lg shadow-md p-6">
+       <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">User Details</h2> 
+      <form onSubmit={handleSubmit} classname="space-y-4">
+        
+     
+<div>
+        <label htmlFor="firstName" className="block text-gray-700 font-semibold">First Name:</label>
         <input id="firstName"
          type="text"
           placeholder="Ex: Saman"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"   
           onChange={(e) => setFirstName(e.target.value)}
           />
-
-        <label htmlFor="lastName">Last Name</label>
+</div>
+<div>
+        <label htmlFor="lastName" className="block text-gray-700 font-semibold">Last Name:</label>
         <input id="lastName"
          type="text"
           placeholder="Ex: Perera"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           onChange={(e) => setLastName(e.target.value)}
           />
-
-        <label htmlFor="address">Address</label>
+</div>
+<div>
+        <label htmlFor="address" className="block text-gray-700 font-semibold">Address:</label>
         <input id="address"
          type="text"
-          placeholder="Ex: 399/8, Station Road, Colombo" 
+          placeholder="Ex: 399/8, Station Road, Colombo"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" 
           onChange={(e) => setAddress(e.target.value)}
           />
+</div>
 
-        <label htmlFor="nic">NIC</label>
+        <label htmlFor="nic" className="block text-gray-700 font-semibold">NIC:</label>
         <input id="nic"
          type="text"
           placeholder="Ex: 200134587570" 
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           onChange={(e) => setNic(e.target.value)}
           />
-
-        <label htmlFor="mobileNumber">Mobile Number</label>
+<div>
+        <label htmlFor="mobileNumber"className="block text-gray-700 font-semibold">
+          
+          Mobile Number:</label>
         <input
           id="mobileNumber"
           type="text"
           placeholder="Ex: 077 123 4567"
+          classname="mt-1 block w-full  p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           value={mobileNumber}
           onChange={(e) => setMobileNumber(e.target.value)}
         />
-
-        <button onClick={handleSendOTP}>
-          Send OTP
+</div>
+        <button onClick={handleSendOTP}  
+        className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+        >Send OTP
         </button>
 
         {otpSent && (
-          <div>
-            <label htmlFor="otp">OTP</label>
+          <div className="mt-4">
+            <label htmlFor="otp" className="block text-sm font-medium text-gray-700">OTP</label>
             <input
               id="otp"
               type="text"
               placeholder="Enter OTP"
+              className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500'
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
             />
 
-            <button onClick={handleVerifyOTP}>
+            <button onClick={handleVerifyOTP}
+              className="mt-4 w-full bg-green-600 text-white py-2 rounded-md hover:bg-blue-700 transition" >
               Verify OTP
             </button>
           </div>
         )}
 
-        {otpVerified && <p>OTP verified successfully!</p>}
-        <button  disabled={!otpVerified} >Submit</button>
+        {otpVerified && <p className="text-green-600">OTP verified successfully!</p>}
+        <button  disabled={!otpVerified}
+         className={` mt-6 w-full py-2 rounded-md text-white ${
+          otpVerified ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-400 cursor-not-allowed'
+        } transition`} >
+          Submit
+          </button>
       </form>
+    </div>
     </div>
   );
 }
