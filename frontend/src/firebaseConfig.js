@@ -20,4 +20,3 @@ const analytics = getAnalytics(app);
 
 
 export { app, auth, analytics };
-                                
