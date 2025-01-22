@@ -3,6 +3,7 @@ package com.fuelmanagement.controller;
 import com.fuelmanagement.model.dto.response.UserDetailsResponse;
 import com.fuelmanagement.service.JwtService;
 import com.fuelmanagement.service.UserService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +49,16 @@ public class UserController {
 
         // Return user details in the response
         return ResponseEntity.ok(userDetails);
+    }
+
+    // Create a new user
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        try {
+            return ResponseEntity.ok((User) userService.createUser((com.fuelmanagement.model.entity.User) user));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
 }

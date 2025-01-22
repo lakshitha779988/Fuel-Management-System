@@ -12,7 +12,12 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     User findByLastName(String username);
 
+    Optional<User> findByNationalId(String nationalId);
+
+    boolean findByVehicleId(Long vehicleId);
+
     boolean existsByMobileNumber(String mobileNumber);
 
     boolean existsByNationalId(String nationalId);
+
 }
