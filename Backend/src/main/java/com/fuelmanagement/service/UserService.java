@@ -42,5 +42,20 @@ public class UserService {
         }
         return userRepository.save(user);
     }
+
+    // Update user details
+    public User updateUser(Long userId, User updatedUserDetails) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+
+        existingUser.setFirstName(updatedUserDetails.getFirstName());
+        existingUser.setLastName(updatedUserDetails.getLastName());
+        existingUser.setMobileNumber(updatedUserDetails.getMobileNumber());
+        existingUser.setPassword(updatedUserDetails.getPassword());
+        existingUser.setActive(updatedUserDetails.isActive());
+        existingUser.setRole(updatedUserDetails.getRole());
+
+        return userRepository.save(existingUser);
+    }
 }
 

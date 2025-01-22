@@ -60,5 +60,13 @@ public class UserController {
             return ResponseEntity.badRequest().body(null);
         }
     }
-
+    // Update user details
+    @PutMapping("/{userId}")
+    public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody User updatedUserDetails) {
+        try {
+            return ResponseEntity.ok((User) userService.updateUser(userId, (com.fuelmanagement.model.entity.User) updatedUserDetails));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
