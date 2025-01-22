@@ -1,55 +1,90 @@
 package com.fuelmanagement.service;
 
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
+@Component
 public class JwtService {
 
-  private   String secretKey = "";
+    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor("your_secret_key_your_secret_key_your_secret_key".getBytes());
+    private final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 hours
 
-  public JwtService(){
-      KeyGenerator keyGen = null;
-      try {
-          keyGen = KeyGenerator.getInstance("HmacSHA256");
-      } catch (NoSuchAlgorithmException e) {
-          throw new RuntimeException(e);
-      }
-      SecretKey sk = keyGen.generateKey();
-     secretKey =  Base64.getEncoder().encodeToString(sk.getEncoded());
-  }
+    // Generate token with identifier (name or mobileNumber), type, and role
+    public String generateToken(String identifier, String type, String role) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("identifier", identifier); // Can be name or mobileNumber
+        claims.put("type", type);
+        claims.put("role", role);
+        return createToken(claims);
+    }
 
-    public String generateToken(String userName){
-        Map<String, Object> claims =    new HashMap<>();
-
+    private String createToken(Map<String, Object> claims) {
         return Jwts.builder()
-                .claims()
-                .add(claims)
-                .subject(userName)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60* 60* 30))
-                .and()
-                .signWith(getKey())
+                .setClaims(claims)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS256) // Updated to use SecretKey
                 .compact();
     }
 
-    private Key getKey() {
-
-      byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-      return Keys.hmacShaKeyFor(keyBytes);
+    // Extract claims
+    public Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
+    public String extractIdentifier(String token) {
+        return extractAllClaims(token).get("identifier", String.class);
+    }
 
+    public String extractType(String token) {
+        return extractAllClaims(token).get("type", String.class);
+    }
+
+    public String extractRole(String token) {
+        return extractAllClaims(token).get("role", String.class);
+    }
+
+    // Verify token validity
+    public boolean verifyToken(String token, String expectedType) {
+        try {
+            Claims claims = extractAllClaims(token);
+
+            // Validate the token is not expired
+            if (claims.getExpiration().before(new Date())) {
+                return false;
+            }
+
+            // Validate the token type (e.g., FUEL_USER or FUEL_STATION)
+            String type = claims.get("type", String.class);
+            return type != null && type.equals(expectedType);
+
+        } catch (JwtException | IllegalArgumentException e) {
+            // Handle cases of invalid tokens or parsing issues
+            System.err.println("Token verification failed: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Token validation
+    public boolean isTokenValid(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY)
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
 }

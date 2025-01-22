@@ -1,24 +1,19 @@
 package com.fuelmanagement.service;
 
-import com.fuelmanagement.model.dto.request.LoggingRequest;
 import com.fuelmanagement.model.dto.request.RegistrationRequest;
-import com.fuelmanagement.model.entity.FuelQuotaTracker;
-import com.fuelmanagement.model.entity.User;
-import com.fuelmanagement.model.entity.Vehicle;
-import com.fuelmanagement.model.entity.VehicleType;
-import com.fuelmanagement.repository.FuelQuotaTrackerRepository;
-import com.fuelmanagement.repository.UserRepository;
-import com.fuelmanagement.repository.VehicleRepository;
-import com.fuelmanagement.repository.VehicleTypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fuelmanagement.model.dto.response.LoginResponse;
+import com.fuelmanagement.model.entity.*;
+import com.fuelmanagement.repository.*;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 public class AuthService {
@@ -29,22 +24,25 @@ public class AuthService {
     private final JwtService jwtService;
     private final SmsService smsService;
     private final FuelQuotaTrackerRepository fuelQuotaTrackerRepository;
+    private final FuelStationRepository fuelStationRepository;
+    private final PasswordEncoder passwordEncoder;
 
+    private FirebaseTokenService firebaseTokenService;
+    private UserService userService;
 
-    @Autowired
-    public AuthService(UserRepository userRepository,
-                       VehicleRepository vehicleRepository,
-                       VehicleTypeRepository vehicleTypeRepository, JwtService jwtService, SmsService smsService, FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelQuotaTracker fuelQuotaTracker
-    ) {
+    public AuthService(UserRepository userRepository, VehicleRepository vehicleRepository, VehicleTypeRepository vehicleTypeRepository, JwtService jwtService, SmsService smsService, FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelStationRepository fuelStationRepository, PasswordEncoder passwordEncoder, FirebaseTokenService firebaseTokenService, UserService userService) {
         this.userRepository = userRepository;
         this.vehicleRepository = vehicleRepository;
         this.vehicleTypeRepository = vehicleTypeRepository;
-
         this.jwtService = jwtService;
         this.smsService = smsService;
         this.fuelQuotaTrackerRepository = fuelQuotaTrackerRepository;
-
+        this.fuelStationRepository = fuelStationRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.firebaseTokenService = firebaseTokenService;
+        this.userService = userService;
     }
+
 
     public void register(RegistrationRequest registrationRequest) {
         // Check if user with the given mobileNumber or nationalId already exists
@@ -100,7 +98,7 @@ public class AuthService {
         user.setMobileNumber(registrationRequest.getMobileNumber());
         user.setNationalId(registrationRequest.getNationalId());
         user.setPassword(registrationRequest.getPassword());
-        user.setCreateAt(new Date());
+        user.setCreatedAt(LocalDateTime.now());
         user.setVehicle(vehicle);
         userRepository.save(user);
 
@@ -116,63 +114,43 @@ public class AuthService {
 
 
 
-    public String  login(LoggingRequest loggingRequest) {
 
-        //check mobile number is exit on database or not
-        User user = userRepository.findByMobileNumber(loggingRequest.getMobileNumber());
-        if (user == null) {
-            throw new RuntimeException("Mobile number not found.");
+    public LoginResponse authenticateFuelUser(String mobileNumber, String firebaseToken) {
+        try {
+
+            FirebaseToken decodedToken = firebaseTokenService.verifyToken(firebaseToken);
+
+
+            User fuelUser = userRepository.findByMobileNumber(mobileNumber)
+                    .orElseThrow(() -> new UsernameNotFoundException("Mobile number not registered"));
+
+            // Step 3: Generate JWT token
+            String token = jwtService.generateToken(fuelUser.getMobileNumber(), "FUEL_USER", fuelUser.getRole());
+
+            // Step 4: Return response
+            return new LoginResponse(token, "FUEL_USER", null, mobileNumber, fuelUser.getRole());
+        } catch (FirebaseAuthException e) {
+            throw new RuntimeException("Invalid Firebase token", e);
         }
-
-        //generate otm
-        String otp = generateOtp();
-        LocalDateTime otpExpiry = LocalDateTime.now().plus(5, ChronoUnit.MINUTES);  // 5 minutes from now
-
-        //update otp in the user table for temporally
-        user.setOtp(otp);
-        user.setOtpExpiry(otpExpiry);
-
-        userRepository.save(user);
-
-        smsService.sendOtp(user.getMobileNumber(),user.getOtp());
-
-        return "OTP sent to registered mobile number.";
-
-
     }
 
 
-    public String verifyOtp(String mobileNumber, String inputOtp) {
+    public LoginResponse authenticateFuelStation(String username, String password) {
+        // Step 1: Find the fuel station by username
+        FuelStation station = fuelStationRepository.findByName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
-        //  Check if the user on that mobile number exists
-        User user = userRepository.findByMobileNumber(mobileNumber);
-
-        // Validate OTP is valid or not
-        if (!user.getOtp().equals(inputOtp)) {
-            throw new RuntimeException("Invalid OTP");
-        }
-        if (user.getOtpExpiry().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("OTP expired");
+        // Step 2: Verify the password
+        if (!passwordEncoder.matches(password, station.getPassword())) {
+            throw new BadCredentialsException("Invalid password");
         }
 
-        // Generate JWT Token
-        String token = jwtService.generateToken(mobileNumber);
+        // Step 3: Generate JWT token
+        String token = jwtService.generateToken(station.getName(), "FUEL_STATION", station.getRole());
 
-        // Clear OTP in user table
-        user.setOtp(null);
-        user.setOtpExpiry(null);
-        userRepository.save(user);
-
-        return token;
+        // Step 4: Return response
+        return new LoginResponse(token, "FUEL_STATION", username, null, station.getRole());
     }
 
-
-
-
-    private String generateOtp() {
-        Random rand = new Random();
-        int otp = rand.nextInt(900000) + 100000; // Generates a 6-digit OTP
-        return String.valueOf(otp);
-    }
 
 }

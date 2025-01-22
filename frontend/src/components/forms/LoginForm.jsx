@@ -12,7 +12,7 @@ function LoginForm() {
   
   const checkMobileExistence = async (mobileNumber) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/check-mobile-existence?mobileNumber=${mobileNumber}`);
+      const response = await fetch(`http://localhost:8080/api/user/check-mobile-existence?mobileNumber=${mobileNumber}`);
       const data = await response.json();
       return data.exists; 
     } catch (error) {
@@ -83,9 +83,13 @@ function LoginForm() {
     }
 
     try {
-      const { token } = await verifyOtp(confirmationResult, otp);
-      localStorage.setItem('token', token);
-      
+      const data = await verifyOtp(confirmationResult, otp);
+      const jwtToken = data.token;
+      localStorage.setItem('token', jwtToken);
+      const cleanedMobileNumber = mobileNumber.replace(/^\+94/, '0');
+      localStorage.setItem('mobileNumber' , cleanedMobileNumber)
+      console.log(jwtToken);
+      window.location.href = "/dashboard";
       setAlert({
         message: 'Login successful!',
         type: 'success',

@@ -2,10 +2,9 @@ package com.fuelmanagement.model.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
-@Table(name = "fuel_station")
+
 public class FuelStation {
 
     @Id
@@ -27,7 +26,13 @@ public class FuelStation {
     @Column(name = "password", nullable = false)
     private String password;
 
-    // Getters and Setters
+    @Column(name = "address", nullable = false)
+    private String address;
+
+    @Column(nullable = false)
+    private String role; // Single role as a string (e.g., "FUEL_STATION_ADMIN")
+
+
     public Long getId() {
         return id;
     }
@@ -74,5 +79,21 @@ public class FuelStation {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
