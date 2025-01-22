@@ -45,46 +45,58 @@ export const sendOtp = async (mobileNumber) => {
   }
 };
 
-const verifyOtp = async (confirmationResult, otp) => {
+export const verifyOtp = async (confirmationResult, otp) => {
   try {
-      const userCredential = await confirmationResult.confirm(otp);
-      const user = userCredential.user;
-      
-      
-      const idToken = await user.getIdToken();
+    const userCredential = await confirmationResult.confirm(otp);
+    const user = userCredential.user;
 
-      
-      sendTokenToBackend(user.phoneNumber, idToken);
+    const idToken = await user.getIdToken();
+    
+    
+    return sendTokenToBackend(user.phoneNumber, idToken);
   } catch (error) {
-      console.error("Error verifying OTP: ", error);
-    }
+    console.error("Error verifying OTP: ", error);
+    throw new Error("OTP verification failed. Please try again.");
+  }
 };
 
 const sendTokenToBackend = async (mobileNumber, idToken) => {
+  const cleanedMobileNumber = mobileNumber.replace(/^\+94/, '0');
+  
   try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-              mobileNumber: mobileNumber,
-              firebaseToken: idToken,
-          }),
-      });
+    const response = await fetch("http://localhost:8080/api/auth/fuel-user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        mobileNumber: cleanedMobileNumber,
+        firebaseToken: idToken,
+      }),
+    });
 
-      const data = await response.json();
-      
-      if (response.ok) {
-          
-          localStorage.setItem("jwtToken", data.token);
-          localStorage.setItem("mobileNumber", mobileNumber);
+    const contentType = response.headers.get("Content-Type");
+    let data;
 
-          window.location.href = "/dashboard";
-      } else {
-          console.error("Error: ", data.message);
-      }
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();  
+    } else {
+      data = await response.text();  
+    }
+
+    if (response.ok) {
+       
+      return data;  
+    } else {
+      console.error("Error: ", data);
+      throw new Error(data);
+    }
   } catch (error) {
-      console.error("Failed to send token to backend: ", error);
-    }
+    console.error("Failed to send token to backend: ", error);
+    throw new Error("Login failed. Please try again.");
+  }
 };
+
+
+
+

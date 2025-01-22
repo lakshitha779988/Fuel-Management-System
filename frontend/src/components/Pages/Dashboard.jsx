@@ -1,13 +1,56 @@
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 
 const Dashboard = () => {
   const [qrCode, setQrCode] = useState("Sample QR Code");
   const [showProfile, setShowProfile] = useState(false);
   const [activeSection, setActiveSection] = useState("QR Code");
+  const [userDetails, setUserDetails] = useState(null);
 
   const generateQrCode = () => {
     setQrCode(`QR-${Date.now()}`);
   };
+
+  useEffect(() => {
+    const jwtToken = localStorage.getItem('token');
+    const mobileNumber = localStorage.getItem('mobileNumber');
+    console.log(jwtToken);
+    
+
+    if (jwtToken && typeof jwtToken === 'string') {
+        
+      fetchUserDetails(jwtToken)
+    } else {
+        setError('JWT Token not found or invalid!');
+    }
+} , []);
+
+
+
+
+const fetchUserDetails = async (jwtToken,mobileNumber) => {
+  try {
+      const response = await fetch(`http://localhost:8080/api/user/details?token=${jwtToken}`, {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${jwtToken}`, 
+              'Content-Type': 'application/json',
+          },
+      });
+
+      const data = await response.json(); 
+      if (response.ok) {
+          setUserDetails(data);
+          setShowProfile(true); 
+      } else {
+          setError('Failed to fetch user details');
+      }
+  } catch (error) {
+      console.error('Error during request:', error);
+      setError('Error occurred during request');
+  }
+};
+
+
 
   const downloadQrCode = () => {
     const canvas = document.getElementById("qrCode");
@@ -19,22 +62,40 @@ const Dashboard = () => {
   };
 
   const handleLogout = () => {
-    alert("Logged out successfully!");
-    // Add logout logic here
-  };
+    
+    const isConfirmed = window.confirm("Do you really want to log out?");
+
+    
+    if (isConfirmed) {
+        
+        localStorage.removeItem('token');
+
+       
+        alert("Logged out successfully!");
+
+        
+        window.location.href = '/login'; 
+    } else {
+       
+        alert("Logout cancelled.");
+    }
+};
+
 
   const deleteAccount = () => {
     if (window.confirm("Are you sure you want to delete your account?")) {
       alert("Account deleted.");
-      // Add account deletion logic here
+      
     }
   };
 
   return (
     <div className="min-h-screen bg-red-50 text-gray-800 flex">
       {/* Navigation Menu */}
+
       <aside className="w-1/5 bg-red-500 text-white py-6 px-4">
         <div className="mb-8 flex justify-center">
+
           {/* Profile Icon */}
           <div
             className="w-16 h-16 bg-red-200 rounded-full flex items-center justify-center cursor-pointer hover:bg-red-300"
@@ -47,8 +108,8 @@ const Dashboard = () => {
         {/* Profile Details */}
         {showProfile && (
           <div className="bg-red-100 text-red-800 rounded-lg p-4 mb-4">
-            <p>Name: John Doe</p>
-            <p>Email: john.doe@example.com</p>
+            <p>Name: {userDetails.firstName}</p>
+            <p>Email: {userDetails.mobileNumber}</p>
           </div>
         )}
 
@@ -87,6 +148,7 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <main className="flex-1 p-6">
+        
         {/* QR Code Section */}
         {activeSection === "QR Code" && (
           <div className="bg-white text-red-800 rounded-lg shadow-lg p-8 text-center">
