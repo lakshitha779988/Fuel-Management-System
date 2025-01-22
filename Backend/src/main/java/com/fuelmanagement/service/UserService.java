@@ -2,6 +2,7 @@ package com.fuelmanagement.service;
 
 import com.fuelmanagement.model.dto.response.UserDetailsResponse;
 import com.fuelmanagement.model.entity.User;
+import com.fuelmanagement.model.entity.Vehicle;
 import com.fuelmanagement.repository.UserRepository;
 import com.fuelmanagement.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,14 @@ public class UserService {
         existingUser.setRole(updatedUserDetails.getRole());
 
         return userRepository.save(existingUser);
+    }
+
+    // Add a vehicle to a user
+    public Vehicle addVehicleToUser(Long userId, Vehicle vehicle) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+        vehicle.setUser(user);
+        return vehicleRepository.save(vehicle);
     }
 }
 
