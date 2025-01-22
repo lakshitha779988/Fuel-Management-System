@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {sendOtp, verifyOtp } from '../../firebaseAuthService';
 
-function UserDetailsForm() {
+function UserDetailsForm({onSubmit}) {
+
 
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
@@ -120,6 +121,7 @@ const handleSubmit = (e) => {
     nic,
     mobileNumber,
   };
+  
   console.log('Form Submitted:', userDetails);
 setAlert({
   message:'Form submitted successfully!',
@@ -128,7 +130,7 @@ setAlert({
 
 });
 
-  
+  onSubmit(userDetails);
   
 };
 
@@ -199,7 +201,7 @@ setAlert({
           type="tel"
           pattern='[0-9]*'
           placeholder="Ex: 077 123 4567"
-          classname="mt-1 block w-full  p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          className="mt-1 block w-full  p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           value={mobileNumber}
           onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g,''))}
         />

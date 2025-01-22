@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './components/forms/LoginForm';
 import UserDetailsForm from './components/forms/UserDetailsForm';
 import VehicleDetailsForm from './components/forms/VehicleDetailsForm';
+import RegistrationPage from './components/Pages/RegistrationPage';
 
 
 function App() {
@@ -20,6 +21,8 @@ function App() {
       </>
     </Router>
   );
+
+  <RegistrationPage />;
 }
 
 export default App;
