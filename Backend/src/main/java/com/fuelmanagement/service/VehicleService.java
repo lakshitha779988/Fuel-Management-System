@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
             return vehicleRepository.save(vehicle);
         }
 
+
         
         public Vehicle getVehicleById(Long vehicleId) {
             // Fetch the vehicle details using its ID
