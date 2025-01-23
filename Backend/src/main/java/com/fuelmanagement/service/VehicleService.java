@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
             // Add validation logic (e.g., mock Motor Traffic DB validation)
             return vehicleRepository.save(vehicle);
         }
+
+        
         public Vehicle getVehicleById(Long vehicleId) {
             // Fetch the vehicle details using its ID
             return vehicleRepository.findById(vehicleId)
