@@ -27,6 +27,11 @@ public class UserService {
             return new UserDetailsResponse(firstName, mobileNumber);
         }
 
+        public Long findVehicleIdByMobileNumber(String mobileNumber){
+        User user = userRepository.findByMobileNumber(mobileNumber).get();
+        return user.getVehicle().getId();
+        }
+
     }
 
 
