@@ -18,6 +18,7 @@ function App() {
           <Route path="/VehicleDetails" element={<VehicleDetailsForm />} />
           
         </Routes>
+        
       </>
     </Router>
   );
