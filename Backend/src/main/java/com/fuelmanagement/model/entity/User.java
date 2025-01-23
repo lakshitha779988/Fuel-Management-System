@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +27,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String nationalId;
 
-    @OneToOne
+    @OneToOne@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
 
