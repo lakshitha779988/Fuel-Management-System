@@ -25,5 +25,26 @@ public class QRCodeController {
 
 
     }
+    @PutMapping("/update/{vehicleId}")
+    public ResponseEntity<byte[]> updateQRCode(@PathVariable Long vehicleId) {
+        try {
+            byte[] qrCodeImage = qrCodeService.updateQRCode(vehicleId);
+            return ResponseEntity.ok()
+                    .header("Content-Type", "image/png")
+                    .body(qrCodeImage);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @DeleteMapping("/delete/{vehicleId}")
+    public ResponseEntity<String> deleteQRCode(@PathVariable Long vehicleId) {
+        try {
+            qrCodeService.deleteQRCode(vehicleId);
+            return ResponseEntity.ok("QR Code deleted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
 

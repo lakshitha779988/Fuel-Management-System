@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {sendOtp, verifyOtp } from '../../firebaseAuthService';
 
+
 function UserDetailsForm({onSubmit}) {
+
 
 
   const [otpSent, setOtpSent] = useState(false);
@@ -19,9 +21,6 @@ function UserDetailsForm({onSubmit}) {
 
   const[confirmationResult,setConfirmationResult]=useState('null');
 
- 
-  
-
   const handleSendOTP = async(event) => {
     event.preventDefault();
     setLoading(true);
@@ -36,6 +35,7 @@ function UserDetailsForm({onSubmit}) {
       setLoading(false);
       return;
    
+
     }
     try {
       const result = await sendOtp(mobileNumber); 
@@ -78,6 +78,7 @@ function UserDetailsForm({onSubmit}) {
     verifyOtp(confirmationResult,otp);
     localStorage.setItem('token',token);
 
+
     setAlert(
       {
         message:'OTP verified successfully!',
@@ -98,6 +99,9 @@ function UserDetailsForm({onSubmit}) {
       setLoading(false);
     }  
 
+  };
+  const closeAlert=()=>{
+    setAlert({...alert,show:false});
   };
   const closeAlert=()=>{
     setAlert({...alert,show:false});
@@ -132,6 +136,7 @@ setAlert({
 
   onSubmit(userDetails);
   
+
 };
 
   return (

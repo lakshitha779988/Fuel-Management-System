@@ -1,4 +1,5 @@
 import React from 'react'
+
 import UserDetailsForm from '../forms/UserDetailsForm';
 import VehicleDetailsForm from '../forms/VehicleDetailsForm';
 import { useState } from 'react';
@@ -34,3 +35,4 @@ const handleVehicleDetailsSubmit=(details)=>{
 }
 
 export default RegistrationPage;
+

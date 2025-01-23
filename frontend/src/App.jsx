@@ -1,11 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './components/forms/LoginForm';
 import UserDetailsForm from './components/forms/UserDetailsForm';
-
-import TestDashboard from './components/Pages/TestDashboard';
-
 import VehicleDetailsForm from './components/forms/VehicleDetailsForm';
+
 import RegistrationPage from './components/Pages/RegistrationPage';
+
+import Dashboard from './components/Pages/Dashboard';
+
 
 
 
@@ -20,8 +21,8 @@ function App() {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/UserDetails" element={<UserDetailsForm />} />
 
-          <Route path="/dashboard" element={<TestDashboard/>} />
-
+          <Route path="/dashboard" element={<Dashboard/>} />
+        
           <Route path="/VehicleDetails" element={<VehicleDetailsForm />} />
 
           
