@@ -70,7 +70,7 @@ public class UserService {
     public Vehicle addVehicleToUser(Long userId, Vehicle vehicle) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
-        vehicle.setUser(user);
+        user.setVehicle(vehicle);
         return vehicleRepository.save(vehicle);
     }
 }
