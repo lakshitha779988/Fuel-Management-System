@@ -1,5 +1,6 @@
 package com.fuelmanagement.model.entity;
 
+import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -17,8 +18,22 @@ public class QrCode  {
 
     private Date createdAt;
 
-
     private String qrCode; // The actual QR code string
+
+    @OneToOne
+    @JoinColumn(name = "vehicle_id", nullable = false)
+    private Vehicle vehicle;
+
+    // Constructors
+    public QrCode() {}
+
+    public QrCode(String qrCode, Vehicle vehicle) {
+        this.qrCode = qrCode;
+        this.vehicle = vehicle;
+    }
+
+
+    //getter and setters
 
     public Date getCreatedAt() {
         return createdAt;
@@ -44,4 +59,8 @@ public class QrCode  {
     public void setQrCode(String qrCode) {
         this.qrCode = qrCode;
     }
+
+    public Vehicle getVehicle() { return vehicle;}
+
+    public void setVehicle(Vehicle vehicle) { this.vehicle = vehicle; }
 }

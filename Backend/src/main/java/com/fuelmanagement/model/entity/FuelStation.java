@@ -1,28 +1,33 @@
 package com.fuelmanagement.model.entity;
 
-
 import jakarta.persistence.*;
-
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
+@Table(name = "fuel_station")
 public class FuelStation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Date createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "mobile_number", nullable = false, unique = true)
     private String mobileNumber;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -31,11 +36,11 @@ public class FuelStation {
         this.id = id;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -61,5 +66,13 @@ public class FuelStation {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
