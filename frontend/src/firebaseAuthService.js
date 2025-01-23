@@ -60,6 +60,21 @@ export const verifyOtp = async (confirmationResult, otp) => {
   }
 };
 
+
+export const verifyOtpForRegistration = async (confirmationResult, otp) => {
+  try {
+    const userCredential = await confirmationResult.confirm(otp);
+    const user = userCredential.user;
+
+    const idToken = await user.getIdToken();
+    return "sucsuss";
+  } catch (error) {
+    console.error("Error verifying OTP: ", error);
+    throw new Error("OTP verification failed. Please try again.");
+  }
+};
+
+
 const sendTokenToBackend = async (mobileNumber, idToken) => {
   const cleanedMobileNumber = mobileNumber.replace(/^\+94/, '0');
   

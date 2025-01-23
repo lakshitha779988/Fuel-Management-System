@@ -1,8 +1,10 @@
 package com.fuelmanagement.controller;
 
 import com.fuelmanagement.model.dto.response.UserDetailsResponse;
+import com.fuelmanagement.model.entity.Vehicle;
 import com.fuelmanagement.service.JwtService;
 import com.fuelmanagement.service.UserService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,4 +52,32 @@ public class UserController {
         return ResponseEntity.ok(userDetails);
     }
 
+    // Create a new user
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        try {
+            return ResponseEntity.ok((User) userService.createUser((com.fuelmanagement.model.entity.User) user));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+    // Update user details
+    @PutMapping("/{userId}")
+    public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody User updatedUserDetails) {
+        try {
+            return ResponseEntity.ok((User) userService.updateUser(userId, (com.fuelmanagement.model.entity.User) updatedUserDetails));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Add a vehicle to a user
+    @PostMapping("/{userId}/vehicles")
+    public ResponseEntity<Vehicle> addVehicleToUser(@PathVariable Long userId, @RequestBody Vehicle vehicle) {
+        try {
+            return ResponseEntity.ok(userService.addVehicleToUser(userId, vehicle));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

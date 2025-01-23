@@ -16,5 +16,11 @@ import org.springframework.stereotype.Service;
         }
 
 
+        
+        public Vehicle getVehicleById(Long vehicleId) {
+            // Fetch the vehicle details using its ID
+            return vehicleRepository.findById(vehicleId)
+                    .orElseThrow(() -> new IllegalArgumentException("Vehicle not found with ID: " + vehicleId));
+        }
     }
 
