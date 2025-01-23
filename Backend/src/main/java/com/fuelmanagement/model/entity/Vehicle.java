@@ -36,14 +36,6 @@ public class Vehicle  {
     @JoinColumn(name = "qr_code_id", nullable = true)
     private QrCode qrCode;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    //getter and setter
-    public User getUser() {return user;}
-
-    public void setUser(User user) {this.user = user;}
 
     public Long getId() {
         return id;
