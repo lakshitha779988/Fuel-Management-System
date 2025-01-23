@@ -2,7 +2,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './components/forms/LoginForm';
 import UserDetailsForm from './components/forms/UserDetailsForm';
 import VehicleDetailsForm from './components/forms/VehicleDetailsForm';
+
+import RegistrationPage from './components/Pages/RegistrationPage';
+
 import Dashboard from './components/Pages/Dashboard';
+
 
 
 
@@ -20,12 +24,17 @@ function App() {
           <Route path="/dashboard" element={<Dashboard/>} />
         
           <Route path="/VehicleDetails" element={<VehicleDetailsForm />} />
+          <Route path="/register" element={<UserDetailsForm />} />
+
 
           
         </Routes>
+        
       </>
     </Router>
   );
+
+ 
 }
 
 export default App;

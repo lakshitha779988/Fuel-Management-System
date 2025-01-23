@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import {sendOtp, verifyOtp } from '../../firebaseAuthService';
+
+import {sendOtp, verifyOtpForRegistration } from '../../firebaseAuthService';
+
 
 function UserDetailsForm() {
+
+
 
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
@@ -18,24 +21,46 @@ function UserDetailsForm() {
 
   const[confirmationResult,setConfirmationResult]=useState('null');
 
- 
-  
 
-  const handleSendOTP = async(event) => {
-    event.preventDefault();
+  
+  const checkMobileExistence = async (mobileNumber) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/user/check-mobile-existence?mobileNumber=${mobileNumber}`);
+      const data = await response.json();
+      return data.exists; 
+    } catch (error) {
+      console.error('Error checking mobile number:', error);
+      setAlert({ message: 'Error checking mobile number.', type: 'error', show: true });
+      return false;
+    }
+  };
+
+
+  const handleSendOTP = async (e) => {
+    e.preventDefault();
     setLoading(true);
 
-
-    if (!mobileNumber || mobileNumber.length< 9) {
+    if (!mobileNumber || mobileNumber.length < 9) {
       setAlert({
         message: 'Please enter a valid mobile number (9 digits)',
         type: 'error',
-        show: true,
+        show: true
       });
       setLoading(false);
       return;
-   
     }
+
+    const mobileExists = await checkMobileExistence(mobileNumber);
+    if (mobileExists) {
+      setAlert({
+        message: 'This mobile number already registerd',
+        type: 'error',
+        show: true
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
       const result = await sendOtp(mobileNumber); 
       setConfirmationResult(result);
@@ -54,14 +79,14 @@ function UserDetailsForm() {
     } finally {
       setLoading(false);
     }
-
   };
 
   const handleVerifyOTP = async(e) => {
    
     e.preventDefault();
     setLoading(true);
-    if(!otp || !otp.length!==6){
+    if(!otp || otp.length!==6){
+      console.log(otp);
       setAlert({
         message: 'Please enter a valid 6-digit OTP',
         type: 'error',
@@ -73,16 +98,16 @@ function UserDetailsForm() {
       return;
     }
    try{
-    const{token} = await
-    verifyOtp(confirmationResult,otp);
-    localStorage.setItem('token',token);
-
+    const massage = await
+    verifyOtpForRegistration(confirmationResult,otp);
     setAlert(
       {
         message:'OTP verified successfully!',
         type:'success',
         show:true,
       });
+
+      setOtpVerified(true)
     }
     catch(error){
       setAlert({
@@ -101,6 +126,7 @@ function UserDetailsForm() {
   const closeAlert=()=>{
     setAlert({...alert,show:false});
   };
+
 const handleSubmit = (e) => {
   e.preventDefault();
   if (!otpVerified) {
@@ -120,7 +146,9 @@ const handleSubmit = (e) => {
     nic,
     mobileNumber,
   };
-  console.log('Form Submitted:', userDetails);
+  localStorage.setItem("userDetail", userDetails);
+  console.log(localStorage.getItem("userDetail"))
+  window.window.location.href = "/VehicleDetails";
 setAlert({
   message:'Form submitted successfully!',
   type:'success',
@@ -128,15 +156,16 @@ setAlert({
 
 });
 
+  onSubmit(userDetails);
   
-  
+
 };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
        <div className="max-w-lg w-full bg-white rounded-lg shadow-md p-6">
        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">User Details</h2> 
-      <form onSubmit={handleSubmit} classname="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
      
       {alert.show && 
       (
@@ -199,12 +228,13 @@ setAlert({
           type="tel"
           pattern='[0-9]*'
           placeholder="Ex: 077 123 4567"
-          classname="mt-1 block w-full  p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          className="mt-1 block w-full  p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           value={mobileNumber}
           onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g,''))}
         />
 </div>
         <button onClick={handleSendOTP}  
+        id="sign-in-button"
         className="mt-4 w-full bg-red-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
         disabled={loading}
         >

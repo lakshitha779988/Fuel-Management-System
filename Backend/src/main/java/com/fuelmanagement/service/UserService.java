@@ -49,6 +49,7 @@ public class UserService {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
 
+
         existingUser.setFirstName(updatedUserDetails.getFirstName());
         existingUser.setLastName(updatedUserDetails.getLastName());
         existingUser.setMobileNumber(updatedUserDetails.getMobileNumber());
@@ -57,7 +58,13 @@ public class UserService {
         existingUser.setRole(updatedUserDetails.getRole());
 
         return userRepository.save(existingUser);
+
     }
+  
+  public Long findVehicleIdByMobileNumber(String mobileNumber){
+        User user = userRepository.findByMobileNumber(mobileNumber).get();
+        return user.getVehicle().getId();
+        }
 
     // Add a vehicle to a user
     public Vehicle addVehicleToUser(Long userId, Vehicle vehicle) {
