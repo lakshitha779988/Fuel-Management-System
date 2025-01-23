@@ -45,20 +45,46 @@ export const sendOtp = async (mobileNumber) => {
   }
 };
 
-export const verifyOtp = async (confirmationResult, otp) => {
+const verifyOtp = async (confirmationResult, otp) => {
   try {
-    const userCredential = await confirmationResult.confirm(otp);
-    const token = await userCredential.user.getIdToken();
-    return { 
-      user: userCredential.user,
-      token 
-    };
+      const userCredential = await confirmationResult.confirm(otp);
+      const user = userCredential.user;
+      
+      
+      const idToken = await user.getIdToken();
+
+      
+      sendTokenToBackend(user.phoneNumber, idToken);
   } catch (error) {
-    console.error('Error in verifyOtp:', error);
-    throw new Error(
-      error.code === 'auth/invalid-verification-code'
-        ? 'Invalid OTP. Please try again.'
-        : 'Error verifying OTP. Please try again.'
-    );
-  }
+      console.error("Error verifying OTP: ", error);
+    }
+};
+
+const sendTokenToBackend = async (mobileNumber, idToken) => {
+  try {
+      const response = await fetch("http://localhost:8080/api/auth/login", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+              mobileNumber: mobileNumber,
+              firebaseToken: idToken,
+          }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+          
+          localStorage.setItem("jwtToken", data.token);
+          localStorage.setItem("mobileNumber", mobileNumber);
+
+          window.location.href = "/dashboard";
+      } else {
+          console.error("Error: ", data.message);
+      }
+  } catch (error) {
+      console.error("Failed to send token to backend: ", error);
+    }
 };
