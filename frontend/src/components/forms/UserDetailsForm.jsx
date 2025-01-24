@@ -126,7 +126,6 @@ function UserDetailsForm() {
   const closeAlert=()=>{
     setAlert({...alert,show:false});
   };
-
 const handleSubmit = (e) => {
   e.preventDefault();
   if (!otpVerified) {
