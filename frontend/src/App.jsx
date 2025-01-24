@@ -6,6 +6,7 @@ import VehicleDetailsForm from './components/forms/VehicleDetailsForm';
 import RegistrationPage from './components/Pages/RegistrationPage';
 
 import Dashboard from './components/Pages/Dashboard';
+import AdminDashboard from './components/Pages/AdminDashboard';
 
 
 
@@ -24,7 +25,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard/>} />
         
           <Route path="/VehicleDetails" element={<VehicleDetailsForm />} />
-
+          <Route path="/admin" element={<AdminDashboard/>} />
           
         </Routes>
         
