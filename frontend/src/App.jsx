@@ -24,6 +24,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboard/>} />
         
           <Route path="/VehicleDetails" element={<VehicleDetailsForm />} />
+          <Route path="/register" element={<UserDetailsForm />} />
+
 
           
         </Routes>
@@ -32,7 +34,7 @@ function App() {
     </Router>
   );
 
-  <RegistrationPage />;
+ 
 }
 
 export default App;

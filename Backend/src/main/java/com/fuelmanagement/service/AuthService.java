@@ -2,8 +2,8 @@ package com.fuelmanagement.service;
 
 import com.fuelmanagement.model.dto.request.RegistrationRequest;
 import com.fuelmanagement.model.dto.response.LoginResponse;
-import com.fuelmanagement.model.entity.*;
-import com.fuelmanagement.repository.*;
+import com.fuelmanagement.model.entity.mysql.*;
+import com.fuelmanagement.repository.mysql.*;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import org.springframework.security.authentication.BadCredentialsException;

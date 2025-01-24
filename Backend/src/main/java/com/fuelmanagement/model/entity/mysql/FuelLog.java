@@ -1,5 +1,5 @@
 
-package com.fuelmanagement.model.entity;
+package com.fuelmanagement.model.entity.mysql;
 
 import jakarta.persistence.*;
 import java.util.Date;
