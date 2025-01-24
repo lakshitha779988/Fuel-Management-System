@@ -3,12 +3,18 @@ package com.fuelmanagement.service;
 
 
 import com.fuelmanagement.model.entity.mysql.FuelLog;
+import com.fuelmanagement.model.entity.mysql.FuelQuotaTracker;
+import com.fuelmanagement.model.entity.mysql.User;
 import com.fuelmanagement.model.entity.mysql.Vehicle;
 import com.fuelmanagement.repository.mysql.FuelLogRepository;
+import com.fuelmanagement.repository.mysql.UserRepository;
 import com.fuelmanagement.repository.mysql.VehicleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ReportService {
   
      @Autowired
@@ -17,6 +23,8 @@ public class ReportService {
     @Autowired
     private VehicleRepository vehicleRepository;
 
+    @Autowired
+    private FuelLogRepository fuelLogRepository;
 
 
 public Float FuelUsageForEachVehicle(String registrationNumber){
