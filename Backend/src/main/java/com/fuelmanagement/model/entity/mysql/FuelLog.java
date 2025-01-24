@@ -33,6 +33,13 @@ public class FuelLog  {
     @Column(nullable = false)
     private Float fuelAmount;
 
+    @Column(nullable = false)
+    private Float fuelPumped;
+
+    public Float getFuelPumped() {return fuelPumped;}
+
+    public void setFuelPumped(Float fuelPumped) {this.fuelPumped = fuelPumped;}
+
     public Date getCreatedAt() {
         return createdAt;
     }

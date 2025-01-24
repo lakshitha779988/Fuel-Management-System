@@ -9,8 +9,9 @@ import java.util.List;
 @Repository
 public interface FuelLogRepository extends JpaRepository<FuelLog,Long> {
 
-
     List<FuelLog> findAllByVehicleId(Long id);
 
     List<FuelLog> findAllByUserId(Long id);
+
+    List<FuelLog> findByStationId(Long id);
 }

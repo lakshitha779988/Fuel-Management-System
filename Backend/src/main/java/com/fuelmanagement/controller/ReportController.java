@@ -19,6 +19,8 @@ public class ReportController {
     @Autowired
     ReportService reportService;
 
+    //fuelUsageForUser
+
     @GetMapping("/user/{userId}/fuel-usage")
     public ResponseEntity<?> fuelUsageForUser(@PathVariable Long userId) {
         try {
@@ -30,23 +32,26 @@ public class ReportController {
 
     }
 
+    //fuelUsageForEachVehicle
 
     public Float fuelUsageForEachVehicle( String registrationNumber) {
-
         Float FuelUsage = reportService.FuelUsageForEachVehicle(registrationNumber);
-
         return (FuelUsage);
-
     }
 
     public Float costUsageForEachVehicle(String registrationNumber) {
-
         Float CostUsage = reportService.CostUsageForEachVehicle(registrationNumber);
-
         return (CostUsage);
     }
 
-   
+    // fuel distribution for fuel stations
+
+    // New method for distributing fuel usage per fuel station
+    public Float fuelDistributionUsageForStation(Long stationId) {
+       // return reportService.fuelDistributionUsageForStation(stationId);
+        Float CostUsageOfFuelStation = reportService.fuelDistributionUsageForStation(stationId);
+        return (CostUsageOfFuelStation);
+    }
 
 
 

@@ -1,6 +1,8 @@
 package com.fuelmanagement.model.entity.mysql;
 
 import jakarta.persistence.*;
+import org.hibernate.mapping.List;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -32,6 +34,12 @@ public class FuelStation {
     @Column(nullable = false)
     private String role; // Single role as a string (e.g., "FUEL_STATION_ADMIN")
 
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
+    private  List fuelLogs;
+
+    public List getFuelLogs() {return fuelLogs;}
+
+    public void setFuelLogs(List fuelLogs) {this.fuelLogs = fuelLogs;}
 
     public Long getId() {
         return id;
