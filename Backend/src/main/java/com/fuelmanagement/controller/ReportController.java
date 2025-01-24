@@ -11,8 +11,18 @@ public class ReportController {
 
     public Float fuelUsageForEachVehicle(String registrationNumber) {
 
-        Float FuelUsage = reportService.FuelUsageForEachVehicle(registrationNumber)
+        Float FuelUsage = reportService.FuelUsageForEachVehicle(registrationNumber);
 
         return (FuelUsage);
     }
+
+    public Float costUsageForEachVehicle(String registrationNumber) {
+
+        Float CostUsage = reportService.CostUsageForEachVehicle(registrationNumber);
+
+        return (CostUsage);
+    }
+
+
+
 }
