@@ -25,12 +25,12 @@ public Float FuelUsageForEachVehicle(String registrationNumber){
      public Float CostUsageForEachVehicle(String registrationNumber){
 
           List<FuelLog> allTransactions = fuelLogRepository.findByVehicle_VehicleRegistrationNumber(registrationNumber);
-          float totalFuelUsage = 0;
+          float totalCostUsage = 0;
           float priceForOneLitre = 325.12F;
           for (FuelLog fuelLog : allTransactions) {
-               totalFuelUsage += fuelLog.getFuelAmount()*priceForOneLitre; // Assuming FuelLog has a field 'fuelAmount'
+               totalCostUsage += fuelLog.getFuelAmount()*priceForOneLitre; // Assuming FuelLog has a field 'fuelAmount'
           }
-          return totalFuelUsage;
+          return totalCostUsage;
 
      }
 
