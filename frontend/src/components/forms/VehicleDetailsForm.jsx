@@ -1,12 +1,53 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 function VehicleDetailsForm() {
  const [vehicleType,setVehicleType]=useState('');
+ const [vehicleTypes,setVehicleTypes]=useState([]);
  const[fuelType,setFuelType]=useState('');
  const[letter,setLetter]=useState('');
  const[number,setNumber]=useState('');
  const[submitted,setSubmitted]=useState('false');
- const[chassisNumber,setChassisNumber]=useState('false');
+ const[chassisNumber,setChassisNumber]=useState('');
+
+
+
+ const fetchVehicleType = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/api/vehicle-types', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    const vehicleTypes = await response.json();
+    console.log('Fetched Vehicle Types:', vehicleTypes);
+
+    // Do something with the vehicle types, e.g., update state
+    return vehicleTypes;
+  } catch (error) {
+    console.error('Failed to fetch vehicle types:', error);
+    return [];
+  }
+};
+
+
+useEffect(() => {
+  const getVehicleTypes = async () => {
+    const types = await fetchVehicleType();
+    setVehicleTypes(types);
+  };
+
+  getVehicleTypes();
+}, []);
+
+
+
+
 
 const  handleSubmit = (event) =>{
     event.preventDefault();
@@ -25,6 +66,11 @@ const  handleSubmit = (event) =>{
  const handleNumberChange = (e) =>
  {
   setNumber(e.target.value.replace(/\D/g, ''));
+ };
+
+
+ const handleChassisNumber = (e) =>{
+    setChassisNumber(e.target.value);
  };
 
   return (
@@ -63,6 +109,8 @@ className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm foc
 <input 
 type='text'
 id='Chassis Number'
+value={chassisNumber}
+onChange={handleChassisNumber}
 placeholder='1236AC5685AF5'
 className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-indigo-500'
 />
@@ -78,10 +126,11 @@ className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm foc
 style={{ backgroundColor: 'white' }}
 >
 <option value="">Select Vechile Type</option>
-<option value="Car">Car</option>
-<option value="Bike">Bike</option>
-
-<option value="Truck">Van</option>
+{vehicleTypes.map((type) => (
+        <option key={type.id} value={type.id}>
+          {type.vehicleTypeName}
+        </option>
+      ))}
 </select>
 </div>
 
