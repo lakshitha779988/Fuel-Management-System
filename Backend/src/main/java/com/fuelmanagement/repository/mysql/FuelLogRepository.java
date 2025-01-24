@@ -11,4 +11,5 @@ public interface FuelLogRepository extends JpaRepository<FuelLog,Long> {
 
 
     List<FuelLog> findAllByVehicleId(Long id);
+    List<FuelLog> findTop10ByVehicleIdOrderByTransactionTimeDesc(Long id);
 }
