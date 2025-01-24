@@ -14,7 +14,11 @@ public Float FuelUsageForEachVehicle(String registrationNumber){
 
      List<FuelLog> allTransactions = fuelLogRepository.findByVehicle_VehicleRegistrationNumber(registrationNumber);
 
-
+     float totalFuelUsage = 0;
+     for (FuelLog fuelLog : allTransactions) {
+          totalFuelUsage += fuelLog.getFuelAmount(); // Assuming FuelLog has a field 'fuelAmount'
+     }
+     return totalFuelUsage;
 
 }
 
