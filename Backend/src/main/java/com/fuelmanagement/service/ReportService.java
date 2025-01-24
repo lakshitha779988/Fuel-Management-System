@@ -1,6 +1,7 @@
 package com.fuelmanagement.service;
 
 
+
 import com.fuelmanagement.model.entity.mysql.FuelLog;
 import com.fuelmanagement.model.entity.mysql.Vehicle;
 import com.fuelmanagement.repository.mysql.FuelLogRepository;
@@ -9,9 +10,14 @@ import com.fuelmanagement.repository.mysql.VehicleRepository;
 import java.util.List;
 
 public class ReportService {
+  
+     @Autowired
+    private UserRepository userRepository;
 
-FuelLogRepository fuelLogRepository;
-VehicleRepository vehicleRepository;
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
+
 
 public Float FuelUsageForEachVehicle(String registrationNumber){
 
@@ -38,5 +44,27 @@ public Float FuelUsageForEachVehicle(String registrationNumber){
           return totalCostUsage;
 
      }
+  
+  public Float fuelUsageForUser(Long userId) {
+        // Fetch the user by ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+
+        // Get all vehicles owned by the user
+        List<Vehicle> vehicles = vehicleRepository.findByUserId(userId);
+
+        // Calculate total fuel usage for the user
+        float totalFuelUsage = 0.0f;
+        for (Vehicle vehicle : vehicles) {
+            FuelQuotaTracker tracker = vehicle.getFuelQuotaTracker();
+            if (tracker != null) {
+                float fuelUsed = (float) (tracker.getWeeklyConsumption() - tracker.getExistingFuel());
+                totalFuelUsage += fuelUsed;
+            }
+        }
+
+        return totalFuelUsage;
+    }
 
 }
+
