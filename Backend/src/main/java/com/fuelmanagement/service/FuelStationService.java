@@ -1,14 +1,10 @@
 package com.fuelmanagement.service;
 
 import com.fuelmanagement.model.dto.request.FuelStationRequest;
-import com.fuelmanagement.model.entity.FuelStation;
-import com.fuelmanagement.repository.FuelStationRepository;
+import com.fuelmanagement.model.entity.mysql.FuelStation;
+import com.fuelmanagement.repository.mysql.FuelStationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Service
 public class FuelStationService {

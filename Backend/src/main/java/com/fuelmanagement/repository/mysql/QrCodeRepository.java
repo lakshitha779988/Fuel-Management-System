@@ -1,6 +1,6 @@
-package com.fuelmanagement.repository;
+package com.fuelmanagement.repository.mysql;
 
-import com.fuelmanagement.model.entity.QrCode;
+import com.fuelmanagement.model.entity.mysql.QrCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;

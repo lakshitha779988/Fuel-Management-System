@@ -1,23 +1,151 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 function VehicleDetailsForm() {
  const [vehicleType,setVehicleType]=useState('');
+ const [vehicleTypes,setVehicleTypes]=useState([]);
  const[fuelType,setFuelType]=useState('');
  const[letter,setLetter]=useState('');
  const[number,setNumber]=useState('');
  const[submitted,setSubmitted]=useState('false');
- const[chassisNumber,setChassisNumber]=useState('false');
+ const[chassisNumber,setChassisNumber]=useState('');
+const[vehicleDetails,setVehicleDetails] = useState({registrationNumber: '',
+  chassisNumber: '',
+  vehicleType: '',
+  fuelType: '',});
 
-const  handleSubmit = (event) =>{
-    event.preventDefault();
-    if (vehicleType && fuelType && letter && number && chassisNumber) {
-        console.log("Vehicle Details Submitted: ", { vehicleType, fuelType, letter, number, chassisNumber });
-        setSubmitted(true); 
-        alert("Form submitted sucessfully!");
-      } else {
-        alert("Please fill in all the fields.");
-      }
- };
+
+ const fetchVehicleType = async () => {
+
+  try {
+    const response = await fetch('http://localhost:8080/api/vehicle-types', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    const vehicleTypes = await response.json();
+    console.log('Fetched Vehicle Types:', vehicleTypes);
+
+    // Do something with the vehicle types, e.g., update state
+    return vehicleTypes;
+  } catch (error) {
+    console.error('Failed to fetch vehicle types:', error);
+    return [];
+  }
+};
+
+
+const sendRegistrationRequest = async () => {
+  
+  
+  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+  if (!userDetails) {
+    
+    alert("User details are missing.");
+    return;
+  }
+
+  
+  const registrationRequest = {
+    mobileNumber: userDetails.mobileNumber, 
+    firstName: userDetails.firstName,  
+    lastName: userDetails.lastName,  
+    address: userDetails.address,  
+    nationalId: userDetails.nic,  
+    chaseNumber: vehicleDetails.chassisNumber, 
+    vehicleNumber: vehicleDetails.registrationNumber,  
+    vehicleTypeId: vehicleDetails.vehicleType,  
+    fuelType: vehicleDetails.fuelType, 
+  };
+
+  try {
+   
+    const response = await fetch('http://localhost:8080/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(registrationRequest),
+    });
+
+    const responseData = await response.text();
+
+    if (response.ok) {
+    
+      alert("Registration successful!");
+      window.location.href = "/login";  
+    } else {
+      
+      alert(responseData.message || "An error occurred during registration.");
+    }
+  } catch (error) {
+    // 6. Handle network or unexpected errors
+    console.error("Error during registration:", error);
+    alert("An error occurred while processing your request.");
+  }
+};
+
+
+useEffect(() => {
+  const getVehicleTypes = async () => {
+    const types = await fetchVehicleType();
+    setVehicleTypes(types);
+  };
+
+  getVehicleTypes();
+}, []);
+
+
+
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+ 
+  const vehicleDetails = {
+    vehicleType,
+    fuelType,
+    registrationNumber: `${letter}-${number}`,
+    chassisNumber,
+  };
+
+  setVehicleDetails(vehicleDetails);
+
+  //console.log('Vehicle Details Submitted:', vehicleDetails);
+
+  try {
+    
+    const response = await fetch('http://localhost:8080/api/vehicles/check-vehicle-details', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(vehicleDetails), 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      alert(errorData.message);  // This is a basic alert, you can replace it with UI error display
+      return;
+    }
+
+    
+
+    const result = await response.text();
+
+    sendRegistrationRequest();
+    
+  } catch (error) {
+    console.error('Error submitting vehicle details:', error);
+    alert('Failed to register vehicle.');
+  }
+};
  const handleLetterChange = (e) =>
     {
         setLetter(e.target.value.toUpperCase());
@@ -25,6 +153,11 @@ const  handleSubmit = (event) =>{
  const handleNumberChange = (e) =>
  {
   setNumber(e.target.value.replace(/\D/g, ''));
+ };
+
+
+ const handleChassisNumber = (e) =>{
+    setChassisNumber(e.target.value);
  };
 
   return (
@@ -63,6 +196,8 @@ className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm foc
 <input 
 type='text'
 id='Chassis Number'
+value={chassisNumber}
+onChange={handleChassisNumber}
 placeholder='1236AC5685AF5'
 className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-indigo-500'
 />
@@ -78,10 +213,11 @@ className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm foc
 style={{ backgroundColor: 'white' }}
 >
 <option value="">Select Vechile Type</option>
-<option value="Car">Car</option>
-<option value="Bike">Bike</option>
-
-<option value="Truck">Van</option>
+{vehicleTypes.map((type) => (
+        <option key={type.id} value={type.id}>
+          {type.vehicleTypeName}
+        </option>
+      ))}
 </select>
 </div>
 

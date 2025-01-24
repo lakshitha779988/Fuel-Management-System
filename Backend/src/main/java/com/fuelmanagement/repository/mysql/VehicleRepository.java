@@ -1,10 +1,13 @@
-package com.fuelmanagement.repository;
+package com.fuelmanagement.repository.mysql;
 
 
-import com.fuelmanagement.model.entity.Vehicle;
+import com.fuelmanagement.model.entity.mysql.Vehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle,Long> {
@@ -16,4 +19,6 @@ public interface VehicleRepository extends JpaRepository<Vehicle,Long> {
     Vehicle findByQrCodeId(Long qrCodeId);
 
     boolean existsByQrCodeId(Long qrCodeId);
+
+
 }

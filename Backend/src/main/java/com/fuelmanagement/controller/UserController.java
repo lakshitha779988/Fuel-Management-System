@@ -1,7 +1,7 @@
 package com.fuelmanagement.controller;
 
 import com.fuelmanagement.model.dto.response.UserDetailsResponse;
-import com.fuelmanagement.model.entity.Vehicle;
+import com.fuelmanagement.model.entity.mysql.Vehicle;
 import com.fuelmanagement.service.JwtService;
 import com.fuelmanagement.service.UserService;
 import org.apache.catalina.User;
@@ -56,7 +56,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
-            return ResponseEntity.ok((User) userService.createUser((com.fuelmanagement.model.entity.User) user));
+            return ResponseEntity.ok((User) userService.createUser((com.fuelmanagement.model.entity.mysql.User) user));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
         }
@@ -65,7 +65,7 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody User updatedUserDetails) {
         try {
-            return ResponseEntity.ok((User) userService.updateUser(userId, (com.fuelmanagement.model.entity.User) updatedUserDetails));
+            return ResponseEntity.ok((User) userService.updateUser(userId, (com.fuelmanagement.model.entity.mysql.User) updatedUserDetails));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }

@@ -1,11 +1,8 @@
-package com.fuelmanagement.model.entity;
+package com.fuelmanagement.model.entity.mysql;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-
-import jakarta.persistence.*;
 
 import java.util.Date;
 

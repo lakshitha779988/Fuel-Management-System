@@ -1,9 +1,9 @@
 package com.fuelmanagement.service;
 
-import com.fuelmanagement.model.entity.QrCode;
-import com.fuelmanagement.model.entity.Vehicle;
-import com.fuelmanagement.repository.QrCodeRepository;
-import com.fuelmanagement.repository.VehicleRepository;
+import com.fuelmanagement.model.entity.mysql.QrCode;
+import com.fuelmanagement.model.entity.mysql.Vehicle;
+import com.fuelmanagement.repository.mysql.QrCodeRepository;
+import com.fuelmanagement.repository.mysql.VehicleRepository;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;

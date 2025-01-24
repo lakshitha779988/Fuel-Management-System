@@ -1,6 +1,6 @@
 package com.fuelmanagement.model.dto.request;
 
-import com.fuelmanagement.model.entity.Vehicle;
+import com.fuelmanagement.model.entity.mysql.Vehicle;
 
 public class VehicleDTO {
     private String chaseNumber;

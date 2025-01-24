@@ -22,8 +22,17 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public void register(@RequestBody RegistrationRequest registrationRequest){
-        authService.register(registrationRequest);
+    public ResponseEntity<String> register(@RequestBody RegistrationRequest registrationRequest) {
+        // Call the service to handle registration logic
+        boolean isRegistered = authService.register(registrationRequest);
+
+        if (isRegistered) {
+            // If registration is successful, return a 200 OK response with a success message
+            return ResponseEntity.ok("Registration successful");
+        } else {
+            // If registration fails, return a 400 Bad Request with an error message
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed");
+        }
     }
 
     @CrossOrigin(origins = "http://localhost:5173")

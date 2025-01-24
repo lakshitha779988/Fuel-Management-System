@@ -1,10 +1,10 @@
 package com.fuelmanagement.service;
 
 import com.fuelmanagement.model.dto.response.UserDetailsResponse;
-import com.fuelmanagement.model.entity.User;
-import com.fuelmanagement.model.entity.Vehicle;
-import com.fuelmanagement.repository.UserRepository;
-import com.fuelmanagement.repository.VehicleRepository;
+import com.fuelmanagement.model.entity.mysql.User;
+import com.fuelmanagement.model.entity.mysql.Vehicle;
+import com.fuelmanagement.repository.mysql.UserRepository;
+import com.fuelmanagement.repository.mysql.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +53,6 @@ public class UserService {
         existingUser.setFirstName(updatedUserDetails.getFirstName());
         existingUser.setLastName(updatedUserDetails.getLastName());
         existingUser.setMobileNumber(updatedUserDetails.getMobileNumber());
-        existingUser.setPassword(updatedUserDetails.getPassword());
         existingUser.setActive(updatedUserDetails.isActive());
         existingUser.setRole(updatedUserDetails.getRole());
 
@@ -63,7 +62,7 @@ public class UserService {
   
   public Long findVehicleIdByMobileNumber(String mobileNumber){
         User user = userRepository.findByMobileNumber(mobileNumber).get();
-        return user.getVehicle().getId();
+        return user.getId();
         }
 
     // Add a vehicle to a user

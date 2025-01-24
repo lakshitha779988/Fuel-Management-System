@@ -1,6 +1,6 @@
 package com.fuelmanagement.controller;
 
-import com.fuelmanagement.model.entity.VehicleType;
+import com.fuelmanagement.model.entity.mysql.VehicleType;
 import com.fuelmanagement.service.VehicleTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,7 @@ public class VehicleTypeController {
     }
 
     // Get all vehicle types
+
     @GetMapping
     public ResponseEntity<List<VehicleType>> getAllVehicleTypes() {
         return ResponseEntity.ok(vehicleTypeService.getAllVehicleTypes());

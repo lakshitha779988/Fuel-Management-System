@@ -1,11 +1,15 @@
-package com.fuelmanagement.model.entity;
+package com.fuelmanagement.model.entity.mysql;
 
 import jakarta.persistence.*;
 import jakarta.persistence.JoinColumn;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 @Entity
+
 public class Vehicle  {
 
     @Id
@@ -24,6 +28,8 @@ public class Vehicle  {
     @Column(nullable = false)
     private String fuelType;
 
+
+
     @ManyToOne
     @JoinColumn(name = "type_id", nullable = false)
     private VehicleType vehicleType;
@@ -37,7 +43,7 @@ public class Vehicle  {
     private QrCode qrCode;
 
 
-    public Long getId() {
+   public Long getId() {
         return id;
     }
 
