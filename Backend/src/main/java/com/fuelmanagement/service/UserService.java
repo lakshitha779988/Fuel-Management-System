@@ -1,10 +1,10 @@
 package com.fuelmanagement.service;
 
 import com.fuelmanagement.model.dto.response.UserDetailsResponse;
-import com.fuelmanagement.model.entity.User;
-import com.fuelmanagement.model.entity.Vehicle;
-import com.fuelmanagement.repository.UserRepository;
-import com.fuelmanagement.repository.VehicleRepository;
+import com.fuelmanagement.model.entity.mysql.User;
+import com.fuelmanagement.model.entity.mysql.Vehicle;
+import com.fuelmanagement.repository.mysql.UserRepository;
+import com.fuelmanagement.repository.mysql.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,9 @@
 package com.fuelmanagement.security;
 
-import com.fuelmanagement.model.entity.FuelStation;
-import com.fuelmanagement.model.entity.User;
-import com.fuelmanagement.repository.FuelStationRepository;
-import com.fuelmanagement.repository.UserRepository;
+import com.fuelmanagement.model.entity.mysql.FuelStation;
+import com.fuelmanagement.model.entity.mysql.User;
+import com.fuelmanagement.repository.mysql.FuelStationRepository;
+import com.fuelmanagement.repository.mysql.UserRepository;
 import com.fuelmanagement.service.JwtService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;

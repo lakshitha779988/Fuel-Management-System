@@ -1,6 +1,6 @@
 package com.fuelmanagement.controller;
 
-import com.fuelmanagement.model.entity.Vehicle;
+import com.fuelmanagement.model.entity.mysql.Vehicle;
 import com.fuelmanagement.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,11 +1,11 @@
 package com.fuelmanagement.service;
 
-import com.fuelmanagement.model.entity.FuelQuotaTracker;
-import com.fuelmanagement.model.entity.QrCode;
-import com.fuelmanagement.model.entity.Vehicle;
-import com.fuelmanagement.repository.FuelQuotaTrackerRepository;
-import com.fuelmanagement.repository.QrCodeRepository;
-import com.fuelmanagement.repository.VehicleRepository;
+import com.fuelmanagement.model.entity.mysql.FuelQuotaTracker;
+import com.fuelmanagement.model.entity.mysql.QrCode;
+import com.fuelmanagement.model.entity.mysql.Vehicle;
+import com.fuelmanagement.repository.mysql.FuelQuotaTrackerRepository;
+import com.fuelmanagement.repository.mysql.QrCodeRepository;
+import com.fuelmanagement.repository.mysql.VehicleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
