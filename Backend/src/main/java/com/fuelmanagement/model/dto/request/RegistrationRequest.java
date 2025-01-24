@@ -9,10 +9,6 @@ public class RegistrationRequest {
 
     private String mobileNumber;
 
-
-    private String password;
-
-
     private String firstName;
 
     private String lastName;
@@ -41,13 +37,8 @@ public class RegistrationRequest {
         this.mobileNumber = mobileNumber;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+
 
     public String getFirstName() {
         return firstName;
@@ -117,7 +108,6 @@ public class RegistrationRequest {
     public String toString() {
         return "RegistrationRequest{" +
                 "mobileNumber='" + mobileNumber + '\'' +
-                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", address='" + address + '\'' +

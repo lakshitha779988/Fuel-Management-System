@@ -44,7 +44,7 @@ public class AuthService {
     }
 
 
-    public void register(RegistrationRequest registrationRequest) {
+    public Boolean register(RegistrationRequest registrationRequest) {
         // Check if user with the given mobileNumber or nationalId already exists
         if (userRepository.existsByMobileNumber(registrationRequest.getMobileNumber())) {
             throw new IllegalArgumentException("Mobile number already registered.");
@@ -97,13 +97,14 @@ public class AuthService {
         user.setLastName(registrationRequest.getLastName());
         user.setMobileNumber(registrationRequest.getMobileNumber());
         user.setNationalId(registrationRequest.getNationalId());
-        user.setPassword(registrationRequest.getPassword());
         user.setCreatedAt(LocalDateTime.now());
         user.setVehicle(vehicle);
+        user.setRole("user");
         userRepository.save(user);
 
 
         System.out.println("User and Vehicle registered successfully.");
+        return true;
     }
 
 

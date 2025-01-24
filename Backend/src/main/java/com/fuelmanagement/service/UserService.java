@@ -53,7 +53,6 @@ public class UserService {
         existingUser.setFirstName(updatedUserDetails.getFirstName());
         existingUser.setLastName(updatedUserDetails.getLastName());
         existingUser.setMobileNumber(updatedUserDetails.getMobileNumber());
-        existingUser.setPassword(updatedUserDetails.getPassword());
         existingUser.setActive(updatedUserDetails.isActive());
         existingUser.setRole(updatedUserDetails.getRole());
 

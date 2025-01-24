@@ -16,7 +16,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String mobileNumber;
 
-    private String password;
+
 
     @Column(nullable = false)
     private String firstName;
@@ -66,13 +66,6 @@ public class User {
         this.mobileNumber = mobileNumber;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public String getFirstName() {
         return firstName;

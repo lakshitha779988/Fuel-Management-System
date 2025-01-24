@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("api/auth/**", "/fuel-user/login", "/api/user/check-mobile-existence" , "/h2-console/**" ,"/api/vehicle-types").permitAll() // Public endpoints
+                        .requestMatchers("api/vehicles/check-vehicle-details","api/auth/**", "/fuel-user/login", "/api/user/check-mobile-existence" , "/h2-console/**" ,"/api/vehicle-types").permitAll() // Public endpoints
                         .anyRequest().authenticated() // Secure other endpoints
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless authentication (JWT)
