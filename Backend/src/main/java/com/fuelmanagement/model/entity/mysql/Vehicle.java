@@ -28,9 +28,7 @@ public class Vehicle  {
     @Column(nullable = false)
     private String fuelType;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user; // Reference to the User entity
+
 
     @ManyToOne
     @JoinColumn(name = "type_id", nullable = false)

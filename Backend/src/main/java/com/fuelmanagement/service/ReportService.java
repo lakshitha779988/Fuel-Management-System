@@ -59,19 +59,17 @@ public Float FuelUsageForEachVehicle(String registrationNumber){
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
 
         // Get all vehicles owned by the user
-        List<Vehicle> vehicles = vehicleRepository.findByUserId(userId);
+
+      List<FuelLog> allTransactions = fuelLogRepository.findAllByUserId(user.getId());
+
 
         // Calculate total fuel usage for the user
-        float totalFuelUsage = 0.0f;
-        for (Vehicle vehicle : vehicles) {
-            FuelQuotaTracker tracker = vehicle.getFuelQuotaTracker();
-            if (tracker != null) {
-                float fuelUsed = (float) (tracker.getWeeklyConsumption() - tracker.getExistingFuel());
-                totalFuelUsage += fuelUsed;
-            }
-        }
-
-        return totalFuelUsage;
+      float totalCostUsage = 0;
+      float priceForOneLitre = 325.12F;
+      for (FuelLog fuelLog : allTransactions) {
+          totalCostUsage += fuelLog.getFuelAmount()*priceForOneLitre; // Assuming FuelLog has a field 'fuelAmount'
+      }
+      return totalCostUsage;
     }
 
 }

@@ -20,6 +20,5 @@ public interface VehicleRepository extends JpaRepository<Vehicle,Long> {
 
     boolean existsByQrCodeId(Long qrCodeId);
 
-    @Query("SELECT v FROM Vehicle v WHERE v.user.id = :userId")
-    List<Vehicle> findByUserId(@Param("userId") Long userId);
+
 }
