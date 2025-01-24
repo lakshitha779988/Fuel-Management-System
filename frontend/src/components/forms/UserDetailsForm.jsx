@@ -139,13 +139,13 @@ const handleSubmit = (e) => {
   }
 
   const userDetails = {
-    firstName,
-    lastName,
-    address,
-    nic,
-    mobileNumber,
+    firstName : firstName,
+    lastName : lastName,
+    address : address,
+    nic: nic,
+    mobileNumber : mobileNumber,
   };
-  localStorage.setItem("userDetail", userDetails);
+  localStorage.setItem("userDetails", JSON.stringify(userDetails));
   console.log(localStorage.getItem("userDetail"))
   window.window.location.href = "/VehicleDetails";
 setAlert({
@@ -155,7 +155,7 @@ setAlert({
 
 });
 
-  onSubmit(userDetails);
+ 
   
 
 };

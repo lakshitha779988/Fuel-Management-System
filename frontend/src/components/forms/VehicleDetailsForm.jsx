@@ -8,10 +8,14 @@ function VehicleDetailsForm() {
  const[number,setNumber]=useState('');
  const[submitted,setSubmitted]=useState('false');
  const[chassisNumber,setChassisNumber]=useState('');
-
+const[vehicleDetails,setVehicleDetails] = useState({registrationNumber: '',
+  chassisNumber: '',
+  vehicleType: '',
+  fuelType: '',});
 
 
  const fetchVehicleType = async () => {
+
   try {
     const response = await fetch('http://localhost:8080/api/vehicle-types', {
       method: 'GET',
@@ -36,6 +40,58 @@ function VehicleDetailsForm() {
 };
 
 
+const sendRegistrationRequest = async () => {
+  
+  
+  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+  if (!userDetails) {
+    
+    alert("User details are missing.");
+    return;
+  }
+
+  
+  const registrationRequest = {
+    mobileNumber: userDetails.mobileNumber, 
+    firstName: userDetails.firstName,  
+    lastName: userDetails.lastName,  
+    address: userDetails.address,  
+    nationalId: userDetails.nic,  
+    chaseNumber: vehicleDetails.chassisNumber, 
+    vehicleNumber: vehicleDetails.registrationNumber,  
+    vehicleTypeId: vehicleDetails.vehicleType,  
+    fuelType: vehicleDetails.fuelType, 
+  };
+
+  try {
+   
+    const response = await fetch('http://localhost:8080/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(registrationRequest),
+    });
+
+    const responseData = await response.text();
+
+    if (response.ok) {
+    
+      alert("Registration successful!");
+      window.location.href = "/login";  
+    } else {
+      
+      alert(responseData.message || "An error occurred during registration.");
+    }
+  } catch (error) {
+    // 6. Handle network or unexpected errors
+    console.error("Error during registration:", error);
+    alert("An error occurred while processing your request.");
+  }
+};
+
+
 useEffect(() => {
   const getVehicleTypes = async () => {
     const types = await fetchVehicleType();
@@ -49,16 +105,47 @@ useEffect(() => {
 
 
 
-const  handleSubmit = (event) =>{
-    event.preventDefault();
-    if (vehicleType && fuelType && letter && number && chassisNumber) {
-        console.log("Vehicle Details Submitted: ", { vehicleType, fuelType, letter, number, chassisNumber });
-        setSubmitted(true); 
-        alert("Form submitted sucessfully!");
-      } else {
-        alert("Please fill in all the fields.");
-      }
- };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+ 
+  const vehicleDetails = {
+    vehicleType,
+    fuelType,
+    registrationNumber: `${letter}-${number}`,
+    chassisNumber,
+  };
+
+  setVehicleDetails(vehicleDetails);
+
+  //console.log('Vehicle Details Submitted:', vehicleDetails);
+
+  try {
+    
+    const response = await fetch('http://localhost:8080/api/vehicles/check-vehicle-details', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(vehicleDetails), 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      alert(errorData.message);  // This is a basic alert, you can replace it with UI error display
+      return;
+    }
+
+    
+
+    const result = await response.text();
+
+    sendRegistrationRequest();
+    
+  } catch (error) {
+    console.error('Error submitting vehicle details:', error);
+    alert('Failed to register vehicle.');
+  }
+};
  const handleLetterChange = (e) =>
     {
         setLetter(e.target.value.toUpperCase());
