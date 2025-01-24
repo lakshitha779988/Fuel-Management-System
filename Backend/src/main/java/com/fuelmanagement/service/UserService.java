@@ -62,7 +62,7 @@ public class UserService {
   
   public Long findVehicleIdByMobileNumber(String mobileNumber){
         User user = userRepository.findByMobileNumber(mobileNumber).get();
-        return user.getVehicle().getId();
+        return user.getId();
         }
 
     // Add a vehicle to a user

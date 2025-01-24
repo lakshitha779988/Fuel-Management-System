@@ -28,7 +28,10 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
-    public Float fuelUsageForEachVehicle(String registrationNumber) {
+    }
+
+
+    public Float fuelUsageForEachVehicle( String registrationNumber) {
 
         Float FuelUsage = reportService.FuelUsageForEachVehicle(registrationNumber);
 
