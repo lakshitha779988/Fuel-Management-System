@@ -7,6 +7,7 @@ import RegistrationPage from './components/Pages/RegistrationPage';
 
 import Dashboard from './components/Pages/Dashboard';
 import AdminDashboard from './components/Pages/AdminDashboard';
+import AdminLoginForm from './components/forms/AdminLoginForm';
 
 
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/admin" element={<AdminDashboard/>} />
 
           <Route path="/register" element={<UserDetailsForm />} />
+          <Route path="/adminlogin" element={<AdminLoginForm />} />
 
 
           
