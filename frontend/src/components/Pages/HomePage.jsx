@@ -5,7 +5,13 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <div className="h-screen flex items-center justify-center text-white relative overflow-hidden bg-gradient-to-br from-red-900 via-red-700 to-red-500">
+    <div className="h-screen flex items-center justify-center text-white relative overflow-hidden bg-gradient-to-br from-red-900 via-red-700 to-red-500"
+    style={{
+      backgroundImage: `url('../../public/fuel5[1].jpg')`,
+      backgroundRepeat: 'no-repeat', // Prevent image repetition
+      backgroundSize: 'cover',      // Ensure the image covers the entire div
+  
+    }}>
      
       <div className="absolute inset-0">
         <div className="w-96 h-96 bg-red-300 opacity-40 rounded-full blur-3xl animate-bounce absolute -top-20 -left-20"></div>
@@ -14,7 +20,7 @@ export default function HomePage() {
       </div>
 
      
-      <div className="bg-red-800 bg-opacity-90 p-10 rounded-2xl text-center shadow-2xl relative z-10 backdrop-blur-md">
+      <div className="bg-transparent bg-opacity-90 p-10 rounded-2xl text-center shadow-2xl relative z-10 backdrop-blur-md">
         <h1 className="text-6xl font-extrabold mb-8 text-yellow-300 drop-shadow-lg">
           Welcome to <span className="text-yellow-400">Fuel Management System</span>
         </h1>
