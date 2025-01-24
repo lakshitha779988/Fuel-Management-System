@@ -27,5 +27,24 @@ public class ReportController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+
+    public Float fuelUsageForEachVehicle(String registrationNumber) {
+
+        Float FuelUsage = reportService.FuelUsageForEachVehicle(registrationNumber);
+
+        return (FuelUsage);
+
     }
+
+    public Float costUsageForEachVehicle(String registrationNumber) {
+
+        Float CostUsage = reportService.CostUsageForEachVehicle(registrationNumber);
+
+        return (CostUsage);
+    }
+
+   
+
+
+
 }
