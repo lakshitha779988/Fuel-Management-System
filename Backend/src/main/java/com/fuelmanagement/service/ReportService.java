@@ -33,25 +33,22 @@ public class ReportService {
           float totalCostUsage = 0;
           float priceForOneLitre = 325.12F;
           for (FuelLog fuelLog : allTransactions) {
-               totalCostUsage += fuelLog.getFuelAmount() * priceForOneLitre; // Assuming FuelLog has a field 'fuelAmount'
+               totalCostUsage += fuelLog.getFuelAmount() * priceForOneLitre;
           }
           return totalCostUsage;
 
      }
 
-     public List<FuelLog> getLast10Transaction(String registrationNumber) {
+     public List<FuelLog> GetLast10Transaction(String registrationNumber) {
 
 
           Vehicle vehicle = vehicleRepository.findByRegistrationNumber(registrationNumber);
 
           // Fetch the last 10 transactions for the vehicle
           List<FuelLog> lastTenTransactions = fuelLogRepository
-                  .findTop10ByVehicleIdOrderByTransactionTimeDesc(vehicle.getId()); // Assuming you have a field like 'transactionDate'
+                  .findTop10ByVehicleIdOrderByTransactionTimeDesc(vehicle.getId());
 
-          float totalFuelUsage = 0;
-          for (FuelLog fuelLog : lastTenTransactions) {
-               totalFuelUsage += fuelLog.getFuelAmount(); // Assuming FuelLog has a field 'fuelAmount'
-          }
+
 
        return lastTenTransactions;
      }
