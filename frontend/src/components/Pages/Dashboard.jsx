@@ -10,6 +10,7 @@ const Dashboard = () => {
     setQrCode(`QR-${Date.now()}`);
   };
 
+
   useEffect(() => {
     const jwtToken = localStorage.getItem('token');
     const mobileNumber = localStorage.getItem('mobileNumber');
@@ -18,16 +19,17 @@ const Dashboard = () => {
 
     if (jwtToken && typeof jwtToken === 'string') {
         
-      fetchUserDetails(jwtToken)
+      fetchUserDetails(jwtToken);
+      generateQRCode(jwtToken);
     } else {
-        setError('JWT Token not found or invalid!');
+      window.location.href = "/login";
     }
 } , []);
 
 
 
 
-const fetchUserDetails = async (jwtToken,mobileNumber) => {
+const fetchUserDetails = async (jwtToken) => {
   try {
       const response = await fetch(`http://localhost:8080/api/user/details?token=${jwtToken}`, {
           method: 'GET',
@@ -46,7 +48,31 @@ const fetchUserDetails = async (jwtToken,mobileNumber) => {
       }
   } catch (error) {
       console.error('Error during request:', error);
-      setError('Error occurred during request');
+     
+  }
+};
+
+const generateQRCode = async (jwtToken, vehicleId) => {
+  try {
+    const response = await fetch(`http://localhost:8080/api/qr/generate?token=${jwtToken}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${jwtToken}`,
+        'Content-Type': 'application/json',  
+      },
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      const imageUrl = URL.createObjectURL(blob);
+      setQrCode(imageUrl);
+      
+    } else {
+      setError('Failed to generate QR code');
+    }
+  } catch (error) {
+    console.error('Error during request:', error);
+    setError('Error occurred during request');
   }
 };
 
@@ -108,8 +134,8 @@ const fetchUserDetails = async (jwtToken,mobileNumber) => {
         {/* Profile Details */}
         {showProfile && (
           <div className="bg-red-100 text-red-800 rounded-lg p-4 mb-4">
-            <p>Name: {userDetails.firstName}</p>
-            <p>Email: {userDetails.mobileNumber}</p>
+            <p>Name: {userDetails ? userDetails.firstName : "Error occur"  }</p>
+            <p>Email: {userDetails ? userDetails.mobileNumber : "Error occur "}</p>
           </div>
         )}
 
@@ -148,16 +174,17 @@ const fetchUserDetails = async (jwtToken,mobileNumber) => {
 
       {/* Main Content */}
       <main className="flex-1 p-6">
-        
+
         {/* QR Code Section */}
         {activeSection === "QR Code" && (
           <div className="bg-white text-red-800 rounded-lg shadow-lg p-8 text-center">
             <h2 className="text-2xl font-bold mb-4">QR Code</h2>
             <div
               id="qrCode"
-              className="bg-gray-100 w-40 h-40 flex justify-center items-center text-red-500 border-2 border-red-300 rounded-lg mx-auto mb-6"
+              className="bg-gray-100 flex justify-center items-center text-red-500 border-2 border-red-300 rounded-lg mx-auto p-3 mb-6"
             >
-              {qrCode}
+              <img src={qrCode} width={300} height={300} alt="" />
+              
             </div>
             <div className="flex justify-center space-x-4">
               <button

@@ -1,6 +1,8 @@
 package com.fuelmanagement.controller;
 
+import com.fuelmanagement.service.JwtService;
 import com.fuelmanagement.service.QrCodeService;
+import com.fuelmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +14,21 @@ public class QRCodeController {
     @Autowired
     private QrCodeService qrCodeService;
 
-    @PostMapping("/generate/{vehicleId}")
-    public ResponseEntity<byte[]> generateQRCode(@PathVariable Long vehicleId) {
+    @Autowired
+    JwtService jwtService;
+
+    @Autowired
+    UserService userService;
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("/generate")
+    public ResponseEntity<byte[]> generateQRCode(@RequestParam String token) {
+
+        System.out.println(token);
+        String mobileNumber =  jwtService.extractIdentifier(token);
+        System.out.println(mobileNumber);
+        Long vehicleId = userService.findVehicleIdByMobileNumber(mobileNumber);
+        System.out.println(vehicleId);
         try {
             byte[] qrCodeImage = qrCodeService.createQRCode(vehicleId);
             return ResponseEntity.ok()

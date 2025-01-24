@@ -1,7 +1,7 @@
 package com.fuelmanagement.service;
 
-import com.fuelmanagement.model.entity.VehicleType;
-import com.fuelmanagement.repository.VehicleTypeRepository;
+import com.fuelmanagement.model.entity.mysql.VehicleType;
+import com.fuelmanagement.repository.mysql.VehicleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

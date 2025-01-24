@@ -1,9 +1,9 @@
 package com.fuelmanagement.service;
 
-import com.fuelmanagement.model.entity.QrCode;
-import com.fuelmanagement.model.entity.Vehicle;
-import com.fuelmanagement.repository.QrCodeRepository;
-import com.fuelmanagement.repository.VehicleRepository;
+import com.fuelmanagement.model.entity.mysql.QrCode;
+import com.fuelmanagement.model.entity.mysql.Vehicle;
+import com.fuelmanagement.repository.mysql.QrCodeRepository;
+import com.fuelmanagement.repository.mysql.VehicleRepository;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,31 +31,15 @@ public class QrCodeService {
         return UUID.randomUUID().toString();
     }
 
-    // Generate a QR code as a PNG and save it to a specified folder
-    public byte[] generateQRCodeImage(String qrCodeString, String folderPath) throws WriterException, IOException {
+    // Generate a QR code as a byte array without saving it to a file
+    public byte[] generateQRCodeImage(String qrCodeString) throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(qrCodeString, BarcodeFormat.QR_CODE, 300, 300);
 
-        // Ensure the folder exists
-        Path folder = Path.of(folderPath);
-        if (!Files.exists(folder)) {
-            Files.createDirectories(folder);
-        }
-
-        // Save the QR code as a PNG file
-        String fileName = qrCodeString + ".png"; // Use the unique string as the file name
-        Path filePath = folder.resolve(fileName);
-
-        // Write the QR code to the file
-        try {
-            MatrixToImageWriter.writeToPath(bitMatrix, "PNG", filePath);
-        } catch (IOException e) {
-            throw new IOException("Failed to save QR Code as PNG file.", e);
-        }
-
-        // Also return the QR code as a byte array
+        // Return the QR code as a byte array
         try (ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream()) {
             MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
+            System.out.println(pngOutputStream);
             return pngOutputStream.toByteArray();
         }
     }
@@ -71,21 +53,27 @@ public class QrCodeService {
         }
 
         Vehicle vehicle = vehicleOptional.get();
-
+        String qrCodeString;
         // Check if a QR code already exists
         if (qrCodeRepository.findByVehicleId(vehicleId).isPresent()) {
-            throw new IllegalStateException("QR Code already exists for this vehicle.");
+            QrCode qrCode = qrCodeRepository.findByVehicleId(vehicleId).get();
+             qrCodeString = qrCode.getQrCode();
+            System.out.println(qrCodeString);
+        }else{
+            qrCodeString = generateUniqueQRCodeString();
+            System.out.println(qrCodeString);
+            QrCode qrCode = new QrCode(qrCodeString, vehicle);
+            qrCodeRepository.save(qrCode);
         }
 
-        String qrCodeString = generateUniqueQRCodeString();
-        QrCode qrCode = new QrCode(qrCodeString, vehicle);
-        qrCodeRepository.save(qrCode);
 
-        // Specify the folder path to save the QR code
-        String folderPath = System.getProperty("user.home") + "\\Downloads\\qrcode";
-// Replace with your desired folder path
-        return generateQRCodeImage(qrCodeString, folderPath);
+
+
+        // Generate the QR code and return it as a byte array (without saving to a file)
+        return generateQRCodeImage(qrCodeString);
     }
+
+    // Update the QR code for a vehicle
     public byte[] updateQRCode(Long vehicleId) throws Exception {
         Optional<QrCode> qrCodeOptional = qrCodeRepository.findByVehicleId(vehicleId);
 
@@ -98,9 +86,8 @@ public class QrCodeService {
         qrCode.setQrCode(newQrCodeString);
         qrCodeRepository.save(qrCode);
 
-        // Specify the folder path to save the updated QR code
-        String folderPath = "C:/QRCodeFiles"; // Replace with your desired folder path
-        return generateQRCodeImage(newQrCodeString, folderPath);
+        // Generate the updated QR code and return it as a byte array (without saving to a file)
+        return generateQRCodeImage(newQrCodeString);
     }
 
     // Delete a QR code record
@@ -111,6 +98,4 @@ public class QrCodeService {
 
         qrCodeRepository.deleteByVehicleId(vehicleId);
     }
-
-
 }
