@@ -2,9 +2,6 @@ package com.fuelmanagement.model.entity.mysql;
 
 import jakarta.persistence.*;
 import jakarta.persistence.JoinColumn;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 
@@ -25,10 +22,10 @@ public class Vehicle  {
     @Column(nullable = false)
     private String registrationNumber;
 
-    @Column(nullable = false)
+    // Many Vehicles can use one FuelType
+    @ManyToOne
+    @JoinColumn(name = "fuel_type_id")
     private String fuelType;
-
-
 
     @ManyToOne
     @JoinColumn(name = "type_id", nullable = false)
@@ -43,7 +40,8 @@ public class Vehicle  {
     private QrCode qrCode;
 
 
-   public Long getId() {
+
+    public Long getId() {
         return id;
     }
 
@@ -80,9 +78,7 @@ public class Vehicle  {
         return fuelType;
     }
 
-    public void setFuelType(String fuelType) {
-        this.fuelType = fuelType;
-    }
+    public void setFuelType(String fuelType) {this.fuelType = fuelType;}
 
     public VehicleType getVehicleType() {
         return vehicleType;

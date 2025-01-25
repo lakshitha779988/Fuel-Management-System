@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
     public class VehicleService {
         @Autowired
@@ -50,5 +52,27 @@ import org.springframework.stereotype.Service;
             }
 
         }
+
+
+
+    // Get all Vehicles using a specific FuelType
+    public List<Vehicle> getVehiclesByFuelType(Long fuelTypeId) {
+        return vehicleRepository.findByFuelTypeId(fuelTypeId);
+    }
+
+    // Get all Vehicles by type (e.g., "Car", "Truck")
+    public List<Vehicle> getVehiclesByType(String type) {
+        return vehicleRepository.findByType(type);
+    }
+
+    // Add or update a Vehicle
+    public Vehicle saveVehicle(Vehicle vehicle) {
+        return vehicleRepository.save(vehicle);
+    }
+
+    // Delete a Vehicle by ID
+    public void deleteVehicle(Long id) {
+        vehicleRepository.deleteById(id);
+    }
     }
 
