@@ -20,5 +20,9 @@ public interface VehicleRepository extends JpaRepository<Vehicle,Long> {
 
     boolean existsByQrCodeId(Long qrCodeId);
 
+    // Find all vehicles by a specific fuel type
+    List<Vehicle> findByFuelTypeId(Long fuelTypeId);
 
+    // Find vehicles by type (e.g., "Car", "Truck")
+    List<Vehicle> findByType(String type);
 }
