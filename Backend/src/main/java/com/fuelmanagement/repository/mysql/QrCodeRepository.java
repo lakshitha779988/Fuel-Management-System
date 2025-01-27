@@ -12,6 +12,6 @@ public interface QrCodeRepository extends JpaRepository<QrCode,Long> {
     void deleteByVehicleId(Long vehicleId);
     
     // Methods from main branch
-    QrCode findByQrCode(String qrString);
+    Optional<QrCode> findByQrCode(String qrString);
     boolean existsByQrCode(String qrString);
 }
