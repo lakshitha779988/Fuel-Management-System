@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface FuelStationRepository extends JpaRepository<FuelStation,Long> {
     Optional<FuelStation> findByName(String username);
+
+    Optional<FuelStation> findByMobileNumber(String mobileNumber);
 }

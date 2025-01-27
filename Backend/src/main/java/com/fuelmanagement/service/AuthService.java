@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -136,21 +137,21 @@ public class AuthService {
     }
 
 
-    public LoginResponse authenticateFuelStation(String username, String password) {
+    public LoginResponse authenticateFuelStation(String mobileNumber, String password) {
         // Step 1: Find the fuel station by username
-        FuelStation station = fuelStationRepository.findByName(username)
+        FuelStation station = fuelStationRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-
+        System.out.println(station);
         // Step 2: Verify the password
-        if (!passwordEncoder.matches(password, station.getPassword())) {
+        if (!Objects.equals(password, station.getPassword())) {
             throw new BadCredentialsException("Invalid password");
         }
-
+        System.out.println(station.getEmail());
         // Step 3: Generate JWT token
         String token = jwtService.generateToken(station.getName(), "FUEL_STATION", station.getRole());
-
+    System.out.println(token);
         // Step 4: Return response
-        return new LoginResponse(token, "FUEL_STATION", username, null, station.getRole());
+        return new LoginResponse(token, "FUEL_STATION", mobileNumber, null, station.getRole());
     }
 
 

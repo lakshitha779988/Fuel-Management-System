@@ -40,6 +40,7 @@ public class FuelStationService {
         fuelStation.setMobileNumber(fuelStationRequest.getMobileNumber());
         fuelStation.setName(fuelStationRequest.getName());
         fuelStation.setPassword(fuelStationRequest.getPassword());
+        fuelStation.setRole("FuelStation");
 
         fuelStationRepository.save(fuelStation);
 
