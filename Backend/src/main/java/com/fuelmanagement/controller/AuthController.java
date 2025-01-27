@@ -46,7 +46,7 @@ public class AuthController {
 
     @PostMapping("/fuel-station/login")
     public ResponseEntity<LoginResponse> fuelStationLogin( @RequestBody FuelStationLoginRequest request) {
-        LoginResponse response = authService.authenticateFuelStation(request.getUsername(), request.getPassword());
+        LoginResponse response = authService.authenticateFuelStation(request.getMobileNumber(), request.getPassword());
         return ResponseEntity.ok(response);
     }
 }

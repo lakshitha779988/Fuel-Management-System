@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.fuelmanagement.service.FuelQuotaService;
 
 @RestController
-@RequestMapping("/fuel-quota")
+@RequestMapping("api/fuel-quota")
 public class FuelQuotaController {
 
     @Autowired
@@ -15,6 +15,8 @@ public class FuelQuotaController {
 
     @PutMapping("/update-limit")
     public ResponseEntity<String> updateFuelLimit(@RequestParam String qrString, @RequestParam float usage) {
+
+        System.out.println(qrString);
         try {
 
             String responseMessage = fuelQuotaService.updateFuelLimit(qrString, usage);

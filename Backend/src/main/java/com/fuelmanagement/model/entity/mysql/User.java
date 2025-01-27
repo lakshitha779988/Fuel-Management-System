@@ -16,7 +16,8 @@ public class User {
     @Column(nullable = false, unique = true)
     private String mobileNumber;
 
-
+    @Column(nullable = false)
+    private String email;
 
     @Column(nullable = false)
     private String firstName;
@@ -66,6 +67,13 @@ public class User {
         this.mobileNumber = mobileNumber;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getFirstName() {
         return firstName;

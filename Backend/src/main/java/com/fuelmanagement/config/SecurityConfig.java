@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("api/vehicles/check-vehicle-details","api/auth/**", "/fuel-user/login", "/api/user/check-mobile-existence" , "/h2-console/**" ,"/api/vehicle-types").permitAll() // Public endpoints
+                        .requestMatchers("api/vehicles/check-vehicle-details","api/auth/**", "/fuel-user/login", "/api/user/check-mobile-existence" , "/h2-console/**" ,"/api/vehicle-types", "/api/fuel-stations/register","/api/fuel-stations/login").permitAll() // Public endpoints
                         .anyRequest().authenticated() // Secure other endpoints
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless authentication (JWT)
@@ -50,7 +50,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Replace with your frontend URL
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173", // React frontend
+                "http://localhost:8082"  // Mobile app
+        ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allow HTTP methods
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type")); // Allow necessary headers
         configuration.setAllowCredentials(true); // Allow credentials (e.g., cookies)
