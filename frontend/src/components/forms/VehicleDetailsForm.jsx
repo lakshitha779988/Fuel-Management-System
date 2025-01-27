@@ -57,6 +57,7 @@ const sendRegistrationRequest = async () => {
     firstName: userDetails.firstName,  
     lastName: userDetails.lastName,  
     address: userDetails.address,  
+    email: userDetails.email,
     nationalId: userDetails.nic,  
     chaseNumber: vehicleDetails.chassisNumber, 
     vehicleNumber: vehicleDetails.registrationNumber,  

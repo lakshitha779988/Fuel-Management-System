@@ -14,6 +14,7 @@ function UserDetailsForm() {
   const[firstName, setFirstName] = useState('');
   const[lastName, setLastName] = useState('');
   const[address, setAddress] = useState('');
+  const[email, setEmail] = useState('');
   const[nic, setNic] = useState('');
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ message: '', type: '', show: false });
@@ -144,6 +145,7 @@ const handleSubmit = (e) => {
     address : address,
     nic: nic,
     mobileNumber : mobileNumber,
+    email :email,
   };
   localStorage.setItem("userDetails", JSON.stringify(userDetails));
   console.log(localStorage.getItem("userDetail"))
@@ -208,6 +210,16 @@ setAlert({
           placeholder="Ex: 399/8, Station Road, Colombo"
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" 
           onChange={(e) => setAddress(e.target.value)}
+          />
+</div>
+
+<div>
+        <label htmlFor="email" className="block text-gray-700 font-semibold">Address:</label>
+        <input id="email"
+         type="email"
+          placeholder="example@gmail.com"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" 
+          onChange={(e) => setEmail(e.target.value)}
           />
 </div>
 
