@@ -15,7 +15,7 @@ public class RegistrationRequest {
 
     private String address;
 
-
+private String email;
 
     private String nationalId;
 
@@ -104,6 +104,14 @@ public class RegistrationRequest {
         this.fuelType = fuelType;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "RegistrationRequest{" +
@@ -111,6 +119,7 @@ public class RegistrationRequest {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", address='" + address + '\'' +
+                ", email='" + email + '\'' +
                 ", nationalId='" + nationalId + '\'' +
                 ", chaseNumber='" + chaseNumber + '\'' +
                 ", vehicleNumber='" + vehicleNumber + '\'' +

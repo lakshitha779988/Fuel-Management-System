@@ -27,21 +27,14 @@ public class FuelStation {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "address", nullable = false)
-    private String address;
 
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private String role; // Single role as a string (e.g., "FUEL_STATION_ADMIN")
 
-    // One FuelStation can provide multiple FuelTypes
-    @OneToMany(mappedBy = "fuelStation", cascade = CascadeType.ALL)
-    private List<FuelType> fuelTypes;
 
-    //getter and setter
 
-    public List<FuelType> getFuelTypes() {return fuelTypes;}
 
-    public void setFuelTypes(List<FuelType> fuelTypes) {this.fuelTypes = fuelTypes;}
 
     public Long getId() {
         return id;
@@ -91,13 +84,7 @@ public class FuelStation {
         this.password = password;
     }
 
-    public String getAddress() {
-        return address;
-    }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     public String getRole() {
         return role;

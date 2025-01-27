@@ -31,15 +31,14 @@ public class FuelQuotaService {
             throw new IllegalArgumentException("Invalid QR code: " + qrString);
         }
 
-        QrCode qrCode = qrCodeRepository.findByQrCode(qrString);
+        QrCode qrCode = qrCodeRepository.findByQrCode(qrString).get();
         Long qrCodeId = qrCode.getId();
+        System.out.println(qrCodeId);
 
-        // Validate associated vehicle
-        if (!vehicleRepository.existsByQrCodeId(qrCodeId)) {
-            throw new IllegalArgumentException("No vehicle associated with the provided QR code.");
-        }
 
-        Vehicle vehicle = vehicleRepository.findByQrCodeId(qrCodeId);
+        Vehicle vehicle = qrCode.getVehicle();
+
+
 
         // Validate fuel quota tracker
         FuelQuotaTracker fuelQuotaTracker = vehicle.getFuelQuotaTracker();

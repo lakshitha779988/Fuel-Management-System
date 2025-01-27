@@ -22,9 +22,7 @@ public class Vehicle  {
     @Column(nullable = false)
     private String registrationNumber;
 
-    // Many Vehicles can use one FuelType
-    @ManyToOne
-    @JoinColumn(name = "fuel_type_id")
+
     private String fuelType;
 
     @ManyToOne

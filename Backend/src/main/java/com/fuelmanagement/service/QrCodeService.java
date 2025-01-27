@@ -1,7 +1,10 @@
 package com.fuelmanagement.service;
 
+import com.fuelmanagement.model.dto.response.QrCodeCheckingResponse;
+import com.fuelmanagement.model.entity.mysql.FuelQuotaTracker;
 import com.fuelmanagement.model.entity.mysql.QrCode;
 import com.fuelmanagement.model.entity.mysql.Vehicle;
+import com.fuelmanagement.repository.mysql.FuelQuotaTrackerRepository;
 import com.fuelmanagement.repository.mysql.QrCodeRepository;
 import com.fuelmanagement.repository.mysql.VehicleRepository;
 import com.google.zxing.BarcodeFormat;
@@ -25,6 +28,8 @@ public class QrCodeService {
 
     @Autowired
     private VehicleRepository vehicleRepository;
+
+
 
     // Generate a unique string for the QR code
     private String generateUniqueQRCodeString() {
@@ -97,5 +102,33 @@ public class QrCodeService {
         }
 
         qrCodeRepository.deleteByVehicleId(vehicleId);
+    }
+
+    public QrCodeCheckingResponse checkIsQrValid(String qrCode) {
+       QrCode qrCodeObj =  qrCodeRepository.findByQrCode(qrCode).get();
+       if(qrCodeObj == null){
+           throw new IllegalArgumentException("QR Code is not valid.");
+       }
+       System.out.println(qrCodeObj);
+      Vehicle vehicle= qrCodeObj.getVehicle();
+
+       if(vehicle==null){
+           throw new IllegalArgumentException("Not any vehicle available for this QR");
+       }
+
+       System.out.println(vehicle.getRegistrationNumber());
+
+        FuelQuotaTracker fuelQuotaTracker = vehicle.getFuelQuotaTracker();
+
+        System.out.println(fuelQuotaTracker.getExistingFuel());
+
+        QrCodeCheckingResponse qrCodeCheckingResponse = new QrCodeCheckingResponse();
+        qrCodeCheckingResponse.setExsistingFuel(fuelQuotaTracker.getExistingFuel());
+        qrCodeCheckingResponse.setVehicleId(vehicle.getId());
+        qrCodeCheckingResponse.setVehicleRegistrationNumber(vehicle.getRegistrationNumber());
+
+        System.out.println(qrCodeCheckingResponse);
+        return qrCodeCheckingResponse;
+
     }
 }
