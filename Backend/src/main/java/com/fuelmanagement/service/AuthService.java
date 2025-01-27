@@ -86,7 +86,6 @@ public class AuthService {
         Vehicle vehicle = new Vehicle();
         vehicle.setChaseNumber(registrationRequest.getChaseNumber());
         vehicle.setRegistrationNumber(registrationRequest.getVehicleNumber());
-        vehicle.setVehicleType(vehicleType);
         vehicle.setCreatedAt(new Date());
         vehicle.setFuelType(registrationRequest.getFuelType());
         vehicle.setFuelQuotaTracker(fuelQuotaTracker1);

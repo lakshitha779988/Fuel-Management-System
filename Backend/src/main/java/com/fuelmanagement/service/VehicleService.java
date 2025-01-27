@@ -55,15 +55,8 @@ import java.util.List;
 
 
 
-    // Get all Vehicles using a specific FuelType
-    public List<Vehicle> getVehiclesByFuelType(Long fuelTypeId) {
-        return vehicleRepository.findByFuelTypeId(fuelTypeId);
-    }
 
-    // Get all Vehicles by type (e.g., "Car", "Truck")
-    public List<Vehicle> getVehiclesByType(String type) {
-        return vehicleRepository.findByType(type);
-    }
+
 
     // Add or update a Vehicle
     public Vehicle saveVehicle(Vehicle vehicle) {
