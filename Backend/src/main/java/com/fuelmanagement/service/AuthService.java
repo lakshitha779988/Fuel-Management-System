@@ -93,6 +93,7 @@ public class AuthService {
         vehicle.setCreatedAt(new Date());
         vehicle.setFuelType(registrationRequest.getFuelType());
         vehicle.setFuelQuotaTracker(fuelQuotaTracker1);
+        vehicle.setVehicleType(vehicleType);
         vehicleRepository.save(vehicle);
 
         // Create and save User
