@@ -2,6 +2,7 @@ package com.fuelmanagement.model.entity.mysql;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 
@@ -31,6 +32,15 @@ public class FuelStation {
     @Column(nullable = true)
     private String role; // Single role as a string (e.g., "FUEL_STATION_ADMIN")
 
+    // One FuelStation can provide multiple FuelTypes
+    @OneToMany(mappedBy = "fuelStation", cascade = CascadeType.ALL)
+    private List<FuelType> fuelTypes;
+
+    //getter and setter
+
+    public List<FuelType> getFuelTypes() {return fuelTypes;}
+
+    public void setFuelTypes(List<FuelType> fuelTypes) {this.fuelTypes = fuelTypes;}
 
     public Long getId() {
         return id;
