@@ -51,6 +51,10 @@ public class AuthService {
             throw new IllegalArgumentException("Mobile number already registered.");
         }
 
+        if (userRepository.existsByEmail(registrationRequest.getEmail())) {
+            throw new IllegalArgumentException("Email address is already registered.");
+        }
+
         if (userRepository.existsByNationalId(registrationRequest.getNationalId())) {
             throw new IllegalArgumentException("National ID already registered.");
         }
@@ -99,8 +103,10 @@ public class AuthService {
         user.setNationalId(registrationRequest.getNationalId());
         user.setCreatedAt(LocalDateTime.now());
         user.setVehicle(vehicle);
+        user.setEmail(registrationRequest.getEmail());
         user.setRole("user");
         userRepository.save(user);
+
 
 
         System.out.println("User and Vehicle registered successfully.");
@@ -108,10 +114,7 @@ public class AuthService {
     }
 
 
-    private boolean isValidVehicleNumber(String vehicleNumber) {
-        //need conect with mock database and check
-        return true; // Placeholder logic; replace with actual checks
-    }
+
 
 
 
