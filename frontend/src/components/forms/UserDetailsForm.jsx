@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import {sendOtp, verifyOtpForRegistration } from '../../firebaseAuthService';
 
@@ -21,7 +21,7 @@ function UserDetailsForm() {
 
 
   const[confirmationResult,setConfirmationResult]=useState('null');
-
+const inputRefs = useRef([]);
 
   
   const checkMobileExistence = async (mobileNumber) => {
@@ -82,11 +82,29 @@ function UserDetailsForm() {
     }
   };
 
+const handleOTPChange = (value,index) => {
+  const updateOTP = [...otp];
+  updateOTP[index] = value;
+  setOtp(updateOTP);
+
+  if(value && index < otp.length - 1){
+    inputRefs.current[index + 1].focus();
+  }
+
+  if(!value && index > 0){
+    inputRefs.current[index - 1].focus();
+  }
+};
+
+
+
   const handleVerifyOTP = async(e) => {
    
     e.preventDefault();
     setLoading(true);
-    if(!otp || otp.length!==6){
+
+    const fullotp = otp.join('');
+    if(!fullotp || otp.length!==6){
       console.log(otp);
       setAlert({
         message: 'Please enter a valid 6-digit OTP',
@@ -100,7 +118,7 @@ function UserDetailsForm() {
     }
    try{
     const massage = await
-    verifyOtpForRegistration(confirmationResult,otp);
+    verifyOtpForRegistration(confirmationResult,fullotp);
     setAlert(
       {
         message:'OTP verified successfully!',
@@ -147,6 +165,7 @@ const handleSubmit = (e) => {
     mobileNumber : mobileNumber,
     email :email,
   };
+
   localStorage.setItem("userDetails", JSON.stringify(userDetails));
   console.log(localStorage.getItem("userDetail"))
   window.window.location.href = "/VehicleDetails";
@@ -254,18 +273,23 @@ setAlert({
 
         {otpSent && (
           <div className="mt-4">
-            <label htmlFor="otp" className="block text-sm font-medium text-gray-700">
-              OTP
-              </label>
+            <label className="block text-gray-700 font-semibold">OTP:</label>
+            <div className="flex space-x-2 mt-2">
+              {otp.map((digit, index) => (
+            
             <input
               id="otp"
+              key={index}
               type="text"
-              placeholder="Enter OTP"
-              className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500'
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
+              maxLength="1"
+              className="w-12 h-12 text-center text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              onChange={(e)=>handleOTPChange(e.target.value,index)} 
+              value={digit}
+             ref={(el) =>(inputRefs.current[index]=el)}
               
             />
+              ))}
+            </div>
 
             <button onClick={handleVerifyOTP}
               className="mt-4 w-full bg-red-600 text-white py-2 rounded-md hover:bg-blue-700 transition" >
