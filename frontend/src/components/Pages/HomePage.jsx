@@ -7,9 +7,9 @@ export default function HomePage() {
   return (
     <div className="h-screen flex items-center justify-center text-white relative overflow-hidden bg-gradient-to-br from-red-900 via-red-700 to-red-500"
     style={{
-      backgroundImage: `url('../../public/fuel2.jpg')`,
-      backgroundRepeat: 'no-repeat', 
-      backgroundSize: 'cover',      
+      backgroundImage: `url('../../public/fuel5[1].jpg')`,
+      backgroundRepeat: 'no-repeat', // Prevent image repetition
+      backgroundSize: 'cover',      // Ensure the image covers the entire div
   
     }}>
      

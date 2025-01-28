@@ -72,8 +72,7 @@ function LoginForm() {
     e.preventDefault();
     setLoading(true);
 
-    const enteredOtp = otp.join('');
-    if (enteredOtp.length !== 6) {
+    if (!otp || otp.length !== 6) {
       setAlert({
         message: 'Please enter a valid 6-digit OTP',
         type: 'error',
@@ -84,7 +83,7 @@ function LoginForm() {
     }
 
     try {
-      const data = await verifyOtp(confirmationResult, enteredOtp);
+      const data = await verifyOtp(confirmationResult, otp);
       const jwtToken = data.token;
       localStorage.setItem('token', jwtToken);
       const cleanedMobileNumber = mobileNumber.replace(/^\+94/, '0');
@@ -112,15 +111,6 @@ function LoginForm() {
   const closeAlert = () => {
     setAlert({ ...alert, show: false });
   };
-  const handleOTPChange = (value, index) => {
-    const newOTP = [...otp];
-    newOTP[index] = value.slice(-1);
-    setOtp(newOTP);
-
-    if(value && index < otp.length - 1) {
-      document.getElementById(`otp-${index + 1}`).focus();
-    }
-  };  
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-red-100">
@@ -186,22 +176,17 @@ function LoginForm() {
               <label htmlFor="otp" className="block text-sm font-medium text-gray-700">
                 OTP
               </label>
-              <div className="flex justify-between">
-                {otp.map((Digit,index) =>  (
               <input
-              key={index}
-              id={`otp-${index}`}
-               
+                id="otp"
                 type="text"
                 pattern="[0-9]*"
-                maxLength="1"
-                value={digit}
-                onChange={(e) => handleOTPChange(e.target.value,index)}
-               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                maxLength="6"
+                placeholder="Enter the 6-digit OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 disabled={loading}
               />
-                ))}
-            </div>
             </div>
             <div className="mb-4">
               <button
