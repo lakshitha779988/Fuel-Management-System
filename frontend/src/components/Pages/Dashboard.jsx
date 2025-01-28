@@ -22,7 +22,7 @@ const Dashboard = () => {
       fetchUserDetails(jwtToken);
       generateQRCode(jwtToken);
     } else {
-      window.location.href = "/login";
+       window.location.href = "/login";
     }
 } , []);
 
@@ -116,10 +116,10 @@ const generateQRCode = async (jwtToken, vehicleId) => {
   };
 
   return (
-    <div className="min-h-screen bg-red-50 text-gray-800 flex">
+    <div className="min-h-screen bg-gray-700 text-gray-800 flex">
       {/* Navigation Menu */}
 
-      <aside className="w-1/5 bg-red-500 text-white py-6 px-4">
+      <aside className="w-1/5 bg-gradient-to-b from-black to-red-500 text-white py-6 px-4">
         <div className="mb-8 flex justify-center">
 
           {/* Profile Icon */}
@@ -181,7 +181,7 @@ const generateQRCode = async (jwtToken, vehicleId) => {
             <h2 className="text-2xl font-bold mb-4">QR Code</h2>
             <div
               id="qrCode"
-              className="bg-gray-100 flex justify-center items-center text-red-500 border-2 border-red-300 rounded-lg mx-auto p-3 mb-6"
+              className="bg-gray-100 flex justify-center items-center text-red-500 border-2 border-red-800 rounded-lg mx-auto p-3 mb-6"
             >
               <img src={qrCode} width={300} height={300} alt="" />
               
@@ -189,13 +189,13 @@ const generateQRCode = async (jwtToken, vehicleId) => {
             <div className="flex justify-center space-x-4">
               <button
                 onClick={generateQrCode}
-                className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-700"
+                className="bg-red-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-800"
               >
                 Update QR Code
               </button>
               <button
                 onClick={downloadQrCode}
-                className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-700"
+                className="bg-red-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-800"
               >
                 Download QR Code
               </button>
