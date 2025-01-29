@@ -1,3 +1,4 @@
+
 import { Pressable, Text, View } from "react-native";
 import { Link } from "expo-router";
 import React from "react";
@@ -27,4 +28,5 @@ export default function Index() {
             </Link>
         </View>
     );
+
 }
