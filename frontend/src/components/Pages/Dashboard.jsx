@@ -140,7 +140,7 @@ const Dashboard = () => {
   if (isConfirmed && jwtToken) {
     try {
       const response = await fetch(`http://localhost:8080/api/account/delete?token=${jwtToken}`, {
-        method: "DELETE", // Use DELETE instead of GET for account deletion
+        method: "GET", 
         headers: {
           "Authorization": `Bearer ${jwtToken}`,
           "Content-Type": "application/json",
@@ -149,8 +149,8 @@ const Dashboard = () => {
 
       if (response.ok) {
         alert("Your account has been deleted successfully.");
-        localStorage.removeItem("jwtToken"); // Remove token after deletion
-        window.location.href = "/register"; // Redirect to registration page
+        localStorage.removeItem("jwtToken"); 
+        window.location.href = "/register"; 
       } else {
         const errorMessage = await response.text();
         alert(`Failed to delete account: ${errorMessage}`);
