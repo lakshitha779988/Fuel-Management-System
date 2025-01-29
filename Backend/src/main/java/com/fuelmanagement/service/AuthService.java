@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
@@ -30,8 +31,9 @@ public class AuthService {
 
     private FirebaseTokenService firebaseTokenService;
     private UserService userService;
+    private final EmailService emailService;
 
-    public AuthService(UserRepository userRepository, VehicleRepository vehicleRepository, VehicleTypeRepository vehicleTypeRepository, JwtService jwtService, SmsService smsService, FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelStationRepository fuelStationRepository, PasswordEncoder passwordEncoder, FirebaseTokenService firebaseTokenService, UserService userService) {
+    public AuthService(UserRepository userRepository, VehicleRepository vehicleRepository, VehicleTypeRepository vehicleTypeRepository, JwtService jwtService, SmsService smsService, FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelStationRepository fuelStationRepository, PasswordEncoder passwordEncoder, FirebaseTokenService firebaseTokenService, UserService userService, EmailService emailService) {
         this.userRepository = userRepository;
         this.vehicleRepository = vehicleRepository;
         this.vehicleTypeRepository = vehicleTypeRepository;
@@ -42,6 +44,7 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
         this.firebaseTokenService = firebaseTokenService;
         this.userService = userService;
+        this.emailService = emailService;
     }
 
 
@@ -111,6 +114,9 @@ public class AuthService {
 
 
         System.out.println("User and Vehicle registered successfully.");
+     String emailContent = emailService.generateUserRegistrationEmailContent(user.getFirstName(),user.getMobileNumber(),vehicle.getRegistrationNumber());
+     emailService.sendEmail(user.getEmail(),"Registration Successful" , emailContent);
+
         return true;
     }
 
@@ -132,7 +138,11 @@ public class AuthService {
             // Step 3: Generate JWT token
             String token = jwtService.generateToken(fuelUser.getMobileNumber(), "FUEL_USER", fuelUser.getRole());
 
+
             // Step 4: Return response
+            LocalDateTime loginTime = LocalDateTime.now();
+            String emailContent = emailService.generateUserLoginNotificationEmailContent(fuelUser.getFirstName(),loginTime);
+            emailService.sendEmail(fuelUser.getEmail(),"Loging Alert" , emailContent);
             return new LoginResponse(token, "FUEL_USER", null, mobileNumber, fuelUser.getRole());
         } catch (FirebaseAuthException e) {
             throw new RuntimeException("Invalid Firebase token", e);

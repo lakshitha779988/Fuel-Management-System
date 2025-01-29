@@ -114,7 +114,7 @@ function LoginForm() {
 
   return (
 
-    <div className="h-screen flex items-center justify-center text-white relative overflow-hidden bg-gradient-to-br from-red-900 via-red-700 to-red-500"
+    <div className="h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-red-900 via-red-700 to-red-500"
     style={{
       backgroundImage: `url('../../public/login11.jpg')`,
       backgroundRepeat: 'no-repeat', // Prevent image repetition
@@ -162,7 +162,7 @@ function LoginForm() {
     )}
 
     {/* Mobile Number Input */}
-    <div className="mt-6 mb-4">
+    <div className="mt-6 mb-4 ">
       <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">
         Mobile Number
       </label>

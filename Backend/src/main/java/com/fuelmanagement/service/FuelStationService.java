@@ -11,12 +11,13 @@ public class FuelStationService {
 
 
     private final FuelStationRepository fuelStationRepository;
-
+    private final EmailService emailService;
 
     @Autowired
-    public FuelStationService(FuelStationRepository fuelStationRepository) {
+    public FuelStationService(FuelStationRepository fuelStationRepository, EmailService emailService) {
         this.fuelStationRepository = fuelStationRepository;
 
+        this.emailService = emailService;
     }
 
     public String registerFuelStation(FuelStationRequest fuelStationRequest) {
@@ -43,7 +44,14 @@ public class FuelStationService {
         fuelStation.setRole("FuelStation");
 
         fuelStationRepository.save(fuelStation);
+        String emailContent = emailService.generateFuelStationRegistrationEmailContent(fuelStation.getName());
+        emailService.sendEmail(fuelStation.getEmail(),"FuelStation Registration Is Pending" , emailContent);
 
         return "Fuel station registered successfully: " + fuelStation.getName();
+
+    }
+
+    public Long getFuelStationIdByMobileNumber(String mobileNumber) {
+        return fuelStationRepository.findByMobileNumber(mobileNumber).get().getId();
     }
 }
