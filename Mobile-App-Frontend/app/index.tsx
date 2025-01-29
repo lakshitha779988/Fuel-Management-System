@@ -8,6 +8,10 @@ export default function SignInScreen() {
     const [loading, setLoading] = useState(false);
 
 
+    const handleSignIn = async () => {
+
+    }
+
 
 
     return (
