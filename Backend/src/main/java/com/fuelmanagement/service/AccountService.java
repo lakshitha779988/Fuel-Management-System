@@ -6,6 +6,7 @@ import com.fuelmanagement.model.entity.mysql.QrCode;
 import com.fuelmanagement.model.entity.mysql.User;
 import com.fuelmanagement.model.entity.mysql.Vehicle;
 import com.fuelmanagement.repository.mysql.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class AccountService {
     @Autowired
     FuelLogRepository fuelLogRepository;
 
+    @Transactional
     public String deleteAccount(String mobileNumber) {
 
         if(!userRepository.existsByMobileNumber(mobileNumber)) {

@@ -45,10 +45,12 @@ public class QRCodeController {
 
     }
 
-    @PutMapping("/update/{vehicleId}")
-    public ResponseEntity<byte[]> updateQRCode(@PathVariable Long vehicleId) {
+    @GetMapping("/update")
+    public ResponseEntity<byte[]> updateQRCode(@RequestParam String token) {
+
+
         try {
-            byte[] qrCodeImage = qrCodeService.updateQRCode(vehicleId);
+            byte[] qrCodeImage = qrCodeService.updateQRCode(token);
             return ResponseEntity.ok()
                     .header("Content-Type", "image/png")
                     .body(qrCodeImage);
