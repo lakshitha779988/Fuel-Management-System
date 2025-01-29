@@ -15,6 +15,8 @@ export default function SignInScreen() {
             return;
         }
 
+        setLoading(true);
+
 
         return (
             <TouchableWithoutFeedback disabled={loading}>
