@@ -13,9 +13,7 @@ export default function RegistrationScreen() {
     const [loading, setLoading] = useState(false);
     const recaptchaVerifier = useRef(null);
 
-
     const handleRegister = async () => {
-
         if (!fuelStationName || !email || !mobileNumber || !password) {
             Alert.alert("Error", "Please fill out all fields.");
             return;
@@ -45,5 +43,86 @@ export default function RegistrationScreen() {
         }
     };
 
+    return (
+        <TouchableWithoutFeedback disabled={loading}>
+            <View className="flex-1 bg-gray-100 px-6 pt-[40px]">
+                <FirebaseRecaptchaVerifierModal
+                    ref={recaptchaVerifier}
+                    firebaseConfig={firebaseConfig}
+                    attemptInvisibleVerification
+                />
 
+                {loading && (
+                    <View className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                        <ActivityIndicator size="large" color="#FF6600" />
+                    </View>
+                )}
+
+                <Text className="text-5xl font-bold text-orange-600 text-center mb-12">
+                    Register
+                </Text>
+
+                <TextInput
+                    className="border border-gray-300 bg-white py-5 px-6 rounded-full text-lg mb-8"
+                    placeholder="Fuel Station Name"
+                    placeholderTextColor="#A9A9A9"
+                    value={fuelStationName}
+                    onChangeText={setFuelStationName}
+                    editable={!loading} // Disable input when loading
+                />
+
+                <TextInput
+                    className="border border-gray-300 bg-white py-5 px-6 rounded-full text-lg mb-8"
+                    placeholder="Email"
+                    placeholderTextColor="#A9A9A9"
+                    keyboardType="email-address"
+                    value={email}
+                    onChangeText={setEmail}
+                    editable={!loading} // Disable input when loading
+                />
+
+                <TextInput
+                    className="border border-gray-300 bg-white py-5 px-6 rounded-full text-lg mb-8"
+                    placeholder="Mobile Number"
+                    placeholderTextColor="#A9A9A9"
+                    keyboardType="phone-pad"
+                    value={mobileNumber}
+                    onChangeText={setMobileNumber}
+                    editable={!loading} // Disable input when loading
+                />
+
+                <TextInput
+                    className="border border-gray-300 bg-white py-5 px-6 rounded-full text-lg mb-12"
+                    placeholder="Password"
+                    placeholderTextColor="#A9A9A9"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                    editable={!loading} // Disable input when loading
+                />
+
+
+
+
+
+                <Pressable
+                    className={`bg-orange-600 py-4 rounded-full mb-10 ${loading ? "opacity-50" : ""}`}
+                    onPress={handleRegister}
+                    disabled={loading}
+                >
+                    <Text className="text-white text-xl font-bold text-center">
+                        {loading ? "Sending OTP..." : "Register"}
+                    </Text>
+                </Pressable>
+
+                <Link href="/sign-in" asChild>
+                    <Pressable disabled={loading}>
+                        <Text className={`text-black text-lg text-center ${loading ? "opacity-50" : ""}`}>
+                            Go to Sign In
+                        </Text>
+                    </Pressable>
+                </Link>
+            </View>
+        </TouchableWithoutFeedback>
+    );
 }
