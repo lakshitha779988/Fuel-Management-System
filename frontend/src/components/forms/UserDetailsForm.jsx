@@ -163,10 +163,19 @@ setAlert({
 };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-       <div className="max-w-lg w-full bg-white rounded-lg shadow-md p-6">
+
+    <div className="flex items-center justify-center relative bg-gradient-to-br from-red-900 via-red-700 to-red-500"
+    style={{
+      backgroundImage: `url('../../public/login11.jpg')`,
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      minHeight: '100vh', 
+  
+    }}>
+    
+       <div className="max-w-lg w-full bg-white rounded shadow-md p-6 my-6 min-h-[400px]">
        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">User Details</h2> 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 min-h-[400px]" style={{ position:"relative" }}>
      
       {alert.show && 
       (
@@ -183,55 +192,57 @@ setAlert({
           </div>
         )}
    
-     
+<div className="grid grid-cols-2 gap-6">    
 <div>
-        <label htmlFor="firstName" className="block text-gray-700 font-semibold">First Name:</label>
+        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name:</label>
         <input id="firstName"
          type="text"
           placeholder="Ex: Saman"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"   
+          className="mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"   
           onChange={(e) => setFirstName(e.target.value)}
           />
 
 </div>
 <div>
-        <label htmlFor="lastName" className="block text-gray-700 font-semibold">Last Name:</label>
+        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name:</label>
         <input id="lastName"
          type="text"
           placeholder="Ex: Perera"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           onChange={(e) => setLastName(e.target.value)}
           />
 </div>
-<div>
-        <label htmlFor="address" className="block text-gray-700 font-semibold">Address:</label>
+<div className="col-span-2">
+        <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address:</label>
         <input id="address"
          type="text"
           placeholder="Ex: 399/8, Station Road, Colombo"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" 
+          className="mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
           onChange={(e) => setAddress(e.target.value)}
           />
 </div>
 
-<div>
-        <label htmlFor="email" className="block text-gray-700 font-semibold">Address:</label>
+<div className="col-span-2">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">E-mail:</label>
         <input id="email"
          type="email"
           placeholder="example@gmail.com"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" 
+          className="mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
           onChange={(e) => setEmail(e.target.value)}
           />
 </div>
-
-        <label htmlFor="nic" className="block text-gray-700 font-semibold">NIC:</label>
+<div>
+        <label htmlFor="nic" className="block text-sm font-medium text-gray-700">NIC:</label>
         <input id="nic"
          type="text"
           placeholder="Ex: 200134587570" 
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           onChange={(e) => setNic(e.target.value)}
           />
+
+</div>          
 <div>
-        <label htmlFor="mobileNumber"className="block text-gray-700 font-semibold">
+        <label htmlFor="mobileNumber"className="block text-sm font-medium text-gray-700">
           
           Mobile Number:</label>
         <input
@@ -239,18 +250,20 @@ setAlert({
           type="tel"
           pattern='[0-9]*'
           placeholder="Ex: 077 123 4567"
-          className="mt-1 block w-full  p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          className="mt-1 block w-full  p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           value={mobileNumber}
           onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g,''))}
         />
 </div>
+<div className="col-span-2">
         <button onClick={handleSendOTP}  
         id="sign-in-button"
-        className="mt-4 w-full bg-red-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+        className="mt-4 w-full bg-gradient-to-r from-red-500 to-purple-500 text-white py-2 rounded hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 transition"
         disabled={loading}
         >
           Send OTP
         </button>
+        </div>
 
         {otpSent && (
           <div className="mt-4">
@@ -261,31 +274,37 @@ setAlert({
               id="otp"
               type="text"
               placeholder="Enter OTP"
-              className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500'
+              className='mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500'
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
               
             />
 
+
             <button onClick={handleVerifyOTP}
-              className="mt-4 w-full bg-red-600 text-white py-2 rounded-md hover:bg-blue-700 transition" >
+              className="mt-4 w-full bg-gradient-to-r from-red-500 to-purple-500 text-white py-2 rounded hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 transition" >
               Verify OTP
             </button>
           </div>
         )}
 
         {otpVerified && <p className="text-green-600">OTP verified successfully!</p>}
+        <div className="col-span-2">
         <button 
         type='submit'
         disabled={!otpVerified}
-         className={` mt-6 w-full py-2 rounded-md text-white ${
+         className={` mt-1 w-full py-2 rounded text-white ${
           otpVerified ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-400 cursor-not-allowed'
         } transition`} >
           Submit
           </button>
+          </div>
+          </div> 
       </form>
     </div>
-    </div>
+
+    
+    </div> 
   );
 
 }
