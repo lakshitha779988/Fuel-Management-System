@@ -273,7 +273,7 @@ setAlert({
             <input
               id="otp"
               type="text"
-              placeholder="Enter OTP"
+              placeholder="Enter the 6-digit OTP"
               className='mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500'
               value={otp}
               onChange={(e) => setOtp(e.target.value)}

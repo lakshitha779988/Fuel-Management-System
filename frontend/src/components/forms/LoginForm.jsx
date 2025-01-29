@@ -117,13 +117,13 @@ function LoginForm() {
     <div className="h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-red-900 via-red-700 to-red-500"
     style={{
       backgroundImage: `url('../../public/login11.jpg')`,
-      backgroundRepeat: 'no-repeat', // Prevent image repetition
-      backgroundSize: 'cover',      // Ensure the image covers the entire div
+      backgroundRepeat: 'no-repeat', 
+      backgroundSize: 'cover', 
   
     }}>
     
-    <div className="flex justify-center items-center min-h-screen ">
-  <form className="bg-white p-8 rounded  shadow-custom w-full max-w-md" style={{ position:"relative", height: "450px",width:"400px" }}>
+    <div className="flex justify-center items-center min-h-[300px] ">
+  <form className="bg-white p-8 rounded  shadow-custom w-full max-w-md my-6" style={{ position:"relative",width:"400px" }}>
     {/* Login Header */}
     
     
@@ -217,7 +217,7 @@ function LoginForm() {
           <button
             onClick={handleVerifyOTP}
             disabled={loading}
-            className={`w-full bg-gradient-to-r from-red-500 to-purple-500 text-white py-2 px-4 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 ${
+            className={`w-full bg-gradient-to-r from-red-500 to-purple-500 text-white py-2 px-4 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 ${
               loading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
