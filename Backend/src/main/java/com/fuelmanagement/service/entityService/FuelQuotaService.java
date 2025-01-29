@@ -6,6 +6,7 @@ import com.fuelmanagement.service.EmailService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -17,16 +18,18 @@ public class FuelQuotaService {
     private final FuelStationRepository fuelStationRepository;
     private final EmailService emailService;
     private final UserRepository userRepository;
+    private final FuelLogRepository fuelLogRepository;
 
     public FuelQuotaService(QrCodeRepository qrCodeRepository,
                             VehicleRepository vehicleRepository,
-                            FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelStationRepository fuelStationRepository, EmailService emailService, UserRepository userRepository) {
+                            FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelStationRepository fuelStationRepository, EmailService emailService, UserRepository userRepository, FuelLogRepository fuelLogRepository) {
         this.qrCodeRepository = qrCodeRepository;
         this.vehicleRepository = vehicleRepository;
         this.fuelQuotaTrackerRepository = fuelQuotaTrackerRepository;
         this.fuelStationRepository = fuelStationRepository;
         this.emailService = emailService;
         this.userRepository = userRepository;
+        this.fuelLogRepository = fuelLogRepository;
     }
 
     public String updateFuelLimit(String qrString, float usage, Long fuelStationId) {
@@ -76,6 +79,19 @@ public class FuelQuotaService {
 
         float updateExsistingFuel = tracker.getExistingFuel();
         LocalDateTime localDateTime = LocalDateTime.now();
+
+
+
+        //Update Fuel Log about this transaction
+        FuelLog fuelLog = new FuelLog();
+        fuelLog.setFuelAmount(usage);
+        fuelLog.setFuelStation(fuelStation);
+        fuelLog.setUser(user);
+        fuelLog.setVehicle(vehicle);
+        fuelLog.setCreatedAt(new Date(System.currentTimeMillis()));
+        fuelLog.setTransactionTime(new Date(System.currentTimeMillis()));
+
+        fuelLogRepository.save(fuelLog);
 
         String emailContent = emailService.generateFuelLimitUpdateEmailContent(fuelStation.getName(),usage,localDateTime,updateExsistingFuel);
         emailService.sendEmail(user.getEmail(),"Fuel Update" , emailContent);
