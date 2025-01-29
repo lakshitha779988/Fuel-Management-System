@@ -4,6 +4,7 @@ import com.fuelmanagement.model.dto.request.RegistrationRequest;
 import com.fuelmanagement.model.dto.response.LoginResponse;
 import com.fuelmanagement.model.entity.mysql.*;
 import com.fuelmanagement.repository.mysql.*;
+import com.fuelmanagement.service.entityService.UserService;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -11,7 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
@@ -161,7 +161,7 @@ public class AuthService {
         }
         System.out.println(station.getEmail());
         // Step 3: Generate JWT token
-        String token = jwtService.generateToken(station.getName(), "FUEL_STATION", station.getRole());
+        String token = jwtService.generateToken(station.getMobileNumber(), "FUEL_STATION", station.getRole());
     System.out.println(token);
         // Step 4: Return response
         return new LoginResponse(token, "FUEL_STATION", mobileNumber, null, station.getRole());

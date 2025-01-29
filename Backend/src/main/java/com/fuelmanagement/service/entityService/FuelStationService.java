@@ -1,8 +1,9 @@
-package com.fuelmanagement.service;
+package com.fuelmanagement.service.entityService;
 
 import com.fuelmanagement.model.dto.request.FuelStationRequest;
 import com.fuelmanagement.model.entity.mysql.FuelStation;
 import com.fuelmanagement.repository.mysql.FuelStationRepository;
+import com.fuelmanagement.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

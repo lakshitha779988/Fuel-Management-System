@@ -1,7 +1,8 @@
-package com.fuelmanagement.service;
+package com.fuelmanagement.service.entityService;
 
 import com.fuelmanagement.model.entity.mysql.*;
 import com.fuelmanagement.repository.mysql.*;
+import com.fuelmanagement.service.EmailService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

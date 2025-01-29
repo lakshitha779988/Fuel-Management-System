@@ -1,10 +1,9 @@
-package com.fuelmanagement.service;
+package com.fuelmanagement.service.entityService;
 
 import com.fuelmanagement.model.dto.response.QrCodeCheckingResponse;
 import com.fuelmanagement.model.entity.mysql.FuelQuotaTracker;
 import com.fuelmanagement.model.entity.mysql.QrCode;
 import com.fuelmanagement.model.entity.mysql.Vehicle;
-import com.fuelmanagement.repository.mysql.FuelQuotaTrackerRepository;
 import com.fuelmanagement.repository.mysql.QrCodeRepository;
 import com.fuelmanagement.repository.mysql.VehicleRepository;
 import com.google.zxing.BarcodeFormat;

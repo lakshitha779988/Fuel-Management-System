@@ -1,13 +1,13 @@
 package com.fuelmanagement.controller;
 
-import com.fuelmanagement.service.FuelStationService;
+import com.fuelmanagement.service.entityService.FuelStationService;
 import com.fuelmanagement.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.fuelmanagement.service.FuelQuotaService;
+import com.fuelmanagement.service.entityService.FuelQuotaService;
 
 @RestController
 @RequestMapping("api/fuel-quota")

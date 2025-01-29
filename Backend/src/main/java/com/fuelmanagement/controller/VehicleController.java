@@ -3,7 +3,7 @@ package com.fuelmanagement.controller;
 import com.fuelmanagement.model.dto.request.VehicleDTO;
 import com.fuelmanagement.model.dto.request.VehicleDetailsRequest;
 import com.fuelmanagement.model.entity.mysql.Vehicle;
-import com.fuelmanagement.service.VehicleService;
+import com.fuelmanagement.service.entityService.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
