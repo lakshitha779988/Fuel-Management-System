@@ -67,14 +67,61 @@ const Dashboard = () => {
     }
   };
 
-  const downloadQrCode = () => {
-    const canvas = document.getElementById("qrCode");
-    const pngUrl = canvas.toDataURL("image/png");
-    const downloadLink = document.createElement("a");
-    downloadLink.href = pngUrl;
-    downloadLink.download = "qr-code.png";
-    downloadLink.click();
+
+  const updateQrCode = async () => {
+    const isConfirmed = window.confirm("Are you sure you want to update your QR code?");
+  
+    if (isConfirmed) {
+      try {
+        const response = await fetch(`http://localhost:8080/api/qr/update?token=${jwtToken}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${jwtToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        if (response.ok) {
+          const blob = await response.blob();
+          const imageUrl = URL.createObjectURL(blob);
+          setQrCode(imageUrl);
+          alert("QR code updated successfully!"); // Success message
+        } else {
+          alert("Failed to generate QR code");
+        }
+      } catch (error) {
+        console.error("Error during request:", error);
+        alert("Error occurred during request");
+      }
+    } else {
+      alert("QR code update canceled");
+    }
   };
+  
+
+  const downloadQrCode = () => {
+    const qrImage = document.getElementById("qrCodeImg");
+  
+    if (!qrImage || !qrImage.src) {
+      alert("QR code is not available for download.");
+      return;
+    }
+  
+    try {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = qrImage.src;
+      downloadLink.download = "qr-code.png";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      alert("QR code downloaded successfully!");
+    } catch (error) {
+      console.error("Error downloading QR code:", error);
+      alert("Failed to download QR code. Please try again.");
+    }
+  };
+  
+  
 
   const handleLogout = () => {
     const isConfirmed = window.confirm("Do you really want to log out?");
@@ -87,33 +134,36 @@ const Dashboard = () => {
     }
   };
 
-  const deleteAccount = async () => {
-    const isConfirmed = window.confirm("Do you really want to delete this Account");
-    if (isConfirmed && jwtToken) {
-      try {
-        const response = await fetch(`http://localhost:8080/api/account/delete?token=${jwtToken}`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${jwtToken}`,
-            'Content-Type': 'application/json',
-          },
-        });
+ const deleteAccount = async () => {
+  const isConfirmed = window.confirm("Do you really want to delete this Account?");
+  
+  if (isConfirmed && jwtToken) {
+    try {
+      const response = await fetch(`http://localhost:8080/api/account/delete?token=${jwtToken}`, {
+        method: "DELETE", // Use DELETE instead of GET for account deletion
+        headers: {
+          "Authorization": `Bearer ${jwtToken}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-        if (response.ok) {
-          alert("Your account has been deleted successfully.");
-          window.location.href = "/register"; // Redirect to registration page
-        } else {
-          const errorMessage = await response.text();
-          alert(`Failed to delete account: ${errorMessage}`);
-        }
-      } catch (error) {
-        console.error("Error deleting account:", error);
-        alert("An error occurred while deleting the account. Please try again.");
+      if (response.ok) {
+        alert("Your account has been deleted successfully.");
+        localStorage.removeItem("jwtToken"); // Remove token after deletion
+        window.location.href = "/register"; // Redirect to registration page
+      } else {
+        const errorMessage = await response.text();
+        alert(`Failed to delete account: ${errorMessage}`);
       }
-    } else {
-      alert("Account Deletion canceled");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      alert("An error occurred while deleting the account. Please try again.");
     }
-  };
+  } else {
+    alert("Account Deletion canceled");
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gray-700 text-gray-800 flex">
@@ -176,11 +226,11 @@ const Dashboard = () => {
               id="qrCode"
               className="bg-gray-100 flex justify-center items-center text-red-500 border-2 border-red-800 rounded-lg mx-auto p-3 mb-6"
             >
-              <img src={qrCode} width={300} height={300} alt="" />
+              <img id="qrCodeImg" src={qrCode} width={300} height={300} alt="" />
             </div>
             <div className="flex justify-center space-x-4">
               <button
-                onClick={generateQrCode}
+                onClick={updateQrCode}
                 className="bg-red-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-800"
               >
                 Update QR Code
