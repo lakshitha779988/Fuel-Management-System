@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {View, Text, TextInput, Pressable, ActivityIndicator, TouchableWithoutFeedback, Alert} from "react-native";
+import axios from "axios";
 import { Link} from "expo-router";
 
 
@@ -16,6 +17,11 @@ export default function SignInScreen() {
         }
 
         setLoading(true);
+
+        const response = await axios.post("http://172.19.67.1:8080/api/fuel-stations/login", {
+            mobileNumber,
+            password,
+        });
 
 
         return (
