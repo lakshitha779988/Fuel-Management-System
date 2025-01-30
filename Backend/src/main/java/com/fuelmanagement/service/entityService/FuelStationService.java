@@ -47,7 +47,7 @@ public class FuelStationService {
         fuelStation.setPassword(fuelStationRequest.getPassword());
         fuelStation.setRole("FuelStation");
         fuelStation.setStock(0);
-        fuelStation.setStatus("Block");
+        fuelStation.setStatus("Blocked");
 
         fuelStationRepository.save(fuelStation);
         String emailContent = emailService.generateFuelStationRegistrationEmailContent(fuelStation.getName());
@@ -63,6 +63,7 @@ public class FuelStationService {
 
 
     public List<FuelStationResponse> getAllFuelStations() {
+        System.out.println("come to function");
         return fuelStationRepository.findAll()
                 .stream()
                 .map(fuelStation -> new FuelStationResponse(

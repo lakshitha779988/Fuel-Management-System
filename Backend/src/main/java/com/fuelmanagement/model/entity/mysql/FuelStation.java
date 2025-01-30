@@ -28,7 +28,8 @@ public class FuelStation {
     private String password;
 
 
-    private String status;
+    private String status = "Blocked";
+
 
     private float stock;
 
