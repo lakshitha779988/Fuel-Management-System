@@ -159,6 +159,12 @@ public class AuthService {
         if (!Objects.equals(password, station.getPassword())) {
             throw new BadCredentialsException("Invalid password");
         }
+
+        if (!Objects.equals(station.getStatus(), "Active")) {
+            throw new BadCredentialsException("Account is not active yet");
+        }
+
+
         System.out.println(station.getEmail());
         // Step 3: Generate JWT token
         String token = jwtService.generateToken(station.getMobileNumber(), "FUEL_STATION", station.getRole());
