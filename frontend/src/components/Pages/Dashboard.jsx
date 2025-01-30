@@ -273,6 +273,7 @@ const Dashboard = () => {
             {/* Reports content here */}
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="text-lg font-semibold mb-2">Current Amount of Fuel</h3>
+              <p>{fuelAmount} L</p>
             </div>
 
           </div>
