@@ -7,9 +7,10 @@ const Dashboard = () => {
   const [userDetails, setUserDetails] = useState(null);
   const [jwtToken, setJwtToken] = useState(""); // Use state to store the JWT token
 
-  const [totalFuelUsage,setTotalFuelUsage]=useState(null);
+  const [totalFuelUsage,setTotalFuelUsage]=useState("0");
 
-  const [fuelAmount, setFuelAmount] = useState("");
+  const [fuelAmount, setFuelAmount] = useState("0");
+  const [transactions, setTransactions] = useState([]);
 
 
   const generateQrCode = () => {
@@ -24,6 +25,7 @@ const Dashboard = () => {
       generateQRCode(token);
       fetchFuelAmount(token);
       fetchTotalFuelUsage(token);
+      fetchTransactions(token);
     } else {
       // window.location.href = "/login"; // Redirect if token is not found
     }
@@ -183,6 +185,27 @@ const Dashboard = () => {
       console.error('Error during request:', error);
     }
   };
+  const fetchTransactions = async (token) => {
+    try {
+      const response = await fetch(``, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        setTransactions(data.slice(0, 10));
+      } else {
+        alert('Failed to fetch transactions');
+      }
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+    }
+  };
+  
   
 
   const handleLogout = () => {
@@ -327,6 +350,37 @@ const Dashboard = () => {
                 <p className="text-lg">Loading fuel data...</p>
               )}
             </div>
+
+            <div className="bg-white text-red-800 rounded-lg shadow-lg p-6 w-full col-span-2">
+            <h3 className="text-2xl font-bold mb-4">Last 10 Transactions</h3>
+
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse border border-red-300">
+                <thead className="bg-red-800 text-white">
+                  <tr>
+                    <th className="border border-red-300 px-4 py-2 text-left">Time</th>
+                    <th className="border border-red-300 px-4 py-2 text-left">Amount (L)</th>
+                    <th className="border border-red-300 px-4 py-2 text-left">Fuel Station Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {transactions.length > 0 ? (
+                    transactions.map((transaction, index) => (
+                      <tr key={index} className="hover:bg-red-100">
+                        <td className="border border-red-300 px-4 py-2">{transaction.time}</td>
+                        <td className="border border-red-300 px-4 py-2">{transaction.amount}</td>
+                        <td className="border border-red-300 px-4 py-2">{transaction.stationName}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3" className="text-center p-4">No transactions found</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
 
           </div>
