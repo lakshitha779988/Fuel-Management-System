@@ -17,15 +17,18 @@ import java.util.List;
 @RequestMapping("/api/report")
 
 public class ReportController {
-    @Autowired
-    ReportService reportService;
 
-    @Autowired
-    JwtService jwtService;
+    private final ReportService  reportService;
+    private final JwtService jwtService;
+    private final FuelLogService fuelLogService;
 
-    @Autowired
-    FuelLogService fuelLogService;
+    public ReportController(ReportService reportService, JwtService jwtService, FuelLogService fuelLogService) {
+        this.reportService = reportService;
+        this.jwtService = jwtService;
+        this.fuelLogService = fuelLogService;
+    }
 
+    //Get fuel usage for user
     @GetMapping("/user/fuel-usage")
     public ResponseEntity<Float> fuelUsageForUser(@RequestHeader("Authorization") String authHeader) {
         try {
@@ -44,6 +47,7 @@ public class ReportController {
 
     }
 
+    //get exsisting fuel for user
     @GetMapping("/user/exsistingFuel")
     public ResponseEntity<Float> exsistingFuelAmount(@RequestHeader("Authorization") String authHeader){
         try {
@@ -63,6 +67,7 @@ public class ReportController {
 
 
 
+    //return last 10 transaction for user
     @GetMapping("/user/transaction")
     public ResponseEntity<List<FuelTransactionDTO>> getLast10Transactions(@RequestHeader("Authorization") String authHeader){
         try {
@@ -79,15 +84,5 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
         }
     }
-
-
-
-
-
-
-
-   
-
-
 
 }

@@ -15,15 +15,20 @@ import java.util.Map;
 @RequestMapping("/api/qr")
 public class QRCodeController {
 
-    @Autowired
-    private QrCodeService qrCodeService;
+
+    private final QrCodeService qrCodeService;
+    private final JwtService  jwtService;
+    private final UserService userService;
 
     @Autowired
-    JwtService jwtService;
+    public QRCodeController(QrCodeService qrCodeService, JwtService jwtService, UserService userService) {
+        this.qrCodeService = qrCodeService;
+        this.jwtService = jwtService;
+        this.userService = userService;
+    }
 
-    @Autowired
-    UserService userService;
 
+    //Generate QrCode
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/generate")
     public ResponseEntity<byte[]> generateQRCode(@RequestParam String token) {
@@ -45,6 +50,7 @@ public class QRCodeController {
 
     }
 
+    //update QrCode
     @GetMapping("/update")
     public ResponseEntity<byte[]> updateQRCode(@RequestParam String token) {
 
@@ -59,16 +65,8 @@ public class QRCodeController {
         }
     }
 
-    @DeleteMapping("/delete/{vehicleId}")
-    public ResponseEntity<String> deleteQRCode(@PathVariable Long vehicleId) {
-        try {
-            qrCodeService.deleteQRCode(vehicleId);
-            return ResponseEntity.ok("QR Code deleted successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 
+    //Check is the Qr code String in the system or not
     @PostMapping("/check-qr-string")
     public ResponseEntity<QrCodeCheckingResponse> checkQrCode(@RequestBody Map<String, String> payload) {
         String qrCode = payload.get("qrString");

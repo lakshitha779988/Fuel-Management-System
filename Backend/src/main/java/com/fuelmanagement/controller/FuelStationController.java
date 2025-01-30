@@ -13,12 +13,18 @@ import org.springframework.web.bind.annotation.*;
     @RequestMapping("/api/fuel-stations")
 public class FuelStationController {
 
-    @Autowired
-    private FuelStationService fuelStationService;
+
+    private final FuelStationService fuelStationService;
+    private final AuthService authService;
 
     @Autowired
-    private  AuthService authService;
+    public FuelStationController(FuelStationService fuelStationService, AuthService authService) {
+        this.fuelStationService = fuelStationService;
+        this.authService = authService;
+    }
 
+
+    //FuelStation Register endpoint
     @CrossOrigin(origins = "http://localhost:8082")
     @PostMapping("/register")
     public ResponseEntity<String> registerFuelStation(@RequestBody FuelStationRequest fuelStationRequest) {
@@ -33,6 +39,7 @@ public class FuelStationController {
     }
 
 
+    //FuelStation login EndPoint
     @CrossOrigin(origins = "http://localhost:8082")
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> fuelUserLogin(@RequestBody FuelStationLoginRequest request) {

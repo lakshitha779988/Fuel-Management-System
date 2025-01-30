@@ -7,25 +7,30 @@ import com.fuelmanagement.service.entityService.AdminService;
 import com.fuelmanagement.service.entityService.FuelStationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/admin")
-public class AdminContoller {
+public class AdminController {
+
+
+    private  final AdminService  adminService;
+    private final FuelStationService fuelStationService;
 
     @Autowired
-    AdminService adminService;
+    public AdminController(AdminService adminService, FuelStationService fuelStationService) {
+        this.adminService = adminService;
+        this.fuelStationService = fuelStationService;
+    }
 
-    @Autowired
-    FuelStationService fuelStationService;
 
+    //Admin login endpoint
     @PostMapping("/login")
-    public ResponseEntity<String> adminLogin(AdminLoginRequest adminLoginRequest){
+    public ResponseEntity<String> adminLogin(@RequestBody AdminLoginRequest adminLoginRequest){
+        System.out.println(adminLoginRequest.getPassword());
+        System.out.println(adminLoginRequest.getUserName());
 
        String token =  adminService.login(adminLoginRequest);
        return ResponseEntity.ok(token);
@@ -33,6 +38,7 @@ public class AdminContoller {
     }
 
 
+    //fetch All fuelStation return list of FuelStationResponse
     @GetMapping
     public ResponseEntity<List<FuelStationResponse>> getAllFuelStations() {
         List<FuelStationResponse> fuelStations = fuelStationService.getAllFuelStations();

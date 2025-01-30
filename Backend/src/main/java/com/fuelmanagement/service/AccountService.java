@@ -12,17 +12,21 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AccountService {
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    VehicleRepository vehicleRepository;
-    @Autowired
-    QrCodeRepository qrCodeRepository;
-    @Autowired
-    FuelQuotaTrackerRepository fuelQuotaTrackerRepository;
+
+   private final UserRepository userRepository;
+    private final VehicleRepository vehicleRepository;
+   private final QrCodeRepository qrCodeRepository;
+    private final FuelQuotaTrackerRepository fuelQuotaTrackerRepository;
+    private final FuelLogRepository fuelLogRepository;
 
     @Autowired
-    FuelLogRepository fuelLogRepository;
+    public AccountService(UserRepository userRepository, VehicleRepository vehicleRepository, QrCodeRepository qrCodeRepository, FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelLogRepository fuelLogRepository) {
+        this.userRepository = userRepository;
+        this.vehicleRepository = vehicleRepository;
+        this.qrCodeRepository = qrCodeRepository;
+        this.fuelQuotaTrackerRepository = fuelQuotaTrackerRepository;
+        this.fuelLogRepository = fuelLogRepository;
+    }
 
     @Transactional
     public String deleteAccount(String mobileNumber) {
@@ -58,8 +62,6 @@ public class AccountService {
         fuelQuotaTrackerRepository.deleteById(fuelQuotaTracker.getId());
 
         return "successfully deleted";
-
-
 
     }
 }

@@ -20,17 +20,19 @@ import java.util.Objects;
 @Service
 public class AdminService {
 
-    @Autowired
-    private AdminRepository adminRepository;
+    private final AdminRepository adminRepository;
+   private final JwtService jwtService;
+   private final FuelStationRepository fuelStationRepository;
+   private final EmailService emailService;
 
-    @Autowired
-    JwtService jwtService;
 
-    @Autowired
-    FuelStationRepository fuelStationRepository;
-
-    @Autowired
-    EmailService emailService;
+   @Autowired
+    public AdminService(AdminRepository adminRepository, JwtService jwtService, FuelStationRepository fuelStationRepository, EmailService emailService) {
+        this.adminRepository = adminRepository;
+        this.jwtService = jwtService;
+        this.fuelStationRepository = fuelStationRepository;
+        this.emailService = emailService;
+    }
 
 
     public String login(AdminLoginRequest adminLoginRequest) {

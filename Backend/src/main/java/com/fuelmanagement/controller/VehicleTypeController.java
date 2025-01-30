@@ -11,8 +11,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/vehicle-types")
 public class VehicleTypeController {
+
+    private  final VehicleTypeService vehicleTypeService;
+
     @Autowired
-    private VehicleTypeService vehicleTypeService;
+    public VehicleTypeController(VehicleTypeService vehicleTypeService) {
+        this.vehicleTypeService = vehicleTypeService;
+    }
 
     // Create or update a vehicle type
     @PostMapping
@@ -21,7 +26,6 @@ public class VehicleTypeController {
     }
 
     // Get all vehicle types
-
     @GetMapping
     public ResponseEntity<List<VehicleType>> getAllVehicleTypes() {
         return ResponseEntity.ok(vehicleTypeService.getAllVehicleTypes());

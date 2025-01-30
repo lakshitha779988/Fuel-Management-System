@@ -21,7 +21,6 @@ public class FuelStationService {
     @Autowired
     public FuelStationService(FuelStationRepository fuelStationRepository, EmailService emailService) {
         this.fuelStationRepository = fuelStationRepository;
-
         this.emailService = emailService;
     }
 

@@ -17,17 +17,21 @@ import java.util.List;
 @Service
 public class ReportService {
   
-     @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
+    private final VehicleRepository vehicleRepository;
+    private final FuelLogRepository fuelLogRepository;
+
 
     @Autowired
-    private VehicleRepository vehicleRepository;
+    public ReportService(UserRepository userRepository, VehicleRepository vehicleRepository, FuelLogRepository fuelLogRepository) {
+        this.userRepository = userRepository;
+        this.vehicleRepository = vehicleRepository;
+        this.fuelLogRepository = fuelLogRepository;
+    }
 
-    @Autowired
-    private FuelLogRepository fuelLogRepository;
 
-
-public Float FuelUsageForEachVehicle(String registrationNumber){
+    public Float FuelUsageForEachVehicle(String registrationNumber){
 
      Vehicle vehicle = vehicleRepository.findByRegistrationNumber(registrationNumber);
      List<FuelLog> allTransactions = fuelLogRepository.findAllByVehicleId(vehicle.getId());

@@ -13,10 +13,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/account")
 public class AccountController {
 
+
+    private final AccountService accountService;
+
+    private final JwtService jwtService;
+
     @Autowired
-    AccountService accountService;
-    @Autowired
-    JwtService jwtService;
+    public AccountController(AccountService accountService, JwtService jwtService) {
+        this.accountService = accountService;
+        this.jwtService = jwtService;
+    }
+
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/delete")

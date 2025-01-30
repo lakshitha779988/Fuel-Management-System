@@ -16,20 +16,19 @@ import java.util.Map;
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
+    private final JwtService jwtService;
 
     @Autowired
-    private JwtService jwtService;
+    public UserController(UserService userService, JwtService jwtService) {
+        this.userService = userService;
+        this.jwtService = jwtService;
+    }
 
-//    @GetMapping("/check-mobile-existence")
-//    public ResponseEntity<Map<String, Boolean>> checkMobileExistence(@RequestParam String mobileNumber) {
-//        boolean exists = userService.isMobileNumberExist(mobileNumber);
-//        Map<String, Boolean> response = new HashMap<>();
-//        response.put("exists", exists);
-//        return ResponseEntity.ok(response);
-//    }
 
+
+    //check if that mobile number available in our system
     @CrossOrigin(origins = "http://localhost:5173")  // Allow requests from the frontend (if needed)
     @GetMapping("/check-mobile-existence")
     public ResponseEntity<Map<String, Boolean>> lk(@RequestParam String mobileNumber) {
@@ -39,6 +38,8 @@ public class UserController {
 
         return ResponseEntity.ok(response);
     }
+
+
     @GetMapping("/details")
     public ResponseEntity<UserDetailsResponse> getUserDetails(@RequestParam String token) {
         // Here, you would parse the JWT token to extract user info (e.g., userId)
@@ -52,32 +53,4 @@ public class UserController {
         return ResponseEntity.ok(userDetails);
     }
 
-    // Create a new user
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        try {
-            return ResponseEntity.ok((User) userService.createUser((com.fuelmanagement.model.entity.mysql.User) user));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-    // Update user details
-    @PutMapping("/{userId}")
-    public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody User updatedUserDetails) {
-        try {
-            return ResponseEntity.ok((User) userService.updateUser(userId, (com.fuelmanagement.model.entity.mysql.User) updatedUserDetails));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    // Add a vehicle to a user
-    @PostMapping("/{userId}/vehicles")
-    public ResponseEntity<Vehicle> addVehicleToUser(@PathVariable Long userId, @RequestBody Vehicle vehicle) {
-        try {
-            return ResponseEntity.ok(userService.addVehicleToUser(userId, vehicle));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
 }
