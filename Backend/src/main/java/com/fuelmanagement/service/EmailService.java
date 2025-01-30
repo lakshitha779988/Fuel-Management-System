@@ -123,4 +123,34 @@ public class EmailService {
                 "FuelManagement Team\n" +
                 "Sri Lanka";
     }
+
+    public String generateFuelStationAccountActiveEmailContent(String fuelStationName, LocalDateTime activationTime) {
+        return "Subject: Fuel Station Account Activation\n\n" +
+                "Dear " + fuelStationName + " Team,\n\n" +
+                "We are pleased to inform you that your fuel station account has been successfully activated.\n\n" +
+                "Activation Details:\n" +
+                "Fuel Station Name: " + fuelStationName + "\n" +
+                "Activation Time: " + activationTime + "\n\n" +
+                "You can now log in and start managing fuel distribution through our system. If you have any questions or need assistance, feel free to contact our support team.\n\n" +
+                "Thank you for being a valued partner.\n\n" +
+                "Best Regards,\n" +
+                "FuelManagement Team\n" +
+                "Sri Lanka";
+    }
+
+
+    public String generateFuelStationAccountBlockedEmailContent(String fuelStationName, LocalDateTime blockTime) {
+        return "Subject: Fuel Station Account Blocked\n\n" +
+                "Dear " + fuelStationName + " Team,\n\n" +
+                "We regret to inform you that your fuel station account has been blocked due to policy violations or operational concerns.\n\n" +
+                "Blocking Details:\n" +
+                "Fuel Station Name: " + fuelStationName + "\n" +
+                "Block Time: " + blockTime + "\n\n" +
+                "If you believe this was a mistake or need further clarification, please contact our support team immediately.\n\n" +
+                "Best Regards,\n" +
+                "FuelManagement Team\n" +
+                "Sri Lanka";
+    }
+
+
 }

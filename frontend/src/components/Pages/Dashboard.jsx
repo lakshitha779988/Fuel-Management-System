@@ -7,9 +7,10 @@ const Dashboard = () => {
   const [userDetails, setUserDetails] = useState(null);
   const [jwtToken, setJwtToken] = useState(""); // Use state to store the JWT token
 
-  const [totalFuelUsage,setTotalFuelUsage]=useState(null);
+  const [totalFuelUsage,setTotalFuelUsage]=useState("0");
 
-  const [fuelAmount, setFuelAmount] = useState("");
+  const [fuelAmount, setFuelAmount] = useState("0");
+  const [transactions, setTransactions] = useState([]);
 
 
   const generateQrCode = () => {
@@ -23,8 +24,10 @@ const Dashboard = () => {
       fetchUserDetails(token);
       generateQRCode(token);
       fetchFuelAmount(token);
+      fetchTotalFuelUsage(token);
+      fetchTransactions(token);
     } else {
-      // window.location.href = "/login"; // Redirect if token is not found
+      window.location.href = "/login"; // Redirect if token is not found
     }
   }, []);
 
@@ -50,12 +53,12 @@ const Dashboard = () => {
     }
   };
 
-  const fetchTotalFuelUsage = async () => {
+  const fetchTotalFuelUsage = async (token) => {
     try {
-      const response = await fetch("http://localhost:8080/api/reports/fuel-usage", {
+      const response = await fetch("http://localhost:8080/api/report/user/fuel-usage", {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${jwtToken}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
@@ -69,7 +72,7 @@ const Dashboard = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setTotalFuelUsage(data.totalFuel);
+        setTotalFuelUsage(data);
       } else {
         alert("Failed to fetch total fuel usage");
       }
@@ -79,11 +82,7 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {
-    if (activeSection === "Reports" && jwtToken) {
-      fetchTotalFuelUsage();
-    }
-  }, [activeSection, jwtToken]);
+ 
 
 
 
@@ -168,7 +167,7 @@ const Dashboard = () => {
   
   const fetchFuelAmount = async (token) => {
     try {
-      const response = await fetch(``, {
+      const response = await fetch(`http://localhost:8080/api/report/user/exsistingFuel`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -186,6 +185,27 @@ const Dashboard = () => {
       console.error('Error during request:', error);
     }
   };
+  const fetchTransactions = async (token) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/report/user/transaction`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        setTransactions(data);
+      } else {
+        alert('Failed to fetch transactions');
+      }
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+    }
+  };
+  
   
 
   const handleLogout = () => {
@@ -248,7 +268,7 @@ const Dashboard = () => {
         {showProfile && (
           <div className="bg-red-100 text-red-800 rounded-lg p-4 mb-4">
             <p>Name: {userDetails ? userDetails.firstName : "Error occur"}</p>
-            <p>Email: {userDetails ? userDetails.mobileNumber : "Error occur "}</p>
+            <p>MobileNumber: {userDetails ? userDetails.mobileNumber : "Error occur "}</p>
           </div>
         )}
 
@@ -320,10 +340,47 @@ const Dashboard = () => {
               <p className="text-lg">{totalFuelUsage !== null ? `${totalFuelUsage} Liters` : "Loading..."}</p>
             </div>
             
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-2">Current Amount of Fuel</h3>
-              <p>{fuelAmount} L</p>
+            <div className="bg-white text-red-800 rounded-lg shadow-lg p-6">
+              <h2 className="text-2xl font-bold mb-4">Current Amount of Fuel</h2>
+              {fuelAmount ? (
+                
+                  <p className="text-lg">{fuelAmount} L</p>
+                
+              ) : (
+                <p className="text-lg">Loading fuel data...</p>
+              )}
             </div>
+
+            <div className="bg-white text-red-800 rounded-lg shadow-lg p-6 w-full col-span-2">
+            <h3 className="text-2xl font-bold mb-4">Last 10 Transactions</h3>
+
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse border border-red-300">
+                <thead className="bg-red-800 text-white">
+                  <tr>
+                    <th className="border border-red-300 px-4 py-2 text-left">Time</th>
+                    <th className="border border-red-300 px-4 py-2 text-left">Amount (L)</th>
+                    <th className="border border-red-300 px-4 py-2 text-left">Fuel Station Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {transactions.length > 0 ? (
+                    transactions.map((transaction, index) => (
+                      <tr key={index} className="hover:bg-red-100">
+                        <td className="border border-red-300 px-4 py-2">{transaction.transactionTime}</td>
+                        <td className="border border-red-300 px-4 py-2">{transaction.fuelAmount}</td>
+                        <td className="border border-red-300 px-4 py-2">{transaction.fuelStationName}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3" className="text-center p-4">No transactions found</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
 
           </div>

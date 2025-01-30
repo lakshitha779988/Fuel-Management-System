@@ -29,8 +29,8 @@ public class AuthService {
     private final FuelStationRepository fuelStationRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private FirebaseTokenService firebaseTokenService;
-    private UserService userService;
+    private final FirebaseTokenService firebaseTokenService;
+    private final UserService userService;
     private final EmailService emailService;
 
     public AuthService(UserRepository userRepository, VehicleRepository vehicleRepository, VehicleTypeRepository vehicleTypeRepository, JwtService jwtService, SmsService smsService, FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelStationRepository fuelStationRepository, PasswordEncoder passwordEncoder, FirebaseTokenService firebaseTokenService, UserService userService, EmailService emailService) {
@@ -87,8 +87,6 @@ public class AuthService {
 
 
 
-
-
         // Create and save Vehicle
         Vehicle vehicle = new Vehicle();
         vehicle.setChaseNumber(registrationRequest.getChaseNumber());
@@ -110,7 +108,6 @@ public class AuthService {
         user.setEmail(registrationRequest.getEmail());
         user.setRole("user");
         userRepository.save(user);
-
 
 
         System.out.println("User and Vehicle registered successfully.");
@@ -159,6 +156,12 @@ public class AuthService {
         if (!Objects.equals(password, station.getPassword())) {
             throw new BadCredentialsException("Invalid password");
         }
+
+        if (!Objects.equals(station.getStatus(), "Active")) {
+            throw new BadCredentialsException("Account is not active yet");
+        }
+
+
         System.out.println(station.getEmail());
         // Step 3: Generate JWT token
         String token = jwtService.generateToken(station.getMobileNumber(), "FUEL_STATION", station.getRole());

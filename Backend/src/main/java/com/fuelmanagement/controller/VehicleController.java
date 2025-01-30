@@ -11,14 +11,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
     @RequestMapping("/api/vehicles")
     public class VehicleController {
-        @Autowired
-        private VehicleService vehicleService;
 
-        @PostMapping("/register")
-        public ResponseEntity<Vehicle> registerVehicle(@RequestBody Vehicle vehicle) {
-            return ResponseEntity.ok(vehicleService.registerVehicle(vehicle));
-        }
+        private final VehicleService vehicleService;
 
+    @Autowired
+        public VehicleController(VehicleService vehicleService) {
+        this.vehicleService = vehicleService;
+    }
+
+
+    //check vehicle detail with mock database
         @PostMapping("/check-vehicle-details")
         public ResponseEntity<String > checkVehicleDetail(@RequestBody VehicleDetailsRequest vehicleDetail){
               return vehicleService.checkVehicleDetail(vehicleDetail);

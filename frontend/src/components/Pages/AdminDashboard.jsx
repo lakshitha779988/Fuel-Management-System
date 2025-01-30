@@ -1,8 +1,40 @@
-// AdminDashboard.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const AdminDashboard = () => {
   const [activePage, setActivePage] = useState('home');
+  const [fuelStations, setFuelStations] = useState([]);
+
+  useEffect(() => {
+    if (activePage === 'overview') {
+      fetchFuelAmount('your-auth-token');
+    }
+  }, [activePage]);
+
+  const fetchFuelAmount = async (token) => {
+    try {
+      const response = await fetch(``, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        setFuelStations(data);
+      } else {
+        alert('Failed to fetch fuel data');
+      }
+    } catch (error) {
+      console.error('Error during request:', error);
+    }
+  };
+
+  const changeStatus = (id) => {
+    // Function logic to change status will be implemented later
+    console.log(`Changing status for station ID: ${id}`);
+  };
 
   const renderContent = () => {
     switch (activePage) {
@@ -13,84 +45,37 @@ const AdminDashboard = () => {
             <p>Use the navigation bar to access different sections of the dashboard.</p>
           </div>
         );
-      case 'overview':
+      case 'fuelstation':
         return (
           <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">Dashboard Overview</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white shadow-md rounded-lg p-4">
-                <h3 className="text-xl font-semibold">Total Registered Users</h3>
-                <p className="text-3xl font-bold">1,234</p>
-              </div>
-              <div className="bg-white shadow-md rounded-lg p-4">
-                <h3 className="text-xl font-semibold">Fuel Requests Processed</h3>
-                <p className="text-3xl font-bold">5,678</p>
-              </div>
-              <div className="bg-white shadow-md rounded-lg p-4">
-                <h3 className="text-xl font-semibold">Pending Fuel Requests</h3>
-                <p className="text-3xl font-bold">34</p>
-              </div>
-            </div>
-          </div>
-        );
-      case 'users':
-        return (
-          <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">User Management</h2>
-            <p>Search and manage user profiles here.</p>
-          </div>
-        );
-      case 'inventory':
-        return (
-          <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">Inventory Monitoring</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white shadow-md rounded-lg p-4">
-                <h3 className="text-xl font-semibold">Fuel Stock Levels</h3>
-                <p className="text-3xl font-bold">5,000 liters</p>
-              </div>
-              <div className="bg-white shadow-md rounded-lg p-4">
-                <h3 className="text-xl font-semibold">Low Stock Alerts</h3>
-                <p className="text-3xl font-bold text-red-600">Critical!</p>
-              </div>
-            </div>
-          </div>
-        );
-      case 'reports':
-        return (
-          <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">Reporting and Analytics</h2>
-            <p>Generate and view detailed reports here.</p>
-          </div>
-        );
-      case 'settings':
-        return (
-          <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">Settings and Customization</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white shadow-md rounded-lg p-4">
-                <h3 className="text-xl font-semibold">Set Fuel Quota Limits</h3>
-                <label className="block text-sm font-medium mb-2" htmlFor="quotaLimit">Fuel Quota (liters):</label>
-                <input
-                  type="number"
-                  id="quotaLimit"
-                  className="w-full border-gray-300 rounded-lg p-2"
-                  placeholder="Enter quota limit"
-                />
-                <button className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg">Save</button>
-              </div>
-              <div className="bg-white shadow-md rounded-lg p-4">
-                <h3 className="text-xl font-semibold">Set Quota Time Duration</h3>
-                <label className="block text-sm font-medium mb-2" htmlFor="quotaDuration">Time Duration (hours):</label>
-                <input
-                  type="number"
-                  id="quotaDuration"
-                  className="w-full border-gray-300 rounded-lg p-2"
-                  placeholder="Enter time duration"
-                />
-                <button className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg">Save</button>
-              </div>
-            </div>
+            <h2 className="text-2xl font-bold mb-4">Fuel Station Management</h2>
+            <table className="w-full border border-gray-400">
+              <thead>
+                <tr className="bg-gray-200 border border-gray-400">
+                  <th className="border border-gray-400 p-2">Fuel Station Name</th>
+                  <th className="border border-gray-400 p-2">Available Stock</th>
+                  <th className="border border-gray-400 p-2">Mobile Number</th>
+                  <th className="border border-gray-400 p-2">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fuelStations.map((station) => (
+                  <tr key={station.id} className="border border-gray-400">
+                    <td className="border border-gray-400 p-2">{station.fuelStationName}</td>
+                    <td className="border border-gray-400 p-2">{station.availableStock}</td>
+                    <td className="border border-gray-400 p-2">{station.mobileNumber}</td>
+                    <td className="border border-gray-400 p-2">
+                      <button
+                        className="px-3 py-1 bg-blue-500 text-white rounded"
+                        onClick={() => changeStatus(station.id)}
+                      >
+                        {station.status}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         );
       default:
@@ -111,34 +96,10 @@ const AdminDashboard = () => {
             Home
           </button>
           <button 
-            className={`w-full text-left px-4 py-2 rounded-lg ${activePage === 'overview' ? 'bg-red-600' : 'hover:bg-gray-700'}`} 
-            onClick={() => setActivePage('overview')}
+            className={`w-full text-left px-4 py-2 rounded-lg ${activePage === 'fuelstation' ? 'bg-red-600' : 'hover:bg-gray-700'}`} 
+            onClick={() => setActivePage('fuelstation')}
           >
-            Dashboard Overview
-          </button>
-          <button 
-            className={`w-full text-left px-4 py-2 rounded-lg ${activePage === 'users' ? 'bg-red-600' : 'hover:bg-gray-700'}`} 
-            onClick={() => setActivePage('users')}
-          >
-            User Management
-          </button>
-          <button 
-            className={`w-full text-left px-4 py-2 rounded-lg ${activePage === 'inventory' ? 'bg-red-600' : 'hover:bg-gray-700'}`} 
-            onClick={() => setActivePage('inventory')}
-          >
-            Inventory Monitoring
-          </button>
-          <button 
-            className={`w-full text-left px-4 py-2 rounded-lg ${activePage === 'reports' ? 'bg-red-600' : 'hover:bg-gray-700'}`} 
-            onClick={() => setActivePage('reports')}
-          >
-            Reporting & Analytics
-          </button>
-          <button 
-            className={`w-full text-left px-4 py-2 rounded-lg ${activePage === 'settings' ? 'bg-red-600' : 'hover:bg-gray-700'}`} 
-            onClick={() => setActivePage('settings')}
-          >
-            Settings & Customization
+            Fuel Station Management
           </button>
         </nav>
       </aside>

@@ -28,13 +28,30 @@ public class FuelStation {
     private String password;
 
 
+    private String status;
+
+    private float stock;
+
+
 
     @Column(nullable = true)
     private String role; // Single role as a string (e.g., "FUEL_STATION_ADMIN")
 
+    public String getStatus() {
+        return status;
+    }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
+    public float getStock() {
+        return stock;
+    }
 
+    public void setStock(float stock) {
+        this.stock = stock;
+    }
 
     public Long getId() {
         return id;

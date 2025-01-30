@@ -25,18 +25,19 @@ import java.util.UUID;
 @Service
 public class QrCodeService {
 
-    @Autowired
-    private QrCodeRepository qrCodeRepository;
+
+    private final QrCodeRepository qrCodeRepository;
+    private final VehicleRepository vehicleRepository;
+    private final JwtService jwtService;
+    private final UserRepository userRepository;
 
     @Autowired
-    private VehicleRepository vehicleRepository;
-
-    @Autowired
-    private JwtService jwtService;
-
-    @Autowired
-    UserRepository userRepository;
-
+    public QrCodeService(QrCodeRepository qrCodeRepository, VehicleRepository vehicleRepository, JwtService jwtService, UserRepository userRepository) {
+        this.qrCodeRepository = qrCodeRepository;
+        this.vehicleRepository = vehicleRepository;
+        this.jwtService = jwtService;
+        this.userRepository = userRepository;
+    }
 
 
     // Generate a unique string for the QR code
@@ -81,8 +82,6 @@ public class QrCodeService {
 
 
 
-
-        // Generate the QR code and return it as a byte array (without saving to a file)
         return generateQRCodeImage(qrCodeString);
     }
 
@@ -107,19 +106,13 @@ public class QrCodeService {
         qrCode.setQrCode(newQrCodeString);
         qrCodeRepository.save(qrCode);
 
-        // Generate the updated QR code and return it as a byte array (without saving to a file)
+
         return generateQRCodeImage(newQrCodeString);
     }
 
-    // Delete a QR code record
-    public void deleteQRCode(Long vehicleId) {
-        if (!qrCodeRepository.findByVehicleId(vehicleId).isPresent()) {
-            throw new IllegalArgumentException("QR Code not found for this vehicle.");
-        }
 
-        qrCodeRepository.deleteByVehicleId(vehicleId);
-    }
 
+    //Check is that Qr code Sting valid or not
     public QrCodeCheckingResponse checkIsQrValid(String qrCode) {
        QrCode qrCodeObj =  qrCodeRepository.findByQrCode(qrCode).get();
        if(qrCodeObj == null){

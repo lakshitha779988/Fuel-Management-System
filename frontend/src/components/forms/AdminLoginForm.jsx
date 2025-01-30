@@ -10,11 +10,38 @@ function AdminLoginForm() {
   function handleLogin(e) {
     e.preventDefault();
 
-    if (username === 'admin' && password === '123') {
-      navigate('/admin');
-    } else {
-      setError('Invalid username or password');
-    }
+    // Prepare the request body
+    const requestBody = {
+      userName: username,
+      password: password,
+    };
+
+    // Make the POST request to the backend
+    fetch('http://localhost:8080/api/admin/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    })
+      .then((response) => {
+        console.log(requestBody.password);
+        console.log(requestBody.username);
+        if (response.ok) {
+          return response.text; // Assuming the backend returns a JSON with the token
+        } else {
+          throw new Error('Invalid username or password');
+        }
+      })
+      .then((data) => {
+        // Store the token in localStorage or sessionStorage
+        localStorage.setItem('adminToken', data.token);
+
+        window.location.href = "/admin";
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
   }
 
   return (

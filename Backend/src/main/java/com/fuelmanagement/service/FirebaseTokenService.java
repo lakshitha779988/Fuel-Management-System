@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class FirebaseTokenService {
 
-    @Autowired
-    private FirebaseAuth firebaseAuth;
+    private final FirebaseAuth firebaseAuth;
 
+    @Autowired
     public FirebaseTokenService(FirebaseAuth firebaseAuth) {
         this.firebaseAuth = firebaseAuth;
     }

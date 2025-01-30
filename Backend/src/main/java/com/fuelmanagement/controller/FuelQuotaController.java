@@ -13,15 +13,20 @@ import com.fuelmanagement.service.entityService.FuelQuotaService;
 @RequestMapping("api/fuel-quota")
 public class FuelQuotaController {
 
-    @Autowired
-    private FuelQuotaService fuelQuotaService;
+
+    private final FuelQuotaService fuelQuotaService;
+    private final JwtService jwtService;
+    private final FuelStationService fuelStationService;
+
 
     @Autowired
-    private JwtService jwtService;
+    public FuelQuotaController(FuelQuotaService fuelQuotaService, JwtService jwtService, FuelStationService fuelStationService) {
+        this.fuelQuotaService = fuelQuotaService;
+        this.jwtService = jwtService;
+        this.fuelStationService = fuelStationService;
+    }
 
-    @Autowired
-    private FuelStationService fuelStationService;
-
+    //update FuelAmount endpoint
     @PutMapping("/update-limit")
     public ResponseEntity<String> updateFuelLimit(
             @RequestParam String qrString,

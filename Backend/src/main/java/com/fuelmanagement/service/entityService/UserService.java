@@ -12,11 +12,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final VehicleRepository vehicleRepository;
+
 
     @Autowired
-    private VehicleRepository vehicleRepository;
+    public UserService(UserRepository userRepository, VehicleRepository vehicleRepository) {
+        this.userRepository = userRepository;
+        this.vehicleRepository = vehicleRepository;
+    }
 
     public boolean isMobileNumberExist(String mobileNumber) {
         return userRepository.existsByMobileNumber(mobileNumber);
@@ -25,10 +29,10 @@ public class UserService {
     public UserDetailsResponse getUserDetails(String mobilenumber) {
 
         User user = userRepository.findByMobileNumber(mobilenumber).get();
-        String firstName = user.getFirstName(); // Get first name from database
-        String mobileNumber = user.getMobileNumber();// Get mobile number from database
+        String firstName = user.getFirstName();
+        String mobileNumber = user.getMobileNumber();
 
-        // Return only the relevant data as a DTO
+
         return new UserDetailsResponse(firstName, mobileNumber);
     }
 

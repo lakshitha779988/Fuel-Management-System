@@ -11,59 +11,45 @@ import org.springframework.stereotype.Service;
 
 @Service
     public class VehicleService {
-        @Autowired
-        private VehicleRepository vehicleRepository;
-
-        @Autowired
-        private MockVehicleRepository mockVehicleRepository;
-
-        public Vehicle registerVehicle(Vehicle vehicle) {
-            // Add validation logic (e.g., mock Motor Traffic DB validation)
-            return vehicleRepository.save(vehicle);
-        }
 
 
-        
-        public Vehicle getVehicleById(Long vehicleId) {
-            // Fetch the vehicle details using its ID
-            return vehicleRepository.findById(vehicleId)
-                    .orElseThrow(() -> new IllegalArgumentException("Vehicle not found with ID: " + vehicleId));
-        }
+    private final VehicleRepository vehicleRepository;
+    private final MockVehicleRepository mockVehicleRepository;
 
-        public ResponseEntity<String> checkVehicleDetail(VehicleDetailsRequest vehicleDetails){
-            Boolean isValid = mockVehicleRepository.existsByChasisNumberAndRegistrationNumber(
-                    vehicleDetails.getChassisNumber(),
-                    vehicleDetails.getRegistrationNumber()
-            );
+    @Autowired
+    public VehicleService(VehicleRepository vehicleRepository, MockVehicleRepository mockVehicleRepository) {
+        this.vehicleRepository = vehicleRepository;
+        this.mockVehicleRepository = mockVehicleRepository;
+    }
 
-            if (!isValid) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vehicle detail are incorrect");
+
+    public Vehicle getVehicleById(Long vehicleId) {
+        // Fetch the vehicle details using its ID
+        return vehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new IllegalArgumentException("Vehicle not found with ID: " + vehicleId));
+    }
+
+    public ResponseEntity<String> checkVehicleDetail(VehicleDetailsRequest vehicleDetails) {
+        Boolean isValid = mockVehicleRepository.existsByChasisNumberAndRegistrationNumber(
+                vehicleDetails.getChassisNumber(),
+                vehicleDetails.getRegistrationNumber()
+        );
+
+        if (!isValid) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vehicle detail are incorrect");
+        } else {
+            Boolean isExsit = vehicleRepository.existsByRegistrationNumber(vehicleDetails.getRegistrationNumber());
+
+            if (!isExsit) {
+                return ResponseEntity.ok("Vehicle details are valid.");
             } else {
-                Boolean isExsit = vehicleRepository.existsByRegistrationNumber(vehicleDetails.getRegistrationNumber());
-
-                if (!isExsit){
-                    return ResponseEntity.ok("Vehicle details are valid.");
-                }else{
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vehicle with this registration number already exists.");
-                }
-
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vehicle with this registration number already exists.");
             }
 
         }
 
-
-
-
-
-
-    // Add or update a Vehicle
-    public Vehicle saveVehicle(Vehicle vehicle) {
-        return vehicleRepository.save(vehicle);
     }
 
-    // Delete a Vehicle by ID
-    public void deleteVehicle(Long id) {
-        vehicleRepository.deleteById(id);
-    }
-    }
+
+}
 

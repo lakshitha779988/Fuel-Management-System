@@ -17,10 +17,13 @@ import javax.naming.AuthenticationException;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
+
     private final AuthService authService;
 
 
 
+
+//FuelUser registration EndPoint
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegistrationRequest registrationRequest) {
         // Call the service to handle registration logic
@@ -35,6 +38,8 @@ public class AuthController {
         }
     }
 
+
+    //FuelUser Login EndPoint
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/fuel-user/login")
     public ResponseEntity<LoginResponse> fuelUserLogin( @RequestBody FuelUserLoginRequest request) {
@@ -44,11 +49,7 @@ public class AuthController {
     }
 
 
-    @PostMapping("/fuel-station/login")
-    public ResponseEntity<LoginResponse> fuelStationLogin( @RequestBody FuelStationLoginRequest request) {
-        LoginResponse response = authService.authenticateFuelStation(request.getMobileNumber(), request.getPassword());
-        return ResponseEntity.ok(response);
-    }
+
 }
 
 
