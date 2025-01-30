@@ -1,12 +1,22 @@
 import {ActivityIndicator, TouchableWithoutFeedback, View, Text, TextInput, Pressable} from "react-native";
 import {useState} from "react";
 import React from "react";
+import { useRouter, useLocalSearchParams } from "expo-router";
 
 
 export default function OtpVerificationScreen(){
+    const router = useRouter();
+    const params = useLocalSearchParams();
     const [loading, setLoading] = useState(false);
     const[otp, setOtp] = useState("");
 
+const{
+    verificationId,
+    fuelStationName,
+    email,
+    mobileNumber,
+    password,
+} = params as Record<string,String>;
 
 return (
     <TouchableWithoutFeedback disabled={loading}>
