@@ -6,7 +6,11 @@ const Dashboard = () => {
   const [activeSection, setActiveSection] = useState("QR Code");
   const [userDetails, setUserDetails] = useState(null);
   const [jwtToken, setJwtToken] = useState(""); // Use state to store the JWT token
+
+  const [totalFuelUsage,setTotalFuelUsage]=useState(null);
+
   const [fuelAmount, setFuelAmount] = useState("");
+
 
   const generateQrCode = () => {
     setQrCode(`QR-${Date.now()}`);
@@ -45,6 +49,45 @@ const Dashboard = () => {
       console.error('Error during request:', error);
     }
   };
+
+  const fetchTotalFuelUsage = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/reports/fuel-usage", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 401) {
+        alert("Session expired. Please log in again.");
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+        return;
+      }
+
+      const data = await response.json();
+      if (response.ok) {
+        setTotalFuelUsage(data.totalFuel);
+      } else {
+        alert("Failed to fetch total fuel usage");
+      }
+    } catch (error) {
+      console.error("Error fetching fuel usage:", error);
+      alert("Error fetching fuel usage");
+    }
+  };
+
+  useEffect(() => {
+    if (activeSection === "Reports" && jwtToken) {
+      fetchTotalFuelUsage();
+    }
+  }, [activeSection, jwtToken]);
+
+
+
+
 
   const generateQRCode = async (token) => {
     try {
@@ -271,10 +314,17 @@ const Dashboard = () => {
         {activeSection === "Reports" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Reports content here */}
+
+            <div className="bg-white text-red-800 rounded-lg shadow-lg p-6">
+              <h2 className="text-2xl font-bold mb-4">Total Fuel Usage</h2>
+              <p className="text-lg">{totalFuelUsage !== null ? `${totalFuelUsage} Liters` : "Loading..."}</p>
+            </div>
+            
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="text-lg font-semibold mb-2">Current Amount of Fuel</h3>
               <p>{fuelAmount} L</p>
             </div>
+
 
           </div>
         )}
