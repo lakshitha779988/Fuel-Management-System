@@ -1,7 +1,7 @@
 import {ActivityIndicator, TouchableWithoutFeedback, View, Text, TextInput, Pressable, Alert} from "react-native";
 import {useState} from "react";
 import {PhoneAuthProvider,signInWithCredential} from "firebase/auth";
-import {auth} from "@/app/firebaseConfig";
+import {auth} from "@/app/(root)/(tabs)/firebaseConfig";
 import React from "react";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios";
