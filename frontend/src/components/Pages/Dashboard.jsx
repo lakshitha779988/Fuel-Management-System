@@ -25,7 +25,7 @@ const Dashboard = () => {
       fetchFuelAmount(token);
       fetchTotalFuelUsage(token);
     } else {
-      // window.location.href = "/login"; // Redirect if token is not found
+      window.location.href = "/login"; // Redirect if token is not found
     }
   }, []);
 
@@ -245,7 +245,7 @@ const Dashboard = () => {
         {showProfile && (
           <div className="bg-red-100 text-red-800 rounded-lg p-4 mb-4">
             <p>Name: {userDetails ? userDetails.firstName : "Error occur"}</p>
-            <p>Email: {userDetails ? userDetails.mobileNumber : "Error occur "}</p>
+            <p>MobileNumber: {userDetails ? userDetails.mobileNumber : "Error occur "}</p>
           </div>
         )}
 
