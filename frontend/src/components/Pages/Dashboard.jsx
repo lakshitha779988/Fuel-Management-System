@@ -317,9 +317,15 @@ const Dashboard = () => {
               <p className="text-lg">{totalFuelUsage !== null ? `${totalFuelUsage} Liters` : "Loading..."}</p>
             </div>
             
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-2">Current Amount of Fuel</h3>
-              <p>{fuelAmount} L</p>
+            <div className="bg-white text-red-800 rounded-lg shadow-lg p-6">
+              <h2 className="text-2xl font-bold mb-4">Current Amount of Fuel</h2>
+              {fuelAmount ? (
+                
+                  <p className="text-lg">{fuelAmount} L</p>
+                
+              ) : (
+                <p className="text-lg">Loading fuel data...</p>
+              )}
             </div>
 
 
