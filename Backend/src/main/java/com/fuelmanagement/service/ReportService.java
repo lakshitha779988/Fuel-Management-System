@@ -53,10 +53,10 @@ public Float FuelUsageForEachVehicle(String registrationNumber){
 
      }
   
-  public Float fuelUsageForUser(Long userId) {
+  public Float fuelUsageForUser(String mobileNumber) {
         // Fetch the user by ID
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+        User user = userRepository.findByMobileNumber(mobileNumber)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with mobileNumber: " + mobileNumber));
 
         // Get all vehicles owned by the user
 
@@ -64,12 +64,23 @@ public Float FuelUsageForEachVehicle(String registrationNumber){
 
 
         // Calculate total fuel usage for the user
-      float totalCostUsage = 0;
-      float priceForOneLitre = 325.12F;
+     float totalFuelUsage =0;
       for (FuelLog fuelLog : allTransactions) {
-          totalCostUsage += fuelLog.getFuelAmount()*priceForOneLitre; // Assuming FuelLog has a field 'fuelAmount'
+          totalFuelUsage += fuelLog.getFuelAmount(); // Assuming FuelLog has a field 'fuelAmount'
       }
-      return totalCostUsage;
+      return totalFuelUsage;
+    }
+
+
+    public Float exsistingFuelForUser(String mobileNumber){
+        // Fetch the user by ID
+        User user = userRepository.findByMobileNumber(mobileNumber)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with mobileNumber: " + mobileNumber));
+
+        float exsistigFuelAmount = user.getVehicle().getFuelQuotaTracker().getExistingFuel();
+
+        return exsistigFuelAmount;
+
     }
 
 }
