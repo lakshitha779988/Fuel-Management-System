@@ -1,10 +1,13 @@
-import {ActivityIndicator, TouchableWithoutFeedback, View, Text, TextInput, Pressable} from "react-native";
+import {ActivityIndicator, TouchableWithoutFeedback, View, Text, TextInput, Pressable, Alert} from "react-native";
 import {useState} from "react";
+import {PhoneAuthProvider,signInWithCredential} from "firebase/auth";
+import {auth} from "@/app/firebaseConfig";
 import React from "react";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import axios from "axios";
 
 
-export default function OtpVerificationScreen(){
+export default async function OtpVerificationScreen(){
     const router = useRouter();
     const params = useLocalSearchParams();
     const [loading, setLoading] = useState(false);
@@ -16,7 +19,48 @@ const{
     email,
     mobileNumber,
     password,
-} = params as Record<string,String>;
+} = params as Record<string,string>;
+
+const handleVerification = async () => {
+    if(!otp || otp.length !==6){
+        Alert.alert("Error","Pleae enter a valid 6-digit OTP")
+        return;
+    }
+}
+
+setLoading(true);
+
+try{
+    const credential = PhoneAuthProvider.credential(verificationId,otp);
+    await signInWithCredential(auth, credential);
+
+    const response = await axios.post("http://172.19.67.1:8080/api/fuel-stations/register",{
+        email,
+        mobileNumber,
+        name: fuelStationName,
+        password,
+    });
+
+    console.log(verificationId);
+
+    if(response.status === 200){
+        Alert.alert("Success","Registration successful!",[
+            {text:"OK", onPress:() => router.push("/sign-in")}
+        ]);
+    }
+}catch (error){
+    let errorMessage = "Registration failed.Please try again.";
+    if(axios.isAxiosError(error)){
+        errorMessage = error.response?.data?.message;
+    }else if(error instanceof Error){
+        errorMessage = error.message;
+    }
+}finally {
+    setLoading(false);
+    await auth.signOut();
+}
+
+
 
 return (
     <TouchableWithoutFeedback disabled={loading}>
