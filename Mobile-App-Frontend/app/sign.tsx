@@ -18,6 +18,7 @@ export default function SignInScreen() {
         }
 
         setLoading(true);
+        try {
 
         const response = await axios.post("http://172.19.67.1:8080/api/fuel-stations/login", {
             mobileNumber,
@@ -35,6 +36,20 @@ export default function SignInScreen() {
                 { text: "OK", onPress: () => router.push("/dashboard") },
             ]);
         }
+        } catch (error) {
+            // @ts-ignore
+            if (error.response && error.response.data) {
+                // @ts-ignore
+                Alert.alert("Error", error.response.data.message || "Login failed. Please try again.");
+            } else {
+                Alert.alert("Error", "Login failed. Please check your connection or credentials.");
+            }
+            console.error("Error during login:", error);
+        }
+        finally {
+            setLoading(false); // Hide the loader
+        }
+
 
 
         return (

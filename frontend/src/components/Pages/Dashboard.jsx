@@ -6,7 +6,10 @@ const Dashboard = () => {
   const [activeSection, setActiveSection] = useState("QR Code");
   const [userDetails, setUserDetails] = useState(null);
   const [jwtToken, setJwtToken] = useState(""); // Use state to store the JWT token
+
   const [totalFuelUsage,setTotalFuelUsage]=useState(null);
+
+  const [fuelAmount, setFuelAmount] = useState("");
 
 
   const generateQrCode = () => {
@@ -19,8 +22,9 @@ const Dashboard = () => {
       setJwtToken(token); // Set JWT token in the state
       fetchUserDetails(token);
       generateQRCode(token);
+      fetchFuelAmount(token);
     } else {
-      window.location.href = "/login"; // Redirect if token is not found
+      // window.location.href = "/login"; // Redirect if token is not found
     }
   }, []);
 
@@ -162,6 +166,26 @@ const Dashboard = () => {
     }
   };
   
+  const fetchFuelAmount = async (token) => {
+    try {
+      const response = await fetch(``, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        setFuelAmount(data);
+      } else {
+        alert('Failed to fetch fuel data');
+      }
+    } catch (error) {
+      console.error('Error during request:', error);
+    }
+  };
   
 
   const handleLogout = () => {
@@ -290,12 +314,16 @@ const Dashboard = () => {
         {activeSection === "Reports" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Reports content here */}
+
             <div className="bg-white text-red-800 rounded-lg shadow-lg p-6">
               <h2 className="text-2xl font-bold mb-4">Total Fuel Usage</h2>
               <p className="text-lg">{totalFuelUsage !== null ? `${totalFuelUsage} Liters` : "Loading..."}</p>
             </div>
-
-
+            
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h3 className="text-lg font-semibold mb-2">Current Amount of Fuel</h3>
+              <p>{fuelAmount} L</p>
+            </div>
 
 
           </div>
