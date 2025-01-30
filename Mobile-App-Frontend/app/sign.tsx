@@ -46,6 +46,10 @@ export default function SignInScreen() {
             }
             console.error("Error during login:", error);
         }
+        finally {
+            setLoading(false); // Hide the loader
+        }
+
 
 
         return (
