@@ -1,127 +1,175 @@
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Dashboard = () => {
   const [qrCode, setQrCode] = useState("Sample QR Code");
   const [showProfile, setShowProfile] = useState(false);
   const [activeSection, setActiveSection] = useState("QR Code");
   const [userDetails, setUserDetails] = useState(null);
+  const [jwtToken, setJwtToken] = useState(""); // Use state to store the JWT token
 
   const generateQrCode = () => {
     setQrCode(`QR-${Date.now()}`);
   };
 
-
   useEffect(() => {
-    const jwtToken = localStorage.getItem('token');
-    const mobileNumber = localStorage.getItem('mobileNumber');
-    console.log(jwtToken);
-    
-
-    if (jwtToken && typeof jwtToken === 'string') {
-        
-      fetchUserDetails(jwtToken);
-      generateQRCode(jwtToken);
+    const token = localStorage.getItem('token');
+    if (token && typeof token === 'string') {
+      setJwtToken(token); // Set JWT token in the state
+      fetchUserDetails(token);
+      generateQRCode(token);
     } else {
-      window.location.href = "/login";
+      window.location.href = "/login"; // Redirect if token is not found
     }
-} , []);
+  }, []);
 
-
-
-
-const fetchUserDetails = async (jwtToken) => {
-  try {
-      const response = await fetch(`http://localhost:8080/api/user/details?token=${jwtToken}`, {
-          method: 'GET',
-          headers: {
-              'Authorization': `Bearer ${jwtToken}`, 
-              'Content-Type': 'application/json',
-          },
+  const fetchUserDetails = async (token) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/user/details?token=${token}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
       });
 
-      const data = await response.json(); 
+      const data = await response.json();
       if (response.ok) {
-          setUserDetails(data);
-          setShowProfile(true); 
+        setUserDetails(data);
+        setShowProfile(true);
       } else {
-          setError('Failed to fetch user details');
+        alert('Failed to fetch user details');
       }
-  } catch (error) {
+    } catch (error) {
       console.error('Error during request:', error);
-     
-  }
-};
-
-const generateQRCode = async (jwtToken, vehicleId) => {
-  try {
-    const response = await fetch(`http://localhost:8080/api/qr/generate?token=${jwtToken}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${jwtToken}`,
-        'Content-Type': 'application/json',  
-      },
-    });
-
-    if (response.ok) {
-      const blob = await response.blob();
-      const imageUrl = URL.createObjectURL(blob);
-      setQrCode(imageUrl);
-      
-    } else {
-      setError('Failed to generate QR code');
     }
-  } catch (error) {
-    console.error('Error during request:', error);
-    setError('Error occurred during request');
-  }
-};
+  };
+
+  const generateQRCode = async (token) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/qr/generate?token=${token}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        setQrCode(imageUrl);
+      } else {
+        alert('Failed to generate QR code');
+      }
+    } catch (error) {
+      console.error('Error during request:', error);
+      alert('Error occurred during request');
+    }
+  };
 
 
+  const updateQrCode = async () => {
+    const isConfirmed = window.confirm("Are you sure you want to update your QR code?");
+  
+    if (isConfirmed) {
+      try {
+        const response = await fetch(`http://localhost:8080/api/qr/update?token=${jwtToken}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${jwtToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        if (response.ok) {
+          const blob = await response.blob();
+          const imageUrl = URL.createObjectURL(blob);
+          setQrCode(imageUrl);
+          alert("QR code updated successfully!"); // Success message
+        } else {
+          alert("Failed to generate QR code");
+        }
+      } catch (error) {
+        console.error("Error during request:", error);
+        alert("Error occurred during request");
+      }
+    } else {
+      alert("QR code update canceled");
+    }
+  };
+  
 
   const downloadQrCode = () => {
-    const canvas = document.getElementById("qrCode");
-    const pngUrl = canvas.toDataURL("image/png");
-    const downloadLink = document.createElement("a");
-    downloadLink.href = pngUrl;
-    downloadLink.download = "qr-code.png";
-    downloadLink.click();
+    const qrImage = document.getElementById("qrCodeImg");
+  
+    if (!qrImage || !qrImage.src) {
+      alert("QR code is not available for download.");
+      return;
+    }
+  
+    try {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = qrImage.src;
+      downloadLink.download = "qr-code.png";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      alert("QR code downloaded successfully!");
+    } catch (error) {
+      console.error("Error downloading QR code:", error);
+      alert("Failed to download QR code. Please try again.");
+    }
   };
+  
+  
 
   const handleLogout = () => {
-    
     const isConfirmed = window.confirm("Do you really want to log out?");
-
-    
     if (isConfirmed) {
-        
-        localStorage.removeItem('token');
-
-       
-        alert("Logged out successfully!");
-
-        
-        window.location.href = '/login'; 
+      localStorage.removeItem('token');
+      alert("Logged out successfully!");
+      window.location.href = '/login'; 
     } else {
-       
-        alert("Logout cancelled.");
+      alert("Logout cancelled.");
     }
+  };
+
+ const deleteAccount = async () => {
+  const isConfirmed = window.confirm("Do you really want to delete this Account?");
+  
+  if (isConfirmed && jwtToken) {
+    try {
+      const response = await fetch(`http://localhost:8080/api/account/delete?token=${jwtToken}`, {
+        method: "GET", 
+        headers: {
+          "Authorization": `Bearer ${jwtToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        alert("Your account has been deleted successfully.");
+        localStorage.removeItem("jwtToken"); 
+        window.location.href = "/register"; 
+      } else {
+        const errorMessage = await response.text();
+        alert(`Failed to delete account: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      alert("An error occurred while deleting the account. Please try again.");
+    }
+  } else {
+    alert("Account Deletion canceled");
+  }
 };
 
 
-  const deleteAccount = () => {
-    if (window.confirm("Are you sure you want to delete your account?")) {
-      alert("Account deleted.");
-      
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-red-50 text-gray-800 flex">
+    <div className="min-h-screen bg-gray-700 text-gray-800 flex">
       {/* Navigation Menu */}
-
-      <aside className="w-1/5 bg-red-500 text-white py-6 px-4">
+      <aside className="w-1/5 bg-gradient-to-b from-black to-red-500 text-white py-6 px-4">
         <div className="mb-8 flex justify-center">
-
           {/* Profile Icon */}
           <div
             className="w-16 h-16 bg-red-200 rounded-full flex items-center justify-center cursor-pointer hover:bg-red-300"
@@ -134,7 +182,7 @@ const generateQRCode = async (jwtToken, vehicleId) => {
         {/* Profile Details */}
         {showProfile && (
           <div className="bg-red-100 text-red-800 rounded-lg p-4 mb-4">
-            <p>Name: {userDetails ? userDetails.firstName : "Error occur"  }</p>
+            <p>Name: {userDetails ? userDetails.firstName : "Error occur"}</p>
             <p>Email: {userDetails ? userDetails.mobileNumber : "Error occur "}</p>
           </div>
         )}
@@ -142,21 +190,17 @@ const generateQRCode = async (jwtToken, vehicleId) => {
         <nav className="flex flex-col space-y-4">
           <button
             onClick={() => setActiveSection("QR Code")}
-            className={`px-4 py-2 rounded-md text-left ${
-              activeSection === "QR Code" ? "bg-red-700" : "hover:bg-red-700"
-            }`}
+            className={`px-4 py-2 rounded-md text-left ${activeSection === "QR Code" ? "bg-red-700" : "hover:bg-red-700"}`}
           >
             QR Code
           </button>
           <button
             onClick={() => setActiveSection("Reports")}
-            className={`px-4 py-2 rounded-md text-left ${
-              activeSection === "Reports" ? "bg-red-700" : "hover:bg-red-700"
-            }`}
+            className={`px-4 py-2 rounded-md text-left ${activeSection === "Reports" ? "bg-red-700" : "hover:bg-red-700"}`}
           >
             Reports
           </button>
-          
+
           <button
             onClick={deleteAccount}
             className="px-4 py-2 rounded-md text-left hover:bg-red-700"
@@ -174,28 +218,26 @@ const generateQRCode = async (jwtToken, vehicleId) => {
 
       {/* Main Content */}
       <main className="flex-1 p-6">
-
         {/* QR Code Section */}
         {activeSection === "QR Code" && (
           <div className="bg-white text-red-800 rounded-lg shadow-lg p-8 text-center">
             <h2 className="text-2xl font-bold mb-4">QR Code</h2>
             <div
               id="qrCode"
-              className="bg-gray-100 flex justify-center items-center text-red-500 border-2 border-red-300 rounded-lg mx-auto p-3 mb-6"
+              className="bg-gray-100 flex justify-center items-center text-red-500 border-2 border-red-800 rounded-lg mx-auto p-3 mb-6"
             >
-              <img src={qrCode} width={300} height={300} alt="" />
-              
+              <img id="qrCodeImg" src={qrCode} width={300} height={300} alt="" />
             </div>
             <div className="flex justify-center space-x-4">
               <button
-                onClick={generateQrCode}
-                className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-700"
+                onClick={updateQrCode}
+                className="bg-red-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-800"
               >
                 Update QR Code
               </button>
               <button
                 onClick={downloadQrCode}
-                className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-700"
+                className="bg-red-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-800"
               >
                 Download QR Code
               </button>
@@ -206,56 +248,7 @@ const generateQRCode = async (jwtToken, vehicleId) => {
         {/* Reports Section */}
         {activeSection === "Reports" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-2">Transaction Summary</h3>
-              <p>Total Transactions: 50</p>
-              <p>Total Amount: $5,000</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-2">Fuel Usage Analysis</h3>
-              <p>Diesel: 1,200L</p>
-              <p>Petrol: 800L</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-2">Cost Analysis</h3>
-              <p>Average Cost per Liter: $1.25</p>
-              <p>Total Cost: $2,500</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-2">Refueling Details</h3>
-              <p>Last Refueling: 2025-01-21</p>
-              <p>Station: ABC Fuel</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-2">Vehicle Reports</h3>
-              <p>Vehicle 1: 500L used</p>
-              <p>Vehicle 2: 700L used</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-2">Custom Date Range</h3>
-              <input
-                type="date"
-                className="border rounded p-2 w-full mt-2"
-                placeholder="Start Date"
-              />
-              <input
-                type="date"
-                className="border rounded p-2 w-full mt-2"
-                placeholder="End Date"
-              />
-            </div>
-            
-          </div>
-        )}
-
-        {/* Transactions Section */}
-        {activeSection === "Transactions" && (
-          <div className="bg-white text-red-800 rounded-lg shadow-lg p-8">
-            <h2 className="text-2xl font-bold mb-4">Transactions</h2>
-            <ul className="text-gray-600">
-              <li>- Refueling Station 1: $45</li>
-              <li>- Refueling Station 2: $60</li>
-            </ul>
+            {/* Reports content here */}
           </div>
         )}
       </main>

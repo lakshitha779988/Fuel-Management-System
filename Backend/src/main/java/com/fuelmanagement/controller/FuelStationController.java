@@ -2,10 +2,9 @@ package com.fuelmanagement.controller;
 
 import com.fuelmanagement.model.dto.request.FuelStationLoginRequest;
 import com.fuelmanagement.model.dto.request.FuelStationRequest;
-import com.fuelmanagement.model.dto.request.FuelUserLoginRequest;
 import com.fuelmanagement.model.dto.response.LoginResponse;
 import com.fuelmanagement.service.AuthService;
-import com.fuelmanagement.service.FuelStationService;
+import com.fuelmanagement.service.entityService.FuelStationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

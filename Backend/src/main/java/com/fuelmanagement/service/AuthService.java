@@ -4,6 +4,7 @@ import com.fuelmanagement.model.dto.request.RegistrationRequest;
 import com.fuelmanagement.model.dto.response.LoginResponse;
 import com.fuelmanagement.model.entity.mysql.*;
 import com.fuelmanagement.repository.mysql.*;
+import com.fuelmanagement.service.entityService.UserService;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,8 +31,9 @@ public class AuthService {
 
     private FirebaseTokenService firebaseTokenService;
     private UserService userService;
+    private final EmailService emailService;
 
-    public AuthService(UserRepository userRepository, VehicleRepository vehicleRepository, VehicleTypeRepository vehicleTypeRepository, JwtService jwtService, SmsService smsService, FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelStationRepository fuelStationRepository, PasswordEncoder passwordEncoder, FirebaseTokenService firebaseTokenService, UserService userService) {
+    public AuthService(UserRepository userRepository, VehicleRepository vehicleRepository, VehicleTypeRepository vehicleTypeRepository, JwtService jwtService, SmsService smsService, FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelStationRepository fuelStationRepository, PasswordEncoder passwordEncoder, FirebaseTokenService firebaseTokenService, UserService userService, EmailService emailService) {
         this.userRepository = userRepository;
         this.vehicleRepository = vehicleRepository;
         this.vehicleTypeRepository = vehicleTypeRepository;
@@ -42,6 +44,7 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
         this.firebaseTokenService = firebaseTokenService;
         this.userService = userService;
+        this.emailService = emailService;
     }
 
 
@@ -111,6 +114,9 @@ public class AuthService {
 
 
         System.out.println("User and Vehicle registered successfully.");
+     String emailContent = emailService.generateUserRegistrationEmailContent(user.getFirstName(),user.getMobileNumber(),vehicle.getRegistrationNumber());
+     emailService.sendEmail(user.getEmail(),"Registration Successful" , emailContent);
+
         return true;
     }
 
@@ -132,7 +138,11 @@ public class AuthService {
             // Step 3: Generate JWT token
             String token = jwtService.generateToken(fuelUser.getMobileNumber(), "FUEL_USER", fuelUser.getRole());
 
+
             // Step 4: Return response
+            LocalDateTime loginTime = LocalDateTime.now();
+            String emailContent = emailService.generateUserLoginNotificationEmailContent(fuelUser.getFirstName(),loginTime);
+            emailService.sendEmail(fuelUser.getEmail(),"Loging Alert" , emailContent);
             return new LoginResponse(token, "FUEL_USER", null, mobileNumber, fuelUser.getRole());
         } catch (FirebaseAuthException e) {
             throw new RuntimeException("Invalid Firebase token", e);
@@ -151,7 +161,7 @@ public class AuthService {
         }
         System.out.println(station.getEmail());
         // Step 3: Generate JWT token
-        String token = jwtService.generateToken(station.getName(), "FUEL_STATION", station.getRole());
+        String token = jwtService.generateToken(station.getMobileNumber(), "FUEL_STATION", station.getRole());
     System.out.println(token);
         // Step 4: Return response
         return new LoginResponse(token, "FUEL_STATION", mobileNumber, null, station.getRole());

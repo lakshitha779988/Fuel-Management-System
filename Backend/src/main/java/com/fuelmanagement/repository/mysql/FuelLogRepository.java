@@ -13,4 +13,6 @@ public interface FuelLogRepository extends JpaRepository<FuelLog,Long> {
     List<FuelLog> findAllByVehicleId(Long id);
 
     List<FuelLog> findAllByUserId(Long id);
+
+    void deleteAllByVehicleId(Long id);
 }

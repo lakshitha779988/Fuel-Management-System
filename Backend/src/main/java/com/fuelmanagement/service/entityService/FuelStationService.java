@@ -1,8 +1,9 @@
-package com.fuelmanagement.service;
+package com.fuelmanagement.service.entityService;
 
 import com.fuelmanagement.model.dto.request.FuelStationRequest;
 import com.fuelmanagement.model.entity.mysql.FuelStation;
 import com.fuelmanagement.repository.mysql.FuelStationRepository;
+import com.fuelmanagement.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +12,13 @@ public class FuelStationService {
 
 
     private final FuelStationRepository fuelStationRepository;
-
+    private final EmailService emailService;
 
     @Autowired
-    public FuelStationService(FuelStationRepository fuelStationRepository) {
+    public FuelStationService(FuelStationRepository fuelStationRepository, EmailService emailService) {
         this.fuelStationRepository = fuelStationRepository;
 
+        this.emailService = emailService;
     }
 
     public String registerFuelStation(FuelStationRequest fuelStationRequest) {
@@ -43,7 +45,14 @@ public class FuelStationService {
         fuelStation.setRole("FuelStation");
 
         fuelStationRepository.save(fuelStation);
+        String emailContent = emailService.generateFuelStationRegistrationEmailContent(fuelStation.getName());
+        emailService.sendEmail(fuelStation.getEmail(),"FuelStation Registration Is Pending" , emailContent);
 
         return "Fuel station registered successfully: " + fuelStation.getName();
+
+    }
+
+    public Long getFuelStationIdByMobileNumber(String mobileNumber) {
+        return fuelStationRepository.findByMobileNumber(mobileNumber).get().getId();
     }
 }

@@ -1,13 +1,12 @@
-package com.fuelmanagement.service;
+package com.fuelmanagement.service.entityService;
 
-import com.fuelmanagement.model.entity.mysql.FuelQuotaTracker;
-import com.fuelmanagement.model.entity.mysql.QrCode;
-import com.fuelmanagement.model.entity.mysql.Vehicle;
-import com.fuelmanagement.repository.mysql.FuelQuotaTrackerRepository;
-import com.fuelmanagement.repository.mysql.QrCodeRepository;
-import com.fuelmanagement.repository.mysql.VehicleRepository;
+import com.fuelmanagement.model.entity.mysql.*;
+import com.fuelmanagement.repository.mysql.*;
+import com.fuelmanagement.service.EmailService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -16,27 +15,42 @@ public class FuelQuotaService {
     private final QrCodeRepository qrCodeRepository;
     private final VehicleRepository vehicleRepository;
     private final FuelQuotaTrackerRepository fuelQuotaTrackerRepository;
+    private final FuelStationRepository fuelStationRepository;
+    private final EmailService emailService;
+    private final UserRepository userRepository;
+    private final FuelLogRepository fuelLogRepository;
 
     public FuelQuotaService(QrCodeRepository qrCodeRepository,
                             VehicleRepository vehicleRepository,
-                            FuelQuotaTrackerRepository fuelQuotaTrackerRepository) {
+                            FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelStationRepository fuelStationRepository, EmailService emailService, UserRepository userRepository, FuelLogRepository fuelLogRepository) {
         this.qrCodeRepository = qrCodeRepository;
         this.vehicleRepository = vehicleRepository;
         this.fuelQuotaTrackerRepository = fuelQuotaTrackerRepository;
+        this.fuelStationRepository = fuelStationRepository;
+        this.emailService = emailService;
+        this.userRepository = userRepository;
+        this.fuelLogRepository = fuelLogRepository;
     }
 
-    public String updateFuelLimit(String qrString, float usage) {
+    public String updateFuelLimit(String qrString, float usage, Long fuelStationId) {
         // Validate QR code
         if (!qrCodeRepository.existsByQrCode(qrString)) {
             throw new IllegalArgumentException("Invalid QR code: " + qrString);
         }
 
+        if(!fuelStationRepository.existsById(fuelStationId)){
+            throw new IllegalArgumentException("Fuel station id is not valid");
+        }
+
+        FuelStation fuelStation = fuelStationRepository.findById(fuelStationId).get();
         QrCode qrCode = qrCodeRepository.findByQrCode(qrString).get();
         Long qrCodeId = qrCode.getId();
         System.out.println(qrCodeId);
 
 
         Vehicle vehicle = qrCode.getVehicle();
+
+       User user =  userRepository.findByVehicleId(vehicle.getId()).get();
 
 
 
@@ -62,6 +76,26 @@ public class FuelQuotaService {
 
         tracker.setExistingFuel(currentFuel - usage);
         fuelQuotaTrackerRepository.save(tracker);
+
+        float updateExsistingFuel = tracker.getExistingFuel();
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+
+
+        //Update Fuel Log about this transaction
+        FuelLog fuelLog = new FuelLog();
+        fuelLog.setFuelAmount(usage);
+        fuelLog.setFuelStation(fuelStation);
+        fuelLog.setUser(user);
+        fuelLog.setVehicle(vehicle);
+        fuelLog.setCreatedAt(new Date(System.currentTimeMillis()));
+        fuelLog.setTransactionTime(new Date(System.currentTimeMillis()));
+
+        fuelLogRepository.save(fuelLog);
+
+        String emailContent = emailService.generateFuelLimitUpdateEmailContent(fuelStation.getName(),usage,localDateTime,updateExsistingFuel);
+        emailService.sendEmail(user.getEmail(),"Fuel Update" , emailContent);
+
 
         return "Fuel limit updated successfully. Remaining quota: " + tracker.getExistingFuel() + " liters.";
     }

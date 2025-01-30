@@ -3,7 +3,7 @@ package com.fuelmanagement.controller;
 import com.fuelmanagement.model.dto.response.UserDetailsResponse;
 import com.fuelmanagement.model.entity.mysql.Vehicle;
 import com.fuelmanagement.service.JwtService;
-import com.fuelmanagement.service.UserService;
+import com.fuelmanagement.service.entityService.UserService;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

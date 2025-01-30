@@ -1,12 +1,14 @@
-package com.fuelmanagement.service;
+package com.fuelmanagement.service.entityService;
 
 import com.fuelmanagement.model.dto.response.QrCodeCheckingResponse;
 import com.fuelmanagement.model.entity.mysql.FuelQuotaTracker;
 import com.fuelmanagement.model.entity.mysql.QrCode;
+import com.fuelmanagement.model.entity.mysql.User;
 import com.fuelmanagement.model.entity.mysql.Vehicle;
-import com.fuelmanagement.repository.mysql.FuelQuotaTrackerRepository;
 import com.fuelmanagement.repository.mysql.QrCodeRepository;
+import com.fuelmanagement.repository.mysql.UserRepository;
 import com.fuelmanagement.repository.mysql.VehicleRepository;
+import com.fuelmanagement.service.JwtService;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -28,6 +30,12 @@ public class QrCodeService {
 
     @Autowired
     private VehicleRepository vehicleRepository;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    UserRepository userRepository;
 
 
 
@@ -79,8 +87,16 @@ public class QrCodeService {
     }
 
     // Update the QR code for a vehicle
-    public byte[] updateQRCode(Long vehicleId) throws Exception {
-        Optional<QrCode> qrCodeOptional = qrCodeRepository.findByVehicleId(vehicleId);
+    public byte[] updateQRCode(String token) throws Exception {
+
+        String mobileNumber = jwtService.extractIdentifier(token);
+        if(!userRepository.existsByMobileNumber(mobileNumber)){
+            throw new IllegalStateException("Mobile number is invalid");
+        }
+
+        User user = userRepository.findByMobileNumber(mobileNumber).get();
+
+        Optional<QrCode> qrCodeOptional = qrCodeRepository.findByVehicleId(user.getVehicle().getId());
 
         if (qrCodeOptional.isEmpty()) {
             throw new IllegalArgumentException("QR Code not found for this vehicle.");

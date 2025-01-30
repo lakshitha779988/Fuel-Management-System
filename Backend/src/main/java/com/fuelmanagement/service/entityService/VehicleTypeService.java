@@ -1,4 +1,4 @@
-package com.fuelmanagement.service;
+package com.fuelmanagement.service.entityService;
 
 import com.fuelmanagement.model.entity.mysql.VehicleType;
 import com.fuelmanagement.repository.mysql.VehicleTypeRepository;

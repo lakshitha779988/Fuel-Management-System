@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import {sendOtp, verifyOtpForRegistration } from '../../firebaseAuthService';
 
@@ -21,7 +21,7 @@ function UserDetailsForm() {
 
 
   const[confirmationResult,setConfirmationResult]=useState('null');
-const inputRefs = useRef([]);
+
 
   
   const checkMobileExistence = async (mobileNumber) => {
@@ -82,29 +82,11 @@ const inputRefs = useRef([]);
     }
   };
 
-const handleOTPChange = (value,index) => {
-  const updateOTP = [...otp];
-  updateOTP[index] = value;
-  setOtp(updateOTP);
-
-  if(value && index < otp.length - 1){
-    inputRefs.current[index + 1].focus();
-  }
-
-  if(!value && index > 0){
-    inputRefs.current[index - 1].focus();
-  }
-};
-
-
-
   const handleVerifyOTP = async(e) => {
    
     e.preventDefault();
     setLoading(true);
-
-    const fullotp = otp.join('');
-    if(!fullotp || otp.length!==6){
+    if(!otp || otp.length!==6){
       console.log(otp);
       setAlert({
         message: 'Please enter a valid 6-digit OTP',
@@ -118,7 +100,7 @@ const handleOTPChange = (value,index) => {
     }
    try{
     const massage = await
-    verifyOtpForRegistration(confirmationResult,fullotp);
+    verifyOtpForRegistration(confirmationResult,otp);
     setAlert(
       {
         message:'OTP verified successfully!',
@@ -165,7 +147,6 @@ const handleSubmit = (e) => {
     mobileNumber : mobileNumber,
     email :email,
   };
-
   localStorage.setItem("userDetails", JSON.stringify(userDetails));
   console.log(localStorage.getItem("userDetail"))
   window.window.location.href = "/VehicleDetails";
@@ -182,10 +163,19 @@ setAlert({
 };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-       <div className="max-w-lg w-full bg-white rounded-lg shadow-md p-6">
+
+    <div className="flex items-center justify-center relative bg-gradient-to-br from-red-900 via-red-700 to-red-500"
+    style={{
+      backgroundImage: `url('../../public/login11.jpg')`,
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      minHeight: '100vh', 
+  
+    }}>
+    
+       <div className="max-w-lg w-full bg-white rounded shadow-md p-6 my-6 min-h-[400px]">
        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">User Details</h2> 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 min-h-[400px]" style={{ position:"relative" }}>
      
       {alert.show && 
       (
@@ -202,55 +192,57 @@ setAlert({
           </div>
         )}
    
-     
+<div className="grid grid-cols-2 gap-6">    
 <div>
-        <label htmlFor="firstName" className="block text-gray-700 font-semibold">First Name:</label>
+        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name:</label>
         <input id="firstName"
          type="text"
           placeholder="Ex: Saman"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"   
+          className="mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"   
           onChange={(e) => setFirstName(e.target.value)}
           />
 
 </div>
 <div>
-        <label htmlFor="lastName" className="block text-gray-700 font-semibold">Last Name:</label>
+        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name:</label>
         <input id="lastName"
          type="text"
           placeholder="Ex: Perera"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           onChange={(e) => setLastName(e.target.value)}
           />
 </div>
-<div>
-        <label htmlFor="address" className="block text-gray-700 font-semibold">Address:</label>
+<div className="col-span-2">
+        <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address:</label>
         <input id="address"
          type="text"
           placeholder="Ex: 399/8, Station Road, Colombo"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" 
+          className="mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
           onChange={(e) => setAddress(e.target.value)}
           />
 </div>
 
-<div>
-        <label htmlFor="email" className="block text-gray-700 font-semibold">Address:</label>
+<div className="col-span-2">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">E-mail:</label>
         <input id="email"
          type="email"
           placeholder="example@gmail.com"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" 
+          className="mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
           onChange={(e) => setEmail(e.target.value)}
           />
 </div>
-
-        <label htmlFor="nic" className="block text-gray-700 font-semibold">NIC:</label>
+<div>
+        <label htmlFor="nic" className="block text-sm font-medium text-gray-700">NIC:</label>
         <input id="nic"
          type="text"
           placeholder="Ex: 200134587570" 
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           onChange={(e) => setNic(e.target.value)}
           />
+
+</div>          
 <div>
-        <label htmlFor="mobileNumber"className="block text-gray-700 font-semibold">
+        <label htmlFor="mobileNumber"className="block text-sm font-medium text-gray-700">
           
           Mobile Number:</label>
         <input
@@ -258,58 +250,61 @@ setAlert({
           type="tel"
           pattern='[0-9]*'
           placeholder="Ex: 077 123 4567"
-          className="mt-1 block w-full  p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          className="mt-1 block w-full  p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           value={mobileNumber}
           onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g,''))}
         />
 </div>
+<div className="col-span-2">
         <button onClick={handleSendOTP}  
         id="sign-in-button"
-        className="mt-4 w-full bg-red-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+        className="mt-4 w-full bg-gradient-to-r from-red-500 to-purple-500 text-white py-2 rounded hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 transition"
         disabled={loading}
         >
           Send OTP
         </button>
+        </div>
 
         {otpSent && (
           <div className="mt-4">
-            <label className="block text-gray-700 font-semibold">OTP:</label>
-            <div className="flex space-x-2 mt-2">
-              {otp.map((digit, index) => (
-            
+            <label htmlFor="otp" className="block text-sm font-medium text-gray-700">
+              OTP
+              </label>
             <input
               id="otp"
-              key={index}
               type="text"
-              maxLength="1"
-              className="w-12 h-12 text-center text-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-              onChange={(e)=>handleOTPChange(e.target.value,index)} 
-              value={digit}
-             ref={(el) =>(inputRefs.current[index]=el)}
+              placeholder="Enter the 6-digit OTP"
+              className='mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500'
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
               
             />
-              ))}
-            </div>
+
 
             <button onClick={handleVerifyOTP}
-              className="mt-4 w-full bg-red-600 text-white py-2 rounded-md hover:bg-blue-700 transition" >
+              className="mt-4 w-full bg-gradient-to-r from-red-500 to-purple-500 text-white py-2 rounded hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 transition" >
               Verify OTP
             </button>
           </div>
         )}
 
         {otpVerified && <p className="text-green-600">OTP verified successfully!</p>}
+        <div className="col-span-2">
         <button 
         type='submit'
         disabled={!otpVerified}
-         className={` mt-6 w-full py-2 rounded-md text-white ${
+         className={` mt-1 w-full py-2 rounded text-white ${
           otpVerified ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-400 cursor-not-allowed'
         } transition`} >
           Submit
           </button>
+          </div>
+          </div> 
       </form>
     </div>
-    </div>
+
+    
+    </div> 
   );
 
 }

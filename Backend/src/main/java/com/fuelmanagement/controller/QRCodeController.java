@@ -2,8 +2,8 @@ package com.fuelmanagement.controller;
 
 import com.fuelmanagement.model.dto.response.QrCodeCheckingResponse;
 import com.fuelmanagement.service.JwtService;
-import com.fuelmanagement.service.QrCodeService;
-import com.fuelmanagement.service.UserService;
+import com.fuelmanagement.service.entityService.QrCodeService;
+import com.fuelmanagement.service.entityService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,10 +45,12 @@ public class QRCodeController {
 
     }
 
-    @PutMapping("/update/{vehicleId}")
-    public ResponseEntity<byte[]> updateQRCode(@PathVariable Long vehicleId) {
+    @GetMapping("/update")
+    public ResponseEntity<byte[]> updateQRCode(@RequestParam String token) {
+
+
         try {
-            byte[] qrCodeImage = qrCodeService.updateQRCode(vehicleId);
+            byte[] qrCodeImage = qrCodeService.updateQRCode(token);
             return ResponseEntity.ok()
                     .header("Content-Type", "image/png")
                     .body(qrCodeImage);
