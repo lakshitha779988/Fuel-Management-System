@@ -23,6 +23,7 @@ const Dashboard = () => {
       fetchUserDetails(token);
       generateQRCode(token);
       fetchFuelAmount(token);
+      fetchTotalFuelUsage(token);
     } else {
       // window.location.href = "/login"; // Redirect if token is not found
     }
@@ -50,12 +51,12 @@ const Dashboard = () => {
     }
   };
 
-  const fetchTotalFuelUsage = async () => {
+  const fetchTotalFuelUsage = async (token) => {
     try {
-      const response = await fetch("http://localhost:8080/api/reports/fuel-usage", {
+      const response = await fetch("http://localhost:8080/api/report/user/fuel-usage", {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${jwtToken}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
@@ -69,7 +70,7 @@ const Dashboard = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setTotalFuelUsage(data.totalFuel);
+        setTotalFuelUsage(data);
       } else {
         alert("Failed to fetch total fuel usage");
       }
@@ -79,11 +80,7 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {
-    if (activeSection === "Reports" && jwtToken) {
-      fetchTotalFuelUsage();
-    }
-  }, [activeSection, jwtToken]);
+ 
 
 
 
@@ -168,7 +165,7 @@ const Dashboard = () => {
   
   const fetchFuelAmount = async (token) => {
     try {
-      const response = await fetch(``, {
+      const response = await fetch(`http://localhost:8080/api/report/user/exsistingFuel`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
