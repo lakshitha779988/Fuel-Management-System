@@ -21,7 +21,7 @@ const{
     password,
 } = params as Record<string,string>;
 
-const handleVerification = async () => {
+const handleVerifyOTP = async () => {
     if(!otp || otp.length !==6){
         Alert.alert("Error","Pleae enter a valid 6-digit OTP")
         return;
@@ -95,7 +95,7 @@ return (
 
     <Pressable
         className={`bg-orange-600 py-4 rounded-full mb-10 ${loading ? "opacity-50 " : ""}`}
-
+        onPress={handleVerifyOTP}
         disabled={loading}
     >
 
