@@ -99,7 +99,7 @@ export default function SignInScreen() {
                     </Pressable>
 
                     {/* Go to Registration Link */}
-                    <Link href="/registration" asChild>
+                    <Link href="/(root)/(tabs)/registration" asChild>
                         <Pressable disabled={loading}>
                             <Text className={`text-black text-lg text-center ${loading ? "opacity-50" : ""}`}>
                                 Go to Register
