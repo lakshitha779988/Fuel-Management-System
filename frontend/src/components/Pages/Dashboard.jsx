@@ -187,7 +187,7 @@ const Dashboard = () => {
   };
   const fetchTransactions = async (token) => {
     try {
-      const response = await fetch(``, {
+      const response = await fetch(`http://localhost:8080/api/report/user/transaction`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -197,7 +197,7 @@ const Dashboard = () => {
   
       const data = await response.json();
       if (response.ok) {
-        setTransactions(data.slice(0, 10));
+        setTransactions(data);
       } else {
         alert('Failed to fetch transactions');
       }
@@ -367,9 +367,9 @@ const Dashboard = () => {
                   {transactions.length > 0 ? (
                     transactions.map((transaction, index) => (
                       <tr key={index} className="hover:bg-red-100">
-                        <td className="border border-red-300 px-4 py-2">{transaction.time}</td>
-                        <td className="border border-red-300 px-4 py-2">{transaction.amount}</td>
-                        <td className="border border-red-300 px-4 py-2">{transaction.stationName}</td>
+                        <td className="border border-red-300 px-4 py-2">{transaction.transactionTime}</td>
+                        <td className="border border-red-300 px-4 py-2">{transaction.fuelAmount}</td>
+                        <td className="border border-red-300 px-4 py-2">{transaction.fuelStationName}</td>
                       </tr>
                     ))
                   ) : (
