@@ -32,4 +32,63 @@ export default function UpdateScreen() {
             </SafeAreaView>
         </TouchableWithoutFeedback>
     );
+
 }
+
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        paddingHorizontal: 20,
+        backgroundColor: "#f3f3f3",
+    },
+    title: {
+        textAlign: "center",
+        fontSize: 55,
+        fontWeight: "bold",
+        color: "#FF6600",
+        marginBottom: 40,
+    },
+    detailsContainer: {
+        marginBottom: 30,
+        alignItems: "center",
+    },
+    vehicleDetail: {
+        fontSize: 18,
+        fontWeight: "600",
+        textAlign: "center",
+        color: "#333",
+        marginBottom: 10,
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: "#ccc",
+        backgroundColor: "#fff",
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 50,
+        fontSize: 18,
+        marginBottom: 30,
+    },
+    updateButton: {
+        backgroundColor: "#FF6600",
+        paddingVertical: 15,
+        borderRadius: 50,
+        marginBottom: 20,
+        marginHorizontal: 20,
+    },
+    cancelButton: {
+        backgroundColor: "#E53E3E",
+        paddingVertical: 15,
+        borderRadius: 50,
+        marginHorizontal: 20,
+    },
+    buttonText: {
+        textAlign: "center",
+        color: "#fff",
+        fontSize: 18,
+        fontWeight: "bold",
+    },
+});
+
