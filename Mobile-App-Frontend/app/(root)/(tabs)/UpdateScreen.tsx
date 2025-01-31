@@ -1,13 +1,87 @@
-import { View, Text } from "react-native";
+import { useEffect, useState } from "react";
+import { SafeAreaView, Text, TextInput, Alert, Pressable, StyleSheet, View, TouchableWithoutFeedback, Keyboard } from "react-native";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 
 export default function UpdateScreen() {
-
-const [data, setData] = useState<any>(null);
+    const [data, setData] = useState<any>(null);
     const [newFuelLimit, setNewFuelLimit] = useState<string>("");
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-   
-   return (
+
+    useEffect(() => {
+        const loadData = async () => {
+            const storedData = await AsyncStorage.getItem("scannedData");
+            if (storedData) {
+                const parsedData = JSON.parse(storedData);
+                setData(parsedData);
+                setNewFuelLimit(parsedData.exsistingFuel.toString());
+            } else {
+                Alert.alert("Error", "No data found. Redirecting to dashboard.");
+                router.push("/");
+            }
+        };
+
+        loadData();
+    }, []);
+
+    const handleUpdate = async () => {
+        setLoading(true);
+        const token = await AsyncStorage.getItem("authToken");
+
+        if (!token) {
+            Alert.alert("Error", "No authentication token found. Please log in.");
+            setLoading(false);
+            return;
+        }
+
+        const usage = parseFloat(newFuelLimit);
+
+        if (isNaN(usage)) {
+            Alert.alert("Error", "Invalid fuel limit value. Please enter a valid number.");
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await axios.put(
+                "http://172.19.67.1:8080/api/fuel-quota/update-limit",
+                null,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    params: {
+                        qrString: data.qrString,
+                        usage,
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                Alert.alert("Success", "Fuel limit updated successfully.");
+            }
+        } catch (error) {
+            Alert.alert("Error", "Failed to update fuel limit. Please try again.");
+        } finally {
+            setLoading(false);
+
+            await AsyncStorage.removeItem("scannedData");
+            router.push("/dashboard");
+        }
+    };
+
+    const handleCancel = async () => {
+        await AsyncStorage.removeItem("scannedData");
+        router.push("/dashboard");
+    };
+
+    if (!data) {
+        return null;
+    }
+
+    return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <SafeAreaView style={styles.container}>
                 <Text style={styles.title}>Update Fuel Limit</Text>
@@ -38,9 +112,7 @@ const [data, setData] = useState<any>(null);
             </SafeAreaView>
         </TouchableWithoutFeedback>
     );
-
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -97,4 +169,3 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
 });
-
