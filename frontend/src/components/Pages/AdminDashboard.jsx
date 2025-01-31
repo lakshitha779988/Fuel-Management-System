@@ -42,7 +42,7 @@ const AdminDashboard = () => {
   };
   const fetchVehicleTypes = async (token) => {
     try {
-      const response = await fetch(`/api/vehicletypes`, {
+      const response = await fetch(`http://localhost:8080/api/vehicle-types`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -60,19 +60,19 @@ const AdminDashboard = () => {
     }
   };
 
-  const addVehicleType = async () => {
+  const addVehicleType = async (token) => {
     if (!newVehicleType || !availableQuota) {
       alert('Please enter both vehicle type and available quota');
       return;
     }
     try {
-      const response = await fetch(`/api/vehicletypes`, {
+      const response = await fetch(`http://localhost:8080/api/vehicle-types`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer your-auth-token`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ typeName: newVehicleType, availableQuota })
+        body: JSON.stringify({ name: newVehicleType, quota:availableQuota })
       });
       const data = await response.json();
       if (response.ok) {
@@ -177,8 +177,8 @@ const AdminDashboard = () => {
                 <tbody>
                   {vehicleTypes.map((vehicle) => (
                     <tr key={vehicle.id} className="border border-gray-400">
-                      <td className="border border-gray-400 p-2">{vehicle.typeName}</td>
-                      <td className="border border-gray-400 p-2">{vehicle.availableQuota}</td>
+                      <td className="border border-gray-400 p-2">{vehicle.vehicleTypeName}</td>
+                      <td className="border border-gray-400 p-2">{vehicle.fuelLimit}</td>
                     </tr>
                   ))}
                 </tbody>
