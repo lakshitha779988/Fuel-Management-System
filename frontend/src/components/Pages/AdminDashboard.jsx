@@ -12,6 +12,7 @@ const AdminDashboard = () => {
     const token = localStorage.getItem('adminToken');
     if (token && typeof token === 'string') {
       fetchFuelStation(token)
+      fetchVehicleTypes(token)
     } else {
       window.location.href = "/adminlogin"; // Redirect if token is not found
 
@@ -161,6 +162,55 @@ const AdminDashboard = () => {
             </table>
           </div>
         );
+
+        case 'vehicletype':
+          return (
+            <div className="p-6">
+              <h2 className="text-2xl font-bold mb-4">Vehicle Type Management</h2>
+              <table className="w-full border border-gray-400 mb-4">
+                <thead>
+                  <tr className="bg-gray-200 border border-gray-400">
+                    <th className="border border-gray-400 p-2">Vehicle Type</th>
+                    <th className="border border-gray-400 p-2">Available Quota</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {vehicleTypes.map((vehicle) => (
+                    <tr key={vehicle.id} className="border border-gray-400">
+                      <td className="border border-gray-400 p-2">{vehicle.typeName}</td>
+                      <td className="border border-gray-400 p-2">{vehicle.availableQuota}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="mt-4">
+                <input 
+                  type="text" 
+                  className="border p-2 mr-2" 
+                  placeholder="Vehicle Type" 
+                  value={newVehicleType} 
+                  onChange={(e) => setNewVehicleType(e.target.value)} 
+                />
+                <input 
+                  type="number" 
+                  className="border p-2 mr-2" 
+                  placeholder="Available Quota" 
+                  value={availableQuota} 
+                  onChange={(e) => setAvailableQuota(e.target.value)} 
+                />
+                <button 
+                  className="px-3 py-2 bg-red-500 text-white rounded" 
+                  onClick={addVehicleType}
+                >
+                  Add Vehicle Type
+                </button>
+              </div>
+            </div>
+          );
+
+
+
+
       default:
         return null;
     }
@@ -184,52 +234,23 @@ const AdminDashboard = () => {
           >
             Fuel Station Management
           </button>
+          <button 
+            className={`w-full text-left px-4 py-2 rounded-lg ${activePage === 'vehicletype' ? 'bg-red-600' : 'hover:bg-gray-700'}`} 
+            onClick={() => setActivePage('vehicletype')}
+          >
+            Vehicle Type Management
+          </button>
+
+
         </nav>
       </aside>
 
       {/* Main Content  */}
-      <main className="flex-1 bg-gray-100 p-6">
-        {activePage === 'fuelstation' && (
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Vehicle Type Management</h2>
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Enter vehicle type"
-                value={newVehicleType}
-                onChange={(e) => setNewVehicleType(e.target.value)}
-                className="p-2 border rounded mr-2"
-              />
-              <input
-                type="text"
-                placeholder="Available Quota"
-                value={availableQuota}
-                onChange={(e) => setAvailableQuota(e.target.value)}
-                className="p-2 border rounded mr-2"
-              />
-              <button onClick={addVehicleType} className="px-4 py-2 bg-blue-500 text-white rounded">
-                Add Vehicle Type
-              </button>
-            </div>
-            <table className="w-full border border-gray-400">
-              <thead>
-                <tr className="bg-gray-200 border border-gray-400">
-                  <th className="border border-gray-400 p-2">Type Name</th>
-                  <th className="border border-gray-400 p-2">Available Quota</th>
-                </tr>
-              </thead>
-              <tbody>
-                {vehicleTypes.map((type) => (
-                  <tr key={type.id} className="border border-gray-400">
-                    <td className="border border-gray-400 p-2">{type.typeName}</td>
-                    <td className="border border-gray-400 p-2">{type.availableQuota}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+<main class name="flex-1 bg-gray-100">
+        {renderContent()}
       </main>
+
+      
     </div>
   );
 };
