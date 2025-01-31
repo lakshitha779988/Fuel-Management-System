@@ -1,6 +1,12 @@
 import { View, Text } from "react-native";
 
 export default function UpdateScreen() {
+
+const [data, setData] = useState<any>(null);
+    const [newFuelLimit, setNewFuelLimit] = useState<string>("");
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+   
    return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <SafeAreaView style={styles.container}>
