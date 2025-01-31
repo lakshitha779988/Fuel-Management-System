@@ -1,5 +1,6 @@
 package com.fuelmanagement.controller;
 
+import com.fuelmanagement.model.dto.request.VehicleTypeAddRequest;
 import com.fuelmanagement.model.entity.mysql.VehicleType;
 import com.fuelmanagement.service.entityService.VehicleTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,11 @@ public class VehicleTypeController {
 
     // Create or update a vehicle type
     @PostMapping
-    public ResponseEntity<VehicleType> saveVehicleType(@RequestBody VehicleType vehicleType) {
-        return ResponseEntity.ok(vehicleTypeService.saveVehicleType(vehicleType));
+    public ResponseEntity<List<VehicleType>> saveVehicleType(@RequestBody VehicleTypeAddRequest vehicleTypeAddRequest) {
+        System.out.println(vehicleTypeAddRequest.getQuota());
+        System.out.println(vehicleTypeAddRequest.getName());
+       String response =  vehicleTypeService.saveVehicleType(vehicleTypeAddRequest);
+        return ResponseEntity.ok(vehicleTypeService.getAllVehicleTypes());
     }
 
     // Get all vehicle types
