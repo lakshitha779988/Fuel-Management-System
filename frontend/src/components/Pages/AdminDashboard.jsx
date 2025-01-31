@@ -8,15 +8,20 @@ const AdminDashboard = () => {
   const [availableQuota, setAvailableQuota] = useState('');
 
   useEffect(() => {
-    if (activePage === 'overview') {
-      fetchFuelAmount('your-auth-token');
-      fetchVehicleTypes('your-auth-token');
+
+    const token = localStorage.getItem('adminToken');
+    if (token && typeof token === 'string') {
+      fetchFuelStation(token)
+    } else {
+      window.location.href = "/adminlogin"; // Redirect if token is not found
+
     }
   }, [activePage]);
 
-  const fetchFuelAmount = async (token) => {
+  const fetchFuelStation = async (token) => {
     try {
-      const response = await fetch(``, {
+      console.log(token);
+      const response = await fetch(`http://localhost:8080/api/admin/fuelStation`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -87,9 +92,32 @@ const AdminDashboard = () => {
 
 
   const changeStatus = (id) => {
-    // Function logic to change status will be implemented later
     console.log(`Changing status for station ID: ${id}`);
+  
+    fetch(`http://localhost:8080/api/admin/toggle-status/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('adminToken')}`, // Ensure the token is included if authentication is required
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to toggle fuel station status');
+        }
+        return response.text(); // Since backend returns a simple success message
+      })
+      .then((message) => {
+        console.log(message);
+        alert('Fuel station status updated successfully!');
+        // Optionally, refresh data or update UI
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert('Failed to update fuel station status');
+      });
   };
+  
 
   const renderContent = () => {
     switch (activePage) {
@@ -116,8 +144,8 @@ const AdminDashboard = () => {
               <tbody>
                 {fuelStations.map((station) => (
                   <tr key={station.id} className="border border-gray-400">
-                    <td className="border border-gray-400 p-2">{station.fuelStationName}</td>
-                    <td className="border border-gray-400 p-2">{station.availableStock}</td>
+                    <td className="border border-gray-400 p-2">{station.name}</td>
+                    <td className="border border-gray-400 p-2">{station.stock}</td>
                     <td className="border border-gray-400 p-2">{station.mobileNumber}</td>
                     <td className="border border-gray-400 p-2">
                       <button

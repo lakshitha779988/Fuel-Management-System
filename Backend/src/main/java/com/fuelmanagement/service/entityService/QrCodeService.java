@@ -8,6 +8,7 @@ import com.fuelmanagement.model.entity.mysql.Vehicle;
 import com.fuelmanagement.repository.mysql.QrCodeRepository;
 import com.fuelmanagement.repository.mysql.UserRepository;
 import com.fuelmanagement.repository.mysql.VehicleRepository;
+import com.fuelmanagement.service.EmailService;
 import com.fuelmanagement.service.JwtService;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,13 +32,15 @@ public class QrCodeService {
     private final VehicleRepository vehicleRepository;
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @Autowired
-    public QrCodeService(QrCodeRepository qrCodeRepository, VehicleRepository vehicleRepository, JwtService jwtService, UserRepository userRepository) {
+    public QrCodeService(QrCodeRepository qrCodeRepository, VehicleRepository vehicleRepository, JwtService jwtService, UserRepository userRepository, EmailService emailService) {
         this.qrCodeRepository = qrCodeRepository;
         this.vehicleRepository = vehicleRepository;
         this.jwtService = jwtService;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
 
@@ -81,7 +85,6 @@ public class QrCodeService {
         }
 
 
-
         return generateQRCodeImage(qrCodeString);
     }
 
@@ -107,6 +110,9 @@ public class QrCodeService {
         qrCodeRepository.save(qrCode);
 
 
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String emailContent = emailService.generateQRCodeUpdateEmailContent(user.getVehicle().getRegistrationNumber(),localDateTime);
+        emailService.sendEmail(user.getEmail(),"Update QRCode",emailContent);
         return generateQRCodeImage(newQrCodeString);
     }
 
