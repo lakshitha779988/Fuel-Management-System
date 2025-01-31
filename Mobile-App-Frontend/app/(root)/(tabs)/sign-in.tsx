@@ -90,6 +90,7 @@ export default function SignInScreen() {
                     {/* Sign In Button */}
                     <Pressable
                         className={`bg-orange-600 py-4 rounded-full mb-10 ${loading ? "opacity-50" : ""}`}
+                        onPress={handleSignIn}
                         disabled={loading} // Disable button when loading
                     >
                         <Text className="text-white text-xl font-bold text-center">
@@ -98,7 +99,7 @@ export default function SignInScreen() {
                     </Pressable>
 
                     {/* Go to Registration Link */}
-                    <Link href="/registration" asChild>
+                    <Link href="/(root)/(tabs)/registration" asChild>
                         <Pressable disabled={loading}>
                             <Text className={`text-black text-lg text-center ${loading ? "opacity-50" : ""}`}>
                                 Go to Register

@@ -10,13 +10,12 @@ function AdminLoginForm() {
   function handleLogin(e) {
     e.preventDefault();
 
-    // Prepare the request body
     const requestBody = {
       userName: username,
       password: password,
     };
 
-    // Make the POST request to the backend
+    
     fetch('http://localhost:8080/api/admin/login', {
       method: 'POST',
       headers: {
@@ -25,23 +24,26 @@ function AdminLoginForm() {
       body: JSON.stringify(requestBody),
     })
       .then((response) => {
-        console.log(requestBody.password);
-        console.log(requestBody.username);
-        if (response.ok) {
-          return response.text; // Assuming the backend returns a JSON with the token
-        } else {
+        if (!response.ok) {
           throw new Error('Invalid username or password');
         }
+        return response.json(); // Call .json() and return the promise
       })
       .then((data) => {
-        // Store the token in localStorage or sessionStorage
-        localStorage.setItem('adminToken', data.token);
-
-        window.location.href = "/admin";
+        console.log("Response JSON:", data); // Check what is actually being received
+        if (data.token) {
+          localStorage.setItem('adminToken', data.token);
+          console.log("Token stored:", data.token);
+          window.location.href = "./admin";
+        } else {
+          throw new Error('Token not found in response');
+        }
       })
       .catch((error) => {
         setError(error.message);
+        console.error("Login error:", error);
       });
+    
   }
 
   return (

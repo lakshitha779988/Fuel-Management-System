@@ -2,6 +2,7 @@ package com.fuelmanagement.controller;
 
 
 import com.fuelmanagement.model.dto.request.AdminLoginRequest;
+import com.fuelmanagement.model.dto.response.AdminLoginResponse;
 import com.fuelmanagement.model.dto.response.FuelStationResponse;
 import com.fuelmanagement.service.entityService.AdminService;
 import com.fuelmanagement.service.entityService.FuelStationService;
@@ -28,21 +29,29 @@ public class AdminController {
 
     //Admin login endpoint
     @PostMapping("/login")
-    public ResponseEntity<String> adminLogin(@RequestBody AdminLoginRequest adminLoginRequest){
+    public ResponseEntity<AdminLoginResponse> adminLogin(@RequestBody AdminLoginRequest adminLoginRequest){
         System.out.println(adminLoginRequest.getPassword());
         System.out.println(adminLoginRequest.getUserName());
 
        String token =  adminService.login(adminLoginRequest);
-       return ResponseEntity.ok(token);
+       AdminLoginResponse adminLoginResponse = new AdminLoginResponse(token);
+       return ResponseEntity.ok(adminLoginResponse);
 
     }
 
 
     //fetch All fuelStation return list of FuelStationResponse
-    @GetMapping
+    @GetMapping("/fuelStation")
     public ResponseEntity<List<FuelStationResponse>> getAllFuelStations() {
+        System.out.println("come");
         List<FuelStationResponse> fuelStations = fuelStationService.getAllFuelStations();
         return ResponseEntity.ok(fuelStations);
+    }
+
+    @PutMapping("/toggle-status/{id}")
+    public ResponseEntity<String> toggleFuelStationStatus(@PathVariable Long id) {
+        adminService.changeFuelStationStatus(id);
+        return ResponseEntity.ok("Fuel station status toggled successfully.");
     }
 
 

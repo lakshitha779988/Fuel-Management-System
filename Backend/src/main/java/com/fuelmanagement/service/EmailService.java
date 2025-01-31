@@ -152,5 +152,19 @@ public class EmailService {
                 "Sri Lanka";
     }
 
+    public String generateQRCodeUpdateEmailContent(String vehicleRegNumber, LocalDateTime updateTime) {
+        return "Subject: QR Code Update Notification\n\n" +
+                "Dear User,\n\n" +
+                "We would like to inform you that your QR code has been successfully updated.\n\n" +
+                "Update Details:\n" +
+                "Vehicle Registration Number: " + vehicleRegNumber + "\n" +
+                "Update Time: " + updateTime + "\n\n" +
+                "If you did not request this update or have any concerns, please contact our support team immediately.\n\n" +
+                "Best Regards,\n" +
+                "FuelManagement Team\n" +
+                "Sri Lanka";
+    }
+
+
 
 }

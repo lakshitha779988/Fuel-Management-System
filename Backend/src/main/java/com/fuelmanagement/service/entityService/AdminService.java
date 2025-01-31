@@ -47,31 +47,33 @@ public class AdminService {
         return token;
     }
 
-    public void changeFuelStationStatus(Long id, String status) {
+    public void changeFuelStationStatus(Long id) {
         if (!fuelStationRepository.existsById(id)) {
             throw new UsernameNotFoundException("Fuel station cannot be found");
         }
 
         FuelStation fuelStation = fuelStationRepository.findById(id).get();
-        fuelStation.setStatus(status);
+        String currentStatus = fuelStation.getStatus();
+        String newStatus = "Active".equalsIgnoreCase(currentStatus) ? "Blocked" : "Active";
+
+        fuelStation.setStatus(newStatus);
         fuelStationRepository.save(fuelStation);
 
         LocalDateTime localDateTime = LocalDateTime.now();
         String emailContent;
         String subject;
 
-        if ("Active".equalsIgnoreCase(status)) {
+        if ("Active".equalsIgnoreCase(newStatus)) {
             emailContent = emailService.generateFuelStationAccountActiveEmailContent(fuelStation.getName(), localDateTime);
             subject = "Fuel Station Activation";
-        } else if ("Blocked".equalsIgnoreCase(status)) {
+        } else {
             emailContent = emailService.generateFuelStationAccountBlockedEmailContent(fuelStation.getName(), localDateTime);
             subject = "Fuel Station Blocked";
-        } else {
-            throw new IllegalArgumentException("Invalid status: " + status);
         }
 
         emailService.sendEmail(fuelStation.getEmail(), subject, emailContent);
     }
+
 
 
 }
