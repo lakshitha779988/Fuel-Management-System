@@ -1,51 +1,32 @@
 package com.fuelmanagement.service.entityService;
 
 
-import com.fuelmanagement.model.dto.request.AdminLoginRequest;
-import com.fuelmanagement.model.entity.mysql.Admin;
 import com.fuelmanagement.model.entity.mysql.FuelStation;
-import com.fuelmanagement.repository.mysql.AdminRepository;
 import com.fuelmanagement.repository.mysql.FuelStationRepository;
-import com.fuelmanagement.service.EmailService;
-import com.fuelmanagement.service.JwtService;
+import com.fuelmanagement.service.notificationService.NotificationContetCreationService;
+import com.fuelmanagement.service.notificationService.NotificationManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
 
 @Service
 public class AdminService {
 
-    private final AdminRepository adminRepository;
-   private final JwtService jwtService;
    private final FuelStationRepository fuelStationRepository;
-   private final EmailService emailService;
+private final NotificationManager notificationManager;
+private final NotificationContetCreationService notificationContetCreationService;
 
 
    @Autowired
-    public AdminService(AdminRepository adminRepository, JwtService jwtService, FuelStationRepository fuelStationRepository, EmailService emailService) {
-        this.adminRepository = adminRepository;
-        this.jwtService = jwtService;
+    public AdminService( FuelStationRepository fuelStationRepository, NotificationManager notificationManager, NotificationContetCreationService notificationContetCreationService) {
         this.fuelStationRepository = fuelStationRepository;
-        this.emailService = emailService;
-    }
+       this.notificationManager = notificationManager;
+       this.notificationContetCreationService = notificationContetCreationService;
+   }
 
 
-    public String login(AdminLoginRequest adminLoginRequest) {
-        Admin admin = adminRepository.findByUserName(adminLoginRequest.getUserName())
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-
-        if (!Objects.equals(adminLoginRequest.getPassword(), admin.getPassword())) {
-            throw new BadCredentialsException("Invalid password");
-        }
-        String token = jwtService.generateToken(admin.getUserName(), "FUEL_STATION", "Admin");
-
-        return token;
-    }
 
     public void changeFuelStationStatus(Long id) {
         if (!fuelStationRepository.existsById(id)) {
@@ -60,18 +41,18 @@ public class AdminService {
         fuelStationRepository.save(fuelStation);
 
         LocalDateTime localDateTime = LocalDateTime.now();
-        String emailContent;
+        String content;
         String subject;
 
         if ("Active".equalsIgnoreCase(newStatus)) {
-            emailContent = emailService.generateFuelStationAccountActiveEmailContent(fuelStation.getName(), localDateTime);
+            content = notificationContetCreationService.generateFuelStationAccountActiveEmailContent(fuelStation.getName(), localDateTime);
             subject = "Fuel Station Activation";
         } else {
-            emailContent = emailService.generateFuelStationAccountBlockedEmailContent(fuelStation.getName(), localDateTime);
+            content = notificationContetCreationService.generateFuelStationAccountBlockedEmailContent(fuelStation.getName(), localDateTime);
             subject = "Fuel Station Blocked";
         }
 
-        emailService.sendEmail(fuelStation.getEmail(), subject, emailContent);
+        notificationManager.notifyUser(fuelStation.getEmail(),fuelStation.getMobileNumber(), content);
     }
 
 

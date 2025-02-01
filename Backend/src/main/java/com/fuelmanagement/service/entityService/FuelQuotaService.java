@@ -2,7 +2,8 @@ package com.fuelmanagement.service.entityService;
 
 import com.fuelmanagement.model.entity.mysql.*;
 import com.fuelmanagement.repository.mysql.*;
-import com.fuelmanagement.service.EmailService;
+import com.fuelmanagement.service.notificationService.NotificationContetCreationService;
+import com.fuelmanagement.service.notificationService.NotificationManager;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,18 +17,20 @@ public class FuelQuotaService {
     private final VehicleRepository vehicleRepository;
     private final FuelQuotaTrackerRepository fuelQuotaTrackerRepository;
     private final FuelStationRepository fuelStationRepository;
-    private final EmailService emailService;
+    private final NotificationManager notificationManager;
+    private final NotificationContetCreationService notificationContetCreationService;
     private final UserRepository userRepository;
     private final FuelLogRepository fuelLogRepository;
 
     public FuelQuotaService(QrCodeRepository qrCodeRepository,
                             VehicleRepository vehicleRepository,
-                            FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelStationRepository fuelStationRepository, EmailService emailService, UserRepository userRepository, FuelLogRepository fuelLogRepository) {
+                            FuelQuotaTrackerRepository fuelQuotaTrackerRepository, FuelStationRepository fuelStationRepository, NotificationManager notificationManager, NotificationContetCreationService notificationContetCreationService, UserRepository userRepository, FuelLogRepository fuelLogRepository) {
         this.qrCodeRepository = qrCodeRepository;
         this.vehicleRepository = vehicleRepository;
         this.fuelQuotaTrackerRepository = fuelQuotaTrackerRepository;
         this.fuelStationRepository = fuelStationRepository;
-        this.emailService = emailService;
+        this.notificationManager = notificationManager;
+        this.notificationContetCreationService = notificationContetCreationService;
         this.userRepository = userRepository;
         this.fuelLogRepository = fuelLogRepository;
     }
@@ -93,8 +96,8 @@ public class FuelQuotaService {
 
         fuelLogRepository.save(fuelLog);
 
-        String emailContent = emailService.generateFuelLimitUpdateEmailContent(fuelStation.getName(),usage,localDateTime,updateExsistingFuel);
-        emailService.sendEmail(user.getEmail(),"Fuel Update" , emailContent);
+        String content = notificationContetCreationService.generateFuelLimitUpdateEmailContent(fuelStation.getName(),usage,localDateTime,updateExsistingFuel);
+        notificationManager.notifyUser(user.getEmail(),user.getMobileNumber() , content);
 
 
         return "Fuel limit updated successfully. Remaining quota: " + tracker.getExistingFuel() + " liters.";

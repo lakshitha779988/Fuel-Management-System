@@ -1,51 +1,96 @@
 package com.fuelmanagement.controller;
 
-import com.fuelmanagement.model.dto.request.FuelStationLoginRequest;
-import com.fuelmanagement.model.dto.request.FuelUserLoginRequest;
-import com.fuelmanagement.model.dto.request.RegistrationRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fuelmanagement.model.dto.request.*;
+import com.fuelmanagement.service.loginService.UserLoginFactory;
 import com.fuelmanagement.model.dto.response.LoginResponse;
-import com.fuelmanagement.service.AuthService;
+import com.fuelmanagement.service.loginService.LoginService;
+import com.fuelmanagement.service.registerService.RegisterService;
+import com.fuelmanagement.service.registerService.UserRegistrationFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import javax.naming.AuthenticationException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+
+    @Autowired
+    private UserLoginFactory userLoginFactory;
+    @Autowired
+    private UserRegistrationFactory userRegistrationFactory;
 
 
 
-
-//FuelUser registration EndPoint
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegistrationRequest registrationRequest) {
-        // Call the service to handle registration logic
-        boolean isRegistered = authService.register(registrationRequest);
+    public ResponseEntity<String> register(@RequestParam String userType, @RequestBody Map<String, Object> requestBody) {
+        RegisterService<?> registerService = userRegistrationFactory.getRegisterService(userType);
+        Object dto = mapToDTO2(userType, requestBody);
 
-        if (isRegistered) {
-            // If registration is successful, return a 200 OK response with a success message
-            return ResponseEntity.ok("Registration successful");
-        } else {
-            // If registration fails, return a 400 Bad Request with an error message
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed");
+        if (dto == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        String response = ((RegisterService<Object>) registerService).register(dto);
+        return ResponseEntity.ok(response);
+    }
+
+
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestParam String userType, @RequestBody Map<String, Object> requestBody) {
+        LoginService<?> loginService = userLoginFactory.getLoginService(userType);
+        Object dto = mapToDTO(userType, requestBody);
+
+        if (dto == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        LoginResponse response = ((LoginService<Object>) loginService).login(dto);
+        return ResponseEntity.ok(response);
+    }
+
+    private Object mapToDTO(String userType, Map<String, Object> requestBody) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            switch (userType.toLowerCase()) {
+                case "admin":
+                    return objectMapper.convertValue(requestBody, AdminLoginRequest.class);
+                case "citizen":
+                    return objectMapper.convertValue(requestBody, FuelUserLoginRequest.class);
+                case "fuel_station":
+                    return objectMapper.convertValue(requestBody, FuelStationLoginRequest.class);
+                default:
+                    return null;
+            }
+        } catch (Exception e) {
+            return null;
         }
     }
 
 
-    //FuelUser Login EndPoint
-    @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping("/fuel-user/login")
-    public ResponseEntity<LoginResponse> fuelUserLogin( @RequestBody FuelUserLoginRequest request) {
-        System.out.println(request.getFirebaseToken() + request.getMobileNumber());
-        LoginResponse response = authService.authenticateFuelUser(request.getMobileNumber(), request.getFirebaseToken());
-        return ResponseEntity.ok(response);
+    private Object mapToDTO2(String userType, Map<String, Object> requestBody) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            switch (userType.toLowerCase()) {
+                case "citizen":
+                    return objectMapper.convertValue(requestBody, RegistrationRequest.class);
+                case "fuel_station":
+                    return objectMapper.convertValue(requestBody, FuelStationRequest.class);
+                default:
+                    return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 
