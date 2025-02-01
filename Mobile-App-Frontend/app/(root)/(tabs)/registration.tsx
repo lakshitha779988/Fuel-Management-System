@@ -13,15 +13,29 @@ export default function RegistrationScreen() {
     const [loading, setLoading] = useState(false);
     const recaptchaVerifier = useRef(null);
 
+        function convertNumberWithCountryCode(mobileNumber: string) {
+
+            const cleanedNumber = mobileNumber.replace(/\D/g, '');
+
+            const lastNineDigits = cleanedNumber.slice(-9);
+
+            return +94${lastNineDigits};
+        }
+
     const handleRegister = async () => {
         if (!fuelStationName || !email || !mobileNumber || !password) {
             Alert.alert("Error", "Please fill out all fields.");
             return;
         }
         setLoading(true);
+
+        const formattedNumber = convertNumberWithCountryCode(mobileNumber);
+
         try {
+
             const verificationId = await phoneProvider.verifyPhoneNumber(
-                mobileNumber, // Ensure mobileNumber includes country code (e.g., +94...)
+                // @ts-ignore
+                formattedNumber,
                 recaptchaVerifier.current!
             );
 
