@@ -16,7 +16,7 @@ function AdminLoginForm() {
     };
 
     
-    fetch('http://localhost:8080/api/admin/login', {
+    fetch('http://localhost:8080/api/auth/login?userType=admin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
