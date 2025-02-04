@@ -4,9 +4,11 @@ import com.fuelmanagement.model.entity.mysql.User;
 import com.fuelmanagement.service.entityService.QrCodeService;
 import com.fuelmanagement.service.notificationService.NotificationContetCreationService;
 import com.fuelmanagement.service.notificationService.NotificationManager;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Service
 public class NotificationObserver implements QRCodeScanObserver{
 
     private final NotificationManager notificationManager;

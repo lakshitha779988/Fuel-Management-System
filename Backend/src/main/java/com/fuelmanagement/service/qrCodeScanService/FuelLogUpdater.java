@@ -4,9 +4,11 @@ import com.fuelmanagement.model.entity.mysql.FuelLog;
 import com.fuelmanagement.repository.mysql.FuelLogRepository;
 import com.fuelmanagement.service.entityService.FuelStationService;
 import com.fuelmanagement.service.entityService.QrCodeService;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+@Service
 public class FuelLogUpdater implements QRCodeScanObserver{
 
     private final FuelLogRepository fuelLogRepository;

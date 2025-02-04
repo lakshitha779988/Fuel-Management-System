@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.*;
 public class FuelQuotaController {
 
 
-    private final QRCodeScanner qrCodeScanner;
+    private  QRCodeScanner qrCodeScanner;
     private final JwtService jwtService;
     private final FuelStationService fuelStationService;
 
 
     @Autowired
-    public FuelQuotaController( QRCodeScanner qrCodeScanner, JwtService jwtService, FuelStationService fuelStationService) {
-        this.qrCodeScanner = qrCodeScanner;
+    public FuelQuotaController(JwtService jwtService, FuelStationService fuelStationService) {
         this.jwtService = jwtService;
         this.fuelStationService = fuelStationService;
     }

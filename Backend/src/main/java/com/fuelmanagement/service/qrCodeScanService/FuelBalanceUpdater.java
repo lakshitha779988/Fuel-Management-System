@@ -5,7 +5,10 @@ import com.fuelmanagement.repository.mysql.FuelQuotaTrackerRepository;
 import com.fuelmanagement.service.entityService.QrCodeService;
 import com.google.api.gax.rpc.InvalidArgumentException;
 import org.springframework.beans.InvalidPropertyException;
+import org.springframework.stereotype.Service;
 
+
+@Service
 public class FuelBalanceUpdater implements QRCodeScanObserver{
 
     private final QrCodeService qrCodeService;
