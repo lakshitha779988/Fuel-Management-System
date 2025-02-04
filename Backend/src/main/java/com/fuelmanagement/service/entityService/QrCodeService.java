@@ -150,4 +150,36 @@ public class QrCodeService {
         return qrCodeCheckingResponse;
 
     }
-}
+
+
+    public User getUserForQRString(String qrCodeString) {
+        if(!qrCodeRepository.existsByQrCode(qrCodeString)) {
+            throw new IllegalArgumentException("Qr code String is not valid");
+        }
+        QrCode qrCode = qrCodeRepository.findByQrCode(qrCodeString).get();
+
+        Optional<User> user = userRepository.findByVehicleId(qrCode.getVehicle().getId());
+        if(user.isEmpty()){
+            throw new IllegalArgumentException("User is not found");
+
+        }
+
+        return user.get();
+
+    }
+
+
+    public FuelQuotaTracker getFuelQuotaTrackerForQrString(String qrCodeString) {
+        if(!qrCodeRepository.existsByQrCode(qrCodeString)) {
+            throw new IllegalArgumentException("Qr code String is not valid");
+        }
+        QrCode qrCode = qrCodeRepository.findByQrCode(qrCodeString).get();
+
+        FuelQuotaTracker fuelQuotaTracker = qrCode.getVehicle().getFuelQuotaTracker();
+
+        return fuelQuotaTracker;
+
+    }
+
+    }
+

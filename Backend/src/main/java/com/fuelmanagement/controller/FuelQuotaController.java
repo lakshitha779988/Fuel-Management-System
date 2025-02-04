@@ -2,26 +2,25 @@ package com.fuelmanagement.controller;
 
 import com.fuelmanagement.service.entityService.FuelStationService;
 import com.fuelmanagement.service.JwtService;
+import com.fuelmanagement.service.qrCodeScanService.QRCodeScanner;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.fuelmanagement.service.entityService.FuelQuotaService;
 
 @RestController
 @RequestMapping("api/fuel-quota")
 public class FuelQuotaController {
 
 
-    private final FuelQuotaService fuelQuotaService;
+    private final QRCodeScanner qrCodeScanner;
     private final JwtService jwtService;
     private final FuelStationService fuelStationService;
 
 
     @Autowired
-    public FuelQuotaController(FuelQuotaService fuelQuotaService, JwtService jwtService, FuelStationService fuelStationService) {
-        this.fuelQuotaService = fuelQuotaService;
+    public FuelQuotaController( QRCodeScanner qrCodeScanner, JwtService jwtService, FuelStationService fuelStationService) {
+        this.qrCodeScanner = qrCodeScanner;
         this.jwtService = jwtService;
         this.fuelStationService = fuelStationService;
     }
@@ -50,9 +49,8 @@ public class FuelQuotaController {
 
             System.out.println("Fuel Station ID: " + fuelStationId);
 
-            // Proceed with updating the fuel limit
-            String responseMessage = fuelQuotaService.updateFuelLimit(qrString, usage,fuelStationId);
-            return ResponseEntity.ok(responseMessage);
+            qrCodeScanner.scanQRCode(qrString,usage,fuelStationId);
+            return ResponseEntity.ok("FuelAmount Update Successfully ");
 
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
