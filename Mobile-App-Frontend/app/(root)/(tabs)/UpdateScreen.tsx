@@ -3,6 +3,8 @@ import { SafeAreaView, Text, TextInput, Alert, Pressable, StyleSheet, View, Touc
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
+import React from "react";
+import {GLOBALS} from "@/app/config";
 
 export default function UpdateScreen() {
     const [data, setData] = useState<any>(null);
@@ -46,7 +48,7 @@ export default function UpdateScreen() {
 
         try {
             const response = await axios.put(
-                "http://172.19.67.1:8080/api/fuel-quota/update-limit",
+                `${GLOBALS.BACKEND_SERVER_URL}/api/fuel-quota/update-limit`,
                 null,
                 {
                     headers: {

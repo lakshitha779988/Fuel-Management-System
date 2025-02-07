@@ -4,6 +4,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
 import axios from "axios";
 import { auth } from "./firebaseConfig";
+import {GLOBALS} from "@/app/config";
 
 export default function OtpVerificationScreen() {
     const router = useRouter();
@@ -32,7 +33,7 @@ export default function OtpVerificationScreen() {
             await signInWithCredential(auth, credential);
 
 
-            const response = await axios.post("http://172.19.67.1:8080/api/fuel-stations/register", {
+            const response = await axios.post(`${GLOBALS.BACKEND_SERVER_URL}/api/auth/register?userType=fuel_station`, {
                 email,
                 mobileNumber,
                 name: fuelStationName,

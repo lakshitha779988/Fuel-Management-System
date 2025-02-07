@@ -19,7 +19,7 @@ export default function RegistrationScreen() {
 
             const lastNineDigits = cleanedNumber.slice(-9);
 
-            return +94${lastNineDigits};
+            return `+94${lastNineDigits}`; // Fix: Use backticks for template literals
         }
 
     const handleRegister = async () => {

@@ -3,9 +3,10 @@ import { View, Text, Pressable, ImageBackground, StyleSheet } from "react-native
 import { Link } from "expo-router";
 
 export default function AuthScreen() {
+
     return (
         <ImageBackground
-            source={require("../../../assets/images/background-2.jpg")} // Add your background image to the assets folder
+            source={require("../../../assets/images/react-logo.png")} // Add your background image to the assets folder
             style={styles.background}
             resizeMode="cover"
         >
