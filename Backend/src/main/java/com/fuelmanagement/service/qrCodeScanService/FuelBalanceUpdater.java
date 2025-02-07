@@ -21,7 +21,7 @@ public class FuelBalanceUpdater implements QRCodeScanObserver{
 
     @Override
     public void onQRCodeScanned(String qrCode, float fuelAmount , Long fuelStationId) {
-
+        System.out.println("come to fuelBalance update");
        FuelQuotaTracker fuelQuotaTracker= qrCodeService.getFuelQuotaTrackerForQrString(qrCode);
        if(fuelAmount>fuelQuotaTracker.getExistingFuel()){
            throw new IllegalArgumentException("FuelAmount is need to be less than this");

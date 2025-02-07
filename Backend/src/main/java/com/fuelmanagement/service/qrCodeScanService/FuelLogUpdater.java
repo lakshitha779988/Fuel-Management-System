@@ -23,6 +23,7 @@ public class FuelLogUpdater implements QRCodeScanObserver{
 
     @Override
     public void onQRCodeScanned(String qrCode, float fuelAmount , Long fuelStationId) {
+System.out.println("come to fuelLog update");
 
         FuelLog fuelLog = new FuelLog();
         fuelLog.setFuelAmount(fuelAmount);

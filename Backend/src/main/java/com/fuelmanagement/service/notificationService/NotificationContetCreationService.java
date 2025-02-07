@@ -71,7 +71,7 @@ public class NotificationContetCreationService {
         );
     }
 
-    public String generateFuelLimitUpdateEmailContent(String fuelStationName, float usage, LocalDateTime localTime, float existingLimit) {
+    public String generateFuelLimitUpdateEmailContent(String fuelStationName, float usage, LocalDateTime localTime) {
         return "Fuel Limit Update Notification\n\n" +
                 "Dear Valued Customer,\n\n" +
                 "We are writing to inform you that your fuel limit has been updated as per the latest transaction at our station.\n\n" +
@@ -79,7 +79,6 @@ public class NotificationContetCreationService {
                 "Fuel Station Name: " + fuelStationName + "\n" +
                 "Fuel Used: " + usage + " liters\n" +
                 "Update Time: " + localTime + "\n" +
-                "Remaining Fuel Limit: " + existingLimit + " liters\n\n" +
                 "Thank you for choosing our services. If you have any questions or concerns, please feel free to reach out to us.\n\n" +
                 "Warm Regards,\n" +
                 "FuelManagement Team\n" +

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class ObserverConfig {
 
     @Bean
-    public QRCodeScanner fuelStationScanner(FuelLogUpdater fuelLogUpdater,
+    public QRCodeScanner qrCodeScanner(FuelLogUpdater fuelLogUpdater,
                                             FuelBalanceUpdater fuelBalanceUpdater,
                                             NotificationObserver notificationObserver) {
         QRCodeScanner scanner = new QRCodeScanner();
