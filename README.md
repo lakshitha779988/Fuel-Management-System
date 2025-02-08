@@ -2,8 +2,7 @@
 # Fuel Management System  
 *A Next-Generation System to Optimize Fuel Distribution & Usage*
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/yourusername/yourrepo) 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 [![Spring Boot](https://img.shields.io/badge/SpringBoot-2.x-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![React](https://img.shields.io/badge/React-Vite-blue)](https://react.dev/)
 [![React Native](https://img.shields.io/badge/ReactNative-Expo-blueviolet)](https://expo.dev/)
@@ -23,9 +22,8 @@
 - [Environment Variables](#environment-variables)
 - [Usage](#usage)
 - [Future Enhancements](#future-enhancements)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+- [TeamMebers](#Team-Members)
+
 
 ---
 
@@ -109,13 +107,13 @@ The system ensures that each user has a unique mobile number that acts as a prim
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/yourusername/yourrepo.git
-   cd yourrepo/backend
+   git clone https://lakshitha779988/Fuel-Management-System.git
+   cd Fuel-Management-System/backend
    ```
 
 2. **Configure Application Properties:**
 
-   Update the `src/main/resources/application.properties` file with your database credentials, JWT secret, and any notification service API keys (Twilio, Mailgun).
+   Update the `src/main/resources/application.properties` file with your database credentials, and any notification service API keys (Twilio, Mailgun).
 
 3. **Build and Run:**
 
@@ -138,16 +136,14 @@ The system ensures that each user has a unique mobile number that acts as a prim
 
    ```bash
    npm install
-   # or if you use yarn
-   yarn install
+  
    ```
 
 3. **Run the Development Server:**
 
    ```bash
    npm run dev
-   # or
-   yarn dev
+ 
    ```
 
    The web portal should be accessible on [http://localhost:3000](http://localhost:3000).
@@ -157,15 +153,14 @@ The system ensures that each user has a unique mobile number that acts as a prim
 1. **Navigate to the Mobile Directory:**
 
    ```bash
-   cd ../mobile
+   cd ../Mobile-App-Frontend
    ```
 
 2. **Install Dependencies:**
 
    ```bash
    npm install
-   # or
-   yarn install
+   
    ```
 
 3. **Start the Expo Development Server:**
@@ -184,17 +179,15 @@ Ensure you create a `.env` file (or use your preferred secret management tool) i
 
 ### Backend (`backend/.env`)
 ```ini
-# Database
-DB_URL=jdbc:mysql://localhost:3306/fuel_management
-DB_USERNAME=your_db_username
-DB_PASSWORD=your_db_password
+TWILIO_ACCOUNT_SID
+TWILIO_AUTH_TOKEN
+TWILIO_PHONE_NUMBER
+TWILIO_API_URL
 
-# JWT
-JWT_SECRET=your_jwt_secret
+MAILGUN_API_KEY
+MAILGUN_DOMAIN
+MAILGUN_FROM
 
-# Notification Services
-TWILIO_API_KEY=your_twilio_api_key
-MAILGUN_API_KEY=your_mailgun_api_key
 ```
 
 ### Frontend (`frontend/.env`)
@@ -203,9 +196,21 @@ VITE_API_URL=http://localhost:8080/api
 VITE_FIREBASE_API_KEY=your_firebase_api_key
 ```
 
-### Mobile (`mobile/.env`)
-```ini
-EXPO_API_URL=http://localhost:8080/api
+### create firebase-service-account.json 
+```
+{
+  "type": "accoutntype",
+  "project_id": "****",
+  "private_key_id": "your key",
+  "private_key",
+  "auth_uri": "your url",
+  "token_uri": "token_url",
+  "auth_provider_x509_cert_url": "***",
+  "client_x509_cert_url": "***",
+  "universe_domain": "***"
+}
+
+
 ```
 
 ---
@@ -237,46 +242,13 @@ EXPO_API_URL=http://localhost:8080/api
 - **Extended Observer Subscriptions:**  
   More modular event subscribers can be added for further system integrations.
 
----
 
-## Contributing
 
-Contributions are welcome! Please follow these steps:
+## Team Members
 
-1. **Fork the Repository**
-2. **Create a Feature Branch:**
-
-   ```bash
-   git checkout -b feature/YourFeatureName
-   ```
-
-3. **Commit Your Changes:**
-
-   ```bash
-   git commit -m "Add: description of feature"
-   ```
-
-4. **Push to the Branch:**
-
-   ```bash
-   git push origin feature/YourFeatureName
-   ```
-
-5. **Create a Pull Request** outlining your changes.
-
-For major changes, please open an issue first to discuss what you would like to change.
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-## Contact
-
-**Project Maintainer:**  
-[Your Name](mailto:your.email@example.com)
-
-Feel free to open issues or contact me directly for any questions or further discussion.
+SE/2021/033 - Lakshitha Madushan
+SE/2021/042 - Buddhika Madumali
+SE/2021/025 - Induwara Mihisara
+SE/2021/013 - JoJeeven
+SE/2021/031 - Praveen Dadigama
+SE/2021/062 - Thagya Kavindi
