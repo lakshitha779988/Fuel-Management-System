@@ -8,8 +8,9 @@ import com.fuelmanagement.model.entity.mysql.Vehicle;
 import com.fuelmanagement.repository.mysql.QrCodeRepository;
 import com.fuelmanagement.repository.mysql.UserRepository;
 import com.fuelmanagement.repository.mysql.VehicleRepository;
-import com.fuelmanagement.service.EmailService;
 import com.fuelmanagement.service.JwtService;
+import com.fuelmanagement.service.notificationService.NotificationContetCreationService;
+import com.fuelmanagement.service.notificationService.NotificationManager;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -32,15 +33,18 @@ public class QrCodeService {
     private final VehicleRepository vehicleRepository;
     private final JwtService jwtService;
     private final UserRepository userRepository;
-    private final EmailService emailService;
+    private final NotificationManager notificationManager;
+    private final NotificationContetCreationService notificationContetCreationService;
 
     @Autowired
-    public QrCodeService(QrCodeRepository qrCodeRepository, VehicleRepository vehicleRepository, JwtService jwtService, UserRepository userRepository, EmailService emailService) {
+    public QrCodeService(QrCodeRepository qrCodeRepository, VehicleRepository vehicleRepository, JwtService jwtService, UserRepository userRepository, NotificationManager notificationManager, NotificationContetCreationService notificationContetCreationService) {
         this.qrCodeRepository = qrCodeRepository;
         this.vehicleRepository = vehicleRepository;
         this.jwtService = jwtService;
         this.userRepository = userRepository;
-        this.emailService = emailService;
+
+        this.notificationManager = notificationManager;
+        this.notificationContetCreationService = notificationContetCreationService;
     }
 
 
@@ -111,8 +115,8 @@ public class QrCodeService {
 
 
         LocalDateTime localDateTime = LocalDateTime.now();
-        String emailContent = emailService.generateQRCodeUpdateEmailContent(user.getVehicle().getRegistrationNumber(),localDateTime);
-        emailService.sendEmail(user.getEmail(),"Update QRCode",emailContent);
+        String content = notificationContetCreationService.generateQRCodeUpdateEmailContent(user.getVehicle().getRegistrationNumber(),localDateTime);
+        notificationManager.notifyUser(user.getEmail(),user.getMobileNumber(),content);
         return generateQRCodeImage(newQrCodeString);
     }
 
@@ -146,4 +150,36 @@ public class QrCodeService {
         return qrCodeCheckingResponse;
 
     }
-}
+
+
+    public User getUserForQRString(String qrCodeString) {
+        if(!qrCodeRepository.existsByQrCode(qrCodeString)) {
+            throw new IllegalArgumentException("Qr code String is not valid");
+        }
+        QrCode qrCode = qrCodeRepository.findByQrCode(qrCodeString).get();
+
+        Optional<User> user = userRepository.findByVehicleId(qrCode.getVehicle().getId());
+        if(user.isEmpty()){
+            throw new IllegalArgumentException("User is not found");
+
+        }
+
+        return user.get();
+
+    }
+
+
+    public FuelQuotaTracker getFuelQuotaTrackerForQrString(String qrCodeString) {
+        if(!qrCodeRepository.existsByQrCode(qrCodeString)) {
+            throw new IllegalArgumentException("Qr code String is not valid");
+        }
+        QrCode qrCode = qrCodeRepository.findByQrCode(qrCodeString).get();
+
+        FuelQuotaTracker fuelQuotaTracker = qrCode.getVehicle().getFuelQuotaTracker();
+
+        return fuelQuotaTracker;
+
+    }
+
+    }
+

@@ -37,17 +37,6 @@ public class UserService {
     }
 
 
-    // Add a new user
-    public User createUser(User user) {
-        if (userRepository.findByMobileNumber(user.getMobileNumber()).isPresent()) {
-            throw new IllegalArgumentException("Mobile number already exists.");
-        }
-        if (userRepository.findByNationalId(user.getNationalId()).isPresent()) {
-            throw new IllegalArgumentException("National ID already exists.");
-        }
-        return userRepository.save(user);
-    }
-
     // Update user details
     public User updateUser(Long userId, User updatedUserDetails) {
         User existingUser = userRepository.findById(userId)

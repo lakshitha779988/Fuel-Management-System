@@ -23,7 +23,7 @@ export default function DashboardScreen() {
 
                 <Pressable
                     className="bg-orange-600 py-6 mx-6 rounded-xl shadow-2xl"
-                    onPress={() => router.push("/reports")}
+                    onPress={() => router.push("/scan")}
                 >
                     <Text className="text-white text-center text-2xl font-bold">Reports</Text>
                 </Pressable>

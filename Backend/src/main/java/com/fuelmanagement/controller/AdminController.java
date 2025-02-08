@@ -27,19 +27,6 @@ public class AdminController {
     }
 
 
-    //Admin login endpoint
-    @PostMapping("/login")
-    public ResponseEntity<AdminLoginResponse> adminLogin(@RequestBody AdminLoginRequest adminLoginRequest){
-        System.out.println(adminLoginRequest.getPassword());
-        System.out.println(adminLoginRequest.getUserName());
-
-       String token =  adminService.login(adminLoginRequest);
-       AdminLoginResponse adminLoginResponse = new AdminLoginResponse(token);
-       return ResponseEntity.ok(adminLoginResponse);
-
-    }
-
-
     //fetch All fuelStation return list of FuelStationResponse
     @GetMapping("/fuelStation")
     public ResponseEntity<List<FuelStationResponse>> getAllFuelStations() {

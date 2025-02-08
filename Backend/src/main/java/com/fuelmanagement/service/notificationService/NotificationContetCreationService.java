@@ -1,51 +1,13 @@
-package com.fuelmanagement.service;
+package com.fuelmanagement.service.notificationService;
 
-import com.mailgun.client.MailgunClient;
-import com.mailgun.api.v3.MailgunMessagesApi;
-import com.mailgun.model.message.Message;
-import com.mailgun.model.message.MessageResponse;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
-public class EmailService {
-
-    @Value("${mailgun.api.key}")
-    private String apiKey;
-
-    @Value("${mailgun.domain}")
-    private String domain;
-
-    @Value("${mailgun.from}")
-    private String from;
-
-    public String sendEmail(String to, String subject, String text) {
-        try {
-            // Initialize Mailgun client and Messages API
-            MailgunMessagesApi mailgunMessagesApi = MailgunClient.config(apiKey).createApi(MailgunMessagesApi.class);
-
-            // Build the message payload
-            Message message = Message.builder()
-                    .from(from)
-                    .to(to)
-                    .subject(subject)
-                    .text(text)
-                    .build();
-
-            // Send the email and capture the response
-            MessageResponse response = mailgunMessagesApi.sendMessage(domain, message);
-
-            return "Email sent successfully! Message ID: " + response.getId();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Failed to send email: " + e.getMessage();
-        }
-    }
+public class NotificationContetCreationService {
 
     public String generateFuelStationRegistrationEmailContent(String fuelStationName) {
         // Get the current date in a readable format
@@ -53,7 +15,7 @@ public class EmailService {
 
         // Construct the email content
         return String.format(
-                "Subject: Registration Confirmation\n\n" +
+                "Registration Confirmation\n\n" +
                         "Dear %s,\n\n" +
                         "Thank you for registering your fuel station with us on %s. We are delighted to welcome you to the Fuel Management System powered by FuelManagement, Sri Lanka.\n\n" +
                         "Your registration is currently under review and will be approved by our admin team shortly. If you have any questions or require assistance, please don't hesitate to contact us at support@fuelmanagement.lk.\n\n" +
@@ -75,7 +37,7 @@ public class EmailService {
 
         // Construct the email content
         return String.format(
-                "Subject: Welcome to FuelManagement!\n\n" +
+                "Welcome to FuelManagement!\n\n" +
                         "Dear %s,\n\n" +
                         "We are excited to inform you that your registration was successful on %s.\n\n" +
                         "Your vehicle with registration number '%s' has been successfully added to our system.\n\n" +
@@ -96,7 +58,7 @@ public class EmailService {
 
         // Construct the email content
         return String.format(
-                "Subject: Login Notification\n\n" +
+                "Login Notification\n\n" +
                         "Dear %s,\n\n" +
                         "We noticed that you logged in to your account on %s.\n\n" +
                         "If this was you, no further action is needed. If you suspect unauthorized access, please contact us immediately at support@fuelmanagement.lk.\n\n" +
@@ -109,15 +71,14 @@ public class EmailService {
         );
     }
 
-    public String generateFuelLimitUpdateEmailContent(String fuelStationName, float usage, LocalDateTime localTime, float existingLimit) {
-        return "Subject: Fuel Limit Update Notification\n\n" +
+    public String generateFuelLimitUpdateEmailContent(String fuelStationName, float usage, LocalDateTime localTime) {
+        return "Fuel Limit Update Notification\n\n" +
                 "Dear Valued Customer,\n\n" +
                 "We are writing to inform you that your fuel limit has been updated as per the latest transaction at our station.\n\n" +
                 "Here are the details of the update:\n" +
                 "Fuel Station Name: " + fuelStationName + "\n" +
                 "Fuel Used: " + usage + " liters\n" +
                 "Update Time: " + localTime + "\n" +
-                "Remaining Fuel Limit: " + existingLimit + " liters\n\n" +
                 "Thank you for choosing our services. If you have any questions or concerns, please feel free to reach out to us.\n\n" +
                 "Warm Regards,\n" +
                 "FuelManagement Team\n" +
@@ -125,7 +86,7 @@ public class EmailService {
     }
 
     public String generateFuelStationAccountActiveEmailContent(String fuelStationName, LocalDateTime activationTime) {
-        return "Subject: Fuel Station Account Activation\n\n" +
+        return "Fuel Station Account Activation\n\n" +
                 "Dear " + fuelStationName + " Team,\n\n" +
                 "We are pleased to inform you that your fuel station account has been successfully activated.\n\n" +
                 "Activation Details:\n" +
@@ -140,7 +101,7 @@ public class EmailService {
 
 
     public String generateFuelStationAccountBlockedEmailContent(String fuelStationName, LocalDateTime blockTime) {
-        return "Subject: Fuel Station Account Blocked\n\n" +
+        return "Fuel Station Account Blocked\n\n" +
                 "Dear " + fuelStationName + " Team,\n\n" +
                 "We regret to inform you that your fuel station account has been blocked due to policy violations or operational concerns.\n\n" +
                 "Blocking Details:\n" +
@@ -153,7 +114,7 @@ public class EmailService {
     }
 
     public String generateQRCodeUpdateEmailContent(String vehicleRegNumber, LocalDateTime updateTime) {
-        return "Subject: QR Code Update Notification\n\n" +
+        return "QR Code Update Notification\n\n" +
                 "Dear User,\n\n" +
                 "We would like to inform you that your QR code has been successfully updated.\n\n" +
                 "Update Details:\n" +

@@ -79,7 +79,7 @@ const sendTokenToBackend = async (mobileNumber, idToken) => {
   const cleanedMobileNumber = mobileNumber.replace(/^\+94/, '0');
   
   try {
-    const response = await fetch("http://localhost:8080/api/auth/fuel-user/login", {
+    const response = await fetch("http://localhost:8080/api/auth/login?userType=citizen", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

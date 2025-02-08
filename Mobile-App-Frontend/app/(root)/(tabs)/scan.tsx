@@ -4,6 +4,7 @@ import {Alert, Platform, SafeAreaView, StatusBar,Text,StyleSheet} from "react-na
 import {useRouter} from "expo-router";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GLOBALS } from "../../config";
 
 
 export default function ScanScreen() {
@@ -40,8 +41,9 @@ export default function ScanScreen() {
 
 
           try {
+
               const response = await axios.post(
-                  "http://172.19.67.1:8080/api/qr/check-qr-string",
+                  `${GLOBALS.BACKEND_SERVER_URL}/api/qr/check-qr-string`,
                   {qrString: data},
                   {
                       headers: {

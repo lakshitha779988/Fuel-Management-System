@@ -3,6 +3,7 @@ import { View, Text, TextInput, Pressable, Alert, ActivityIndicator, TouchableWi
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Link, useRouter } from "expo-router";
+import {GLOBALS} from "@/app/config";
 
 export default function SignInScreen() {
     const router = useRouter();
@@ -18,7 +19,7 @@ export default function SignInScreen() {
 
         setLoading(true);
         try {
-            const response = await axios.post("http://172.19.67.1:8080/api/fuel-stations/login", {
+            const response = await axios.post(`${GLOBALS.BACKEND_SERVER_URL}/api/auth/login?userType=fuel_station`, {
                 mobileNumber,
                 password,
             });
