@@ -190,12 +190,6 @@ MAILGUN_FROM
 
 ```
 
-### Frontend (`frontend/.env`)
-```ini
-VITE_API_URL=http://localhost:8080/api
-VITE_FIREBASE_API_KEY=your_firebase_api_key
-```
-
 ### create firebase-service-account.json 
 ```
 {
@@ -246,9 +240,10 @@ VITE_FIREBASE_API_KEY=your_firebase_api_key
 
 ## Team Members
 
-SE/2021/033 - Lakshitha Madushan
-SE/2021/042 - Buddhika Madumali
-SE/2021/025 - Induwara Mihisara
-SE/2021/013 - JoJeeven
-SE/2021/031 - Praveen Dadigama
-SE/2021/062 - Thagya Kavindi
+- **SE/2021/033** - Lakshitha Madushan
+- **SE/2021/042** - Buddhika Madumali
+- **SE/2021/025** - Induwara Mihisara
+- **SE/2021/013** - JoJeeven
+- **SE/2021/031** - Praveen Dadigama
+- **SE/2021/062** - Thagya Kavindi
+
