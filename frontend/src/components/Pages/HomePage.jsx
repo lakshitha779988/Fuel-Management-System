@@ -5,75 +5,151 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <div
-      className="h-screen flex items-center justify-center text-white relative overflow-hidden bg-gradient-to-br from-red-900 via-red-700 to-red-500"
-      style={{
-        backgroundImage: `url('../../public/gas.jpg')`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-     
-      <div className="absolute inset-0">
-        <div className="w-96 h-96 bg-red-300 opacity-40 rounded-full blur-3xl animate-bounce absolute -top-20 -left-20"></div>
-        <div className="w-80 h-80 bg-red-400 opacity-30 rounded-full blur-2xl animate-spin-slow absolute top-1/3 left-1/3"></div>
-        <div className="w-96 h-96 bg-red-300 opacity-50 rounded-full blur-3xl animate-pulse absolute bottom-20 right-20"></div>
-      </div>
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      {/* Hero Section */}
+      <section
+        className="relative flex items-center justify-center h-screen bg-cover bg-center"
+        style={{ backgroundImage: "url('/gas.jpg')" }}
+      >
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="relative z-10 text-center px-4">
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
+            LuxeFuel Management System
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-200 mb-8">
+            Experience a luxurious and efficient way to manage your fuel needs.
+          </p>
+          <div className="flex justify-center space-x-6">
+            <button
+              onClick={() => navigate('/login')}
+              className="px-8 py-4 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg shadow transition duration-300"
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => navigate('/register')}
+              className="px-8 py-4 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg shadow transition duration-300"
+            >
+              Sign Up
+            </button>
+          </div>
+        </div>
+      </section>
 
-     
-    
-     <div className="absolute inset-0 bg-black opacity-60 z-0"></div>
+      {/* Services Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
+            Our Services
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Card 1 */}
+            <div className="bg-gray-50 rounded-lg shadow-lg p-6 hover:shadow-2xl transition duration-300">
+              <h3 className="text-2xl font-semibold mb-4">User Portal</h3>
+              <p className="text-gray-600">
+                Register with your unique mobile number, receive your personalized QR code, and track your fuel usage effortlessly.
+              </p>
+            </div>
+            {/* Card 2 */}
+            <div className="bg-gray-50 rounded-lg shadow-lg p-6 hover:shadow-2xl transition duration-300">
+              <h3 className="text-2xl font-semibold mb-4">Admin Dashboard</h3>
+              <p className="text-gray-600">
+                Manage fuel stations, update vehicle categories, and soon, view detailed reports to optimize fuel distribution.
+              </p>
+            </div>
+            {/* Card 3 */}
+            <div className="bg-gray-50 rounded-lg shadow-lg p-6 hover:shadow-2xl transition duration-300">
+              <h3 className="text-2xl font-semibold mb-4">Fuel Station App</h3>
+              <p className="text-gray-600">
+                Scan QR codes to update fuel consumption, ensuring a seamless experience for fuel station operators.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
+      {/* Features Section */}
+      <section className="py-20 bg-gray-100">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
+            What You Can Do
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 h-16 w-16 bg-yellow-500 rounded-full flex items-center justify-center">
+                <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div className="ml-4">
+                <h3 className="text-xl font-semibold">Track Fuel Usage</h3>
+                <p className="text-gray-600">
+                  Monitor and manage your fuel consumption effortlessly.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center">
+              <div className="flex-shrink-0 h-16 w-16 bg-yellow-500 rounded-full flex items-center justify-center">
+                <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2l4-4" />
+                </svg>
+              </div>
+              <div className="ml-4">
+                <h3 className="text-xl font-semibold">Instant Notifications</h3>
+                <p className="text-gray-600">
+                  Receive SMS and email alerts for every important activity.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center">
+              <div className="flex-shrink-0 h-16 w-16 bg-yellow-500 rounded-full flex items-center justify-center">
+                <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3" />
+                </svg>
+              </div>
+              <div className="ml-4">
+                <h3 className="text-xl font-semibold">Effortless Login</h3>
+                <p className="text-gray-600">
+                  Sign in securely with your mobile number and access your dashboard with ease.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center">
+              <div className="flex-shrink-0 h-16 w-16 bg-yellow-500 rounded-full flex items-center justify-center">
+                <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01" />
+                </svg>
+              </div>
+              <div className="ml-4">
+                <h3 className="text-xl font-semibold">Complete Control</h3>
+                <p className="text-gray-600">
+                  Update your profile, regenerate your QR code, or even delete your account anytime.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<div className="p-10 rounded-2xl text-center shadow-2xl relative z-10">
-  <h1
-    className="text-6xl font-extrabold mb-8 text-red-400 drop-shadow-lg animate-pulse"
-    style={{
-      textShadow: `0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px rgba(255, 0, 0, 0.6), 0 0 40px rgba(255, 0, 0, 0.4)`,
-    }}
-  >
-    Welcome to{' '}
-    <span
-      style={{
-        textShadow: `0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px rgba(255, 0, 0, 0.6), 0 0 40px rgba(255, 0, 0, 0.4)`,
-      }}
-    >
-      Fuel Management System
-    </span>
-  </h1>
-  <p
-    className="text-2xl mb-10 text-purple-200"
-    style={{
-      textShadow: `0 0 8px rgba(128, 0, 255, 0.6), 0 0 16px rgba(128, 0, 255, 0.4)`,
-    }}
-  >
-    Effortless fuel tracking and management for your convenience.
-  </p>
-
-  <div className="space-x-6">
-    <button
-      onClick={() => navigate('/login')}
-      className="px-10 py-4 bg-yellow-500 text-white text-xl font-bold rounded-lg shadow-xl transition-transform transform hover:scale-110 hover:bg-yellow-600 hover:shadow-2xl duration-300"
-      style={{
-        boxShadow: `0 0 15px rgba(255, 255, 0, 0.7), 0 0 30px rgba(255, 255, 0, 0.5)`,
-      }}
-    >
-      Sign In
-    </button>
-    <button
-      onClick={() => navigate('/register')}
-      className="px-10 py-4 bg-yellow-500 text-white text-xl font-bold rounded-lg shadow-xl transition-transform transform hover:scale-110 hover:bg-yellow-600 hover:shadow-2xl duration-300"
-      style={{
-        boxShadow: `0 0 15px rgba(255, 255, 0, 0.7), 0 0 30px rgba(255, 255, 0, 0.5)`,
-      }}
-    >
-      Sign Up
-    </button>
-  </div>
-</div>
-     
-      <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-red-900 to-transparent"></div>
+      {/* Footer */}
+      <footer className="bg-gray-800 text-gray-200 py-8">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="mb-4 md:mb-0">
+              <h4 className="text-xl font-bold">LuxeFuel Management System</h4>
+              <p className="text-gray-400">Excellence in Fuel Management.</p>
+            </div>
+            <div className="flex space-x-6">
+              <a href="#" className="hover:text-white">Privacy Policy</a>
+              <a href="#" className="hover:text-white">Terms of Service</a>
+              <a href="#" className="hover:text-white">Contact Us</a>
+            </div>
+          </div>
+          <div className="text-center mt-4 text-gray-500">
+            © {new Date().getFullYear()} LuxeFuel Management System. All rights reserved.
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
