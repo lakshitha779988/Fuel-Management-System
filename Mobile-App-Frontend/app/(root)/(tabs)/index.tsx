@@ -6,7 +6,9 @@ export default function AuthScreen() {
 
     return (
         <ImageBackground
-            source={require("../../../assets/images/react-logo.png")} // Add your background image to the assets folder
+
+            source={require("../../../assets/images/background-2.jpeg")} // Add your background image to the assets folder
+
             style={styles.background}
             resizeMode="cover"
         >
