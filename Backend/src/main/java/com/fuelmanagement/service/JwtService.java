@@ -12,7 +12,7 @@ import java.util.Map;
 @Component
 public class JwtService {
 
-    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor("your_secret_key_your_secret_key_your_secret_key".getBytes());
+    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor("FuelmanagemtnSystemsyestem778996508bbbdhhh22211333nnnsss".getBytes());
     private final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 hours
 
     // Generate token with identifier (name or mobileNumber), type, and role

@@ -110,5 +110,8 @@ public class FuelUserRegisterService implements RegisterService<RegistrationRequ
         return "Sucsuss";
     }
 
+
+
+
 }
 

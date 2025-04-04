@@ -57,7 +57,7 @@ function AdminLoginForm() {
               htmlFor="username"
               className="block text-sm font-medium text-gray-700"
             >
-              Username
+              Usernames
             </label>
             <input
               type="text"
